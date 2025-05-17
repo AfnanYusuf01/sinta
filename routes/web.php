@@ -4,6 +4,8 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LogBimbinganController;
 use App\Http\Controllers\PengajuanPembimbingController;
+use App\Http\Controllers\PenilaianController;
+use App\Http\Controllers\DeskEvaluationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -27,9 +29,7 @@ Route::get('/perpanjangan', function () {
     return view('perpanjangan');
 });
 
-Route::get('/deskevaluasi', function () {
-    return view('deskevaluasi');
-});
+
 
 Route::get('/penilaiandosen', function () {
     return view('penilaiandosen');
@@ -108,6 +108,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/pengajuanpembimbing', [PengajuanPembimbingController::class, 'store'])->name('pengajuanpembimbing.store');
 // });
 
-
+Route::get('/deskevaluasi', [DeskEvaluationController::class, 'index'])->name('desk-evaluation.index');
+Route::post('/desk-evaluation', [DeskEvaluationController::class, 'store'])->name('desk-evaluation.store');
+Route::get('/desk-evaluation/get-dosen', [DeskEvaluationController::class, 'getDosen'])->name('desk-evaluation.get-dosen');
 
 require __DIR__.'/auth.php';

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('desk_evaluasi', function (Blueprint $table) {
             $table->id('id_desk_evaluasi');
             $table->string('file')->nullable();
+            $table->string('judul_ta')->nullable();
             $table->integer('nilai')->nullable();   
             $table->foreignId('id_mahasiswa')->nullable()->constrained('mahasiswa')->onDelete('cascade');
             $table->foreignId('id_dosen')->nullable()->constrained('dosen')->onDelete('cascade');

@@ -7,259 +7,300 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     :root {
-      --primary: #E30613;
-      --primary-dark: #C00511;
-      --primary-light: #FF4757;
-      --secondary: #0F172A;
-      --text-dark: #1E293B;
-      --text-light: #F8FAFC;
-      --bg-light: #F1F5F9;
-      --border: #E2E8F0;
-      --card-bg: rgba(255, 255, 255, 0.98);
-      --shadow: 0 8px 30px rgba(15, 23, 42, 0.12);
-      --glow: 0 0 15px rgba(227, 6, 19, 0.2);
-      --accent: #E30613;
+      --primary: #d32f2f;
+      --primary-dark: #b71c1c;
+      --primary-light: #ff6659;
+      --secondary: #f5f5f5;
+      --text: #333333;
+      --text-light: #757575;
+      --border: #e0e0e0;
+      --white: #ffffff;
+      --success: #388e3c;
+      --warning: #ffa000;
+      --error: #d32f2f;
     }
     
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: var(--bg-light);
-      color: var(--text-dark);
+      color: var(--text);
+      background-color: #f9f9f9;
       line-height: 1.6;
-      margin: 0;
-      padding: 40px 20px;
-      background-image: 
-        radial-gradient(circle at 20% 30%, rgba(227, 6, 19, 0.03) 0%, transparent 25%),
-        radial-gradient(circle at 80% 70%, rgba(227, 6, 19, 0.03) 0%, transparent 25%);
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px;
+      background-color: var(--white);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      border-radius: 8px;
+      margin-top: 30px;
+      margin-bottom: 30px;
+      border-top: 5px solid var(--primary);
     }
     
     .logo {
-            width: 120px;
-            margin-bottom: 20px;
-            filter: drop-shadow(var(--));
-        }
-
-    .container {
-      background: var(--card-bg);
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 40px;
-      border-radius: 16px;
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.4);
-    }
-    
-    .container::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 5px;
-      height: 100%;
-      background: linear-gradient(to bottom, var(--primary), var(--accent));
+      height: 60px;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      border-radius: 8px;
+      padding: 10px;
     }
     
     h1 {
-      font-size: 28px;
-      color: var(--secondary);
-      text-align: center;
-      margin-bottom: 25px;
+      color: var(--primary);
       font-weight: 700;
-      letter-spacing: -0.5px;
-      position: relative;
-      padding-bottom: 15px;
+      font-size: 28px;
+      margin-bottom: 5px;
     }
     
-    h1::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 3px;
-      border-radius: 3px;
+    .subtitle {
+      display: block;
+      color: var(--text-light);
+      font-size: 16px;
+      margin-bottom: 30px;
+      font-weight: 500;
     }
     
     .section-title {
+      font-size: 20px;
+      font-weight: 600;
       color: var(--primary);
-      margin: 30px 0 15px;
-      font-size: 18px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      margin: 25px 0 15px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--primary);
     }
     
     .evaluation-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 12px;
-      margin: 20px 0 30px;
+      gap: 15px;
+      margin-bottom: 30px;
     }
     
     .evaluation-item {
-      background: rgba(241, 245, 249, 0.6);
-      padding: 12px 15px;
+      background-color: var(--secondary);
+      padding: 15px;
       border-radius: 8px;
-      font-size: 14px;
+      text-align: center;
       font-weight: 500;
-      color: var(--text-dark);
-      border-left: 3px solid var(--primary);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       transition: all 0.3s ease;
+      border-left: 4px solid var(--primary);
     }
     
     .evaluation-item:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 4px 8px rgba(227, 6, 19, 0.1);
-      background: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
     
-    form {
-      margin-top: 30px;
+    .evaluation-btn {
+      display: inline-block;
+      padding: 12px 20px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: left;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .evaluation-btn:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .evaluation-btn.completed {
+      background-color: var(--success);
+    }
+    
+    .evaluation-btn.completed:hover {
+      background-color: #2e7d32;
+    }
+    
+    .add-btn {
+      display: inline-block;
+      padding: 12px 25px;
+      background-color: var(--white);
+      color: var(--primary);
+      border: 2px solid var(--primary);
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 15px;
+    }
+    
+    .add-btn:hover {
+      background-color: var(--primary);
+      color: var(--white);
     }
     
     .form-group {
       margin-bottom: 20px;
     }
     
-    label {
+    .form-group label {
       display: block;
       margin-bottom: 8px;
-      font-weight: 600;
-      color: var(--secondary);
-      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
     }
     
-    label.required::after {
-      content: '*';
-      color: var(--primary);
-      margin-left: 4px;
+    .form-group label.required::after {
+      content: " *";
+      color: var(--error);
     }
     
-    input, textarea, select {
+    .form-control, textarea {
       width: 100%;
-      padding: 14px 16px;
+      padding: 12px;
       border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 15px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      background-color: rgba(255, 255, 255, 0.9);
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      border-radius: 6px;
+      font-family: inherit;
+      transition: border 0.3s ease;
     }
     
-    input:focus, textarea:focus, select:focus {
+    .form-control:focus, textarea:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.1);
+      box-shadow: 0 0 0 2px rgba(211, 47, 47, 0.2);
     }
     
     textarea {
-      min-height: 120px;
+      min-height: 100px;
       resize: vertical;
     }
     
     .file-upload-wrapper {
       position: relative;
+      margin-bottom: 5px;
     }
     
     .file-upload-wrapper input[type="file"] {
+      width: 100%;
       padding: 12px;
       border: 1px dashed var(--border);
-      background-color: rgba(241, 245, 249, 0.5);
-    }
-    
-    .file-upload-wrapper::after {
-      content: 'Pilih File';
-      position: absolute;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: var(--primary);
-      color: white;
-      padding: 6px 12px;
       border-radius: 6px;
-      font-size: 14px;
-      font-weight: 500;
-      pointer-events: none;
+      background-color: var(--secondary);
     }
     
     .file-hint {
       font-size: 13px;
-      color: #64748B;
-      margin-top: 6px;
-      display: block;
+      color: var(--text-light);
     }
     
-    button {
-      margin-top: 30px;
-      padding: 16px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    .btn-primary {
+      background-color: var(--primary);
+      border-color: var(--primary);
+      padding: 10px 20px;
+      font-weight: 600;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      border-color: var(--primary-dark);
+    }
+    
+    .btn-secondary {
+      padding: 10px 20px;
+      font-weight: 600;
+    }
+    
+    .modal-header {
+      border-bottom: 1px solid var(--border);
+      padding: 20px;
+    }
+    
+    .modal-title {
+      color: var(--primary);
+      font-weight: 700;
+    }
+    
+    .modal-content {
+      border-radius: 10px;
+      overflow: hidden;
+      border: none;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .modal-body {
+      padding: 20px;
+    }
+    
+    .modal-footer {
+      border-top: 1px solid var(--border);
+      padding: 15px 20px;
+    }
+    
+    .remove-btn {
+      background: var(--error);
       color: white;
       border: none;
+      padding: 10px 15px;
       border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
       font-weight: 600;
-      width: 100%;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 4px 6px rgba(227, 6, 19, 0.15);
-      position: relative;
-      overflow: hidden;
-      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-left: 10px;
     }
     
-    button:hover {
+    .remove-btn:hover {
+      background: #c62828;
       transform: translateY(-2px);
-      box-shadow: 0 8px 15px rgba(227, 6, 19, 0.25);
     }
     
-    button::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-    }
-    
-    button:hover::after {
-      left: 100%;
+    .evaluation-item-wrapper {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
     }
     
     @media (max-width: 768px) {
       .container {
-        padding: 30px 20px;
+        padding: 20px;
+        margin-top: 15px;
+      }
+      
+      h1 {
+        font-size: 24px;
       }
       
       .evaluation-grid {
         grid-template-columns: 1fr;
       }
       
-      h1 {
-        font-size: 24px;
+      .evaluation-item-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .remove-btn {
+        margin-left: 0;
+        margin-top: 10px;
+        width: 100%;
       }
     }
-.subtitle {
-            color: var(--primary);
-            text-align: center;
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            display: block;
-        }
-
   </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="logo" style="height: 40px; background: var(--border); display: flex; align-items: center; justify-content: center;">
-                    <img src="assets/img/logo.jpeg" alt="Logo FIF" style="height: 100%; object-fit: contain;">
-                </div>
+  <div class="logo">
+    <img src="{{ asset('assets/img/logo.jpeg') }}" alt="Logo FIF" style="height: 100%; object-fit: contain;">
+  </div>
   <h1>Penilaian Desk Evaluation Prodi S1 Informatika</h1>
   <span class="subtitle">Fakultas Informatika</span>
 
@@ -277,40 +318,123 @@
     <div class="evaluation-item">Link Road Tridharma</div>
   </div>
 
-  <form>
-    <div class="form-group">
-      <label for="dosen" class="required">Dosen</label>
-      <select id="dosen" name="dosen" required>
-        <option value="">-- Pilih Dosen --</option>
-        <option value="dosen1">Dr. Ahmad Fauzi, S.Kom., M.Kom.</option>
-        <option value="dosen2">Prof. Budi Santoso, S.T., M.Sc., Ph.D.</option>
-        <option value="dosen3">Dr. Citra Dewi, S.Si., M.T.</option>
-        <option value="dosen4">Dr. Dian Pratama, S.Kom., M.Sc.</option>
-        <option value="dosen5">Dr. Eka Wijaya, S.T., M.Eng.</option>
-        <option value="dosen6">Dr. Fitri Ayu, S.Kom., M.Kom.</option>
-        <option value="dosen7">Dr. Guntur Setiawan, S.T., M.T.</option>
-        <option value="dosen8">Dr. Hana Lestari, S.Si., M.Kom.</option>
-      </select>
+  <div class="section-title">Desk Evaluation</div>
+  
+  <!-- List of existing evaluations -->
+  @foreach($evaluations as $index => $evaluation)
+    <div class="evaluation-item-wrapper">
+      <button 
+        class="evaluation-btn completed"
+        data-bs-toggle="modal" 
+        data-bs-target="#evaluationModal"
+        data-evaluation-id="{{ $evaluation->id_desk_evaluasi }}"
+        data-dosen-id="{{ $evaluation->id_dosen }}"
+        data-judul-ta="{{ $evaluation->judul_ta }}"
+      >
+        Desk Evaluation {{ $index + 1 }} ({{ $evaluation->dosen->nama }})
+      </button>
+      {{-- <form action="{{ route('desk-evaluation.destroy', $evaluation->id_desk_evaluasi) }}" method="POST" style="display: inline;">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="remove-btn">Hapus</button>
+      </form> --}}
     </div>
-
-    <div class="form-group">
-      <label for="judulPenelitian" class="required">Judul Penelitian</label>
-      <textarea id="judulPenelitian" name="judulPenelitian" rows="4" required></textarea>
-    </div>
-
-    <div class="form-group">
-      <label for="formDeskEvaluation" class="required">Upload Form Desk Evaluation</label>
-      <div class="file-upload-wrapper">
-        <input type="file" id="formDeskEvaluation" name="formDeskEvaluation" accept=".pdf,.doc,.docx" required>
-      </div>
-      <span class="file-hint">Format file: PDF, DOC, DOCX (maks. 10MB)</span>
-    </div>
-
-    <button type="submit">
-      Kirim Penilaian
-    </button>
-  </form>
+  @endforeach
+  
+  <!-- Add new evaluation button -->
+  <button class="add-btn mt-3" id="addEvaluationBtn">
+    + Tambah Desk Evaluation Baru
+  </button>
 </div>
 
+<!-- Evaluation Modal -->
+<div class="modal fade" id="evaluationModal" tabindex="-1" aria-labelledby="evaluationModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="evaluationModalLabel">Form Desk Evaluation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="evaluationForm" method="POST" action="{{ route('desk-evaluation.store') }}" enctype="multipart/form-data">
+        @csrf
+        <input type="hidden" name="evaluation_id" id="evaluationId">
+        
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="id_dosen" class="required">Dosen</label>
+            <select id="id_dosen" name="id_dosen" class="form-control" required>
+              <option value="">-- Pilih Dosen --</option>
+              @foreach($allDosen as $dosen)
+                <option value="{{ $dosen->id }}">{{ $dosen->nama }}</option>
+              @endforeach
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="judul_ta" class="required">Judul Penelitian</label>
+            <textarea id="judul_ta" name="judul_ta" class="form-control" rows="4" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="file" class="required">Upload Form Desk Evaluation</label>
+            <div class="file-upload-wrapper">
+              <input type="file" id="file" name="file" class="form-control" accept=".pdf,.doc,.docx" required>
+            </div>
+            <span class="file-hint">Format file: PDF, DOC, DOCX (maks. 10MB)</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+          <button type="submit" class="btn btn-primary">Kirim Penilaian</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const evaluationModal = document.getElementById('evaluationModal');
+    const evaluationForm = document.getElementById('evaluationForm');
+    
+    evaluationModal.addEventListener('show.bs.modal', function(event) {
+      const button = event.relatedTarget;
+      const evaluationId = button.getAttribute('data-evaluation-id');
+      const dosenId = button.getAttribute('data-dosen-id');
+      const judulTa = button.getAttribute('data-judul-ta');
+      
+      document.getElementById('evaluationId').value = evaluationId || '';
+      document.getElementById('id_dosen').value = dosenId || '';
+      document.getElementById('judul_ta').value = judulTa || '';
+      
+      // Clear file input for existing evaluations
+      if (evaluationId) {
+        document.getElementById('file').required = false;
+      } else {
+        document.getElementById('file').required = true;
+      }
+    });
+    
+    // Add new evaluation button
+    const addEvaluationBtn = document.getElementById('addEvaluationBtn');
+    if (addEvaluationBtn) {
+      addEvaluationBtn.addEventListener('click', function() {
+        // Reset form
+        evaluationForm.reset();
+        document.getElementById('file').required = true;
+        
+        // Show modal
+        const modal = new bootstrap.Modal(document.getElementById('evaluationModal'));
+        modal.show();
+      });
+    }
+    
+    // Reset form when modal is hidden
+    evaluationModal.addEventListener('hidden.bs.modal', function() {
+      evaluationForm.reset();
+    });
+  });
+</script>
 </body>
 </html>
