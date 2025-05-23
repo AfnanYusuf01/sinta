@@ -43,7 +43,7 @@ class Mahasiswa extends Model
 
     public function penguji()
     {
-        return $this->belongsTo(Dosen::class, 'penguji');
+        return $this->hasMany(Penguji::class, 'id_mahasiswa');
     }
 
     public function deskEvaluasi()
@@ -51,10 +51,15 @@ class Mahasiswa extends Model
         return $this->hasMany(DeskEvaluasi::class, 'id_mahasiswa');
     }
 
-public function usulanPembimbing()
-{
-    return $this->hasMany(UsulDospem::class, 'id_mahasiswa');
-}
+    public function nilaiPresentasi()
+    {
+        return $this->hasMany(NilaiPresentasi::class, 'id_mahasiswa');
+    }
+
+    public function usulanPembimbing()
+    {
+        return $this->hasMany(UsulDospem::class, 'id_mahasiswa');
+    }
 
     public function nilaiBimbingan()
     {
@@ -64,5 +69,10 @@ public function usulanPembimbing()
     public function nilaiDe()
     {
         return $this->hasMany(NilaiDe::class, 'id_mahasiswa');
+    }
+
+    public function nilaiLiteratur()
+    {
+        return $this->hasMany(NilaiLiteratur::class, 'id_mahasiswa');
     }
 }

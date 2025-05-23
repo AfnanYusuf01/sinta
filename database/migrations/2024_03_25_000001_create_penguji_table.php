@@ -6,29 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('nilai_literatur', function (Blueprint $table) {
+        Schema::create('penguji', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_mahasiswa')->constrained('mahasiswa')->onDelete('cascade');
             $table->foreignId('id_dosen')->constrained('dosen')->onDelete('cascade');
-            $table->integer('nilai_pemahaman')->nullable();
-            $table->integer('nilai_analisis')->nullable();
-            $table->integer('nilai_sintesis')->nullable();
-            $table->integer('nilai_kesimpulan')->nullable();
-            $table->text('catatan')->nullable();
+            $table->enum('status', ['aktif', 'nonaktif'])->default('aktif');
+            $table->enum('jenis_penguji', ['1', '2'])->comment('1: Ketua Penguji, 2: Anggota Penguji');
             $table->timestamps();
+
+            // Memastikan satu dosen hanya bisa menjadi satu jenis penguji untuk satu mahasiswa
+            $table->unique(['id_mahasiswa', 'id_dosen']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('nilai_literatur');
+        Schema::dropIfExists('penguji');
     }
 };

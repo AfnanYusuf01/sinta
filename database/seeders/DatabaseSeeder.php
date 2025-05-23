@@ -17,7 +17,8 @@ public function run(): void
         UserSeeder::class,
         MahasiswaSeeder::class,
         DosenSeeder::class,
-            AdminSeeder::class,
+        AdminSeeder::class,
+        PengujiSeeder::class,
     ]);
 }
 }

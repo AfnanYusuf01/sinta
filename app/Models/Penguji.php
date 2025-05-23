@@ -9,7 +9,14 @@ class Penguji extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id_mahasiswa', 'id_dosen'];
+    protected $table = 'penguji';
+
+    protected $fillable = [
+        'id_mahasiswa',
+        'id_dosen',
+        'status',
+        'jenis_penguji' // 1 untuk ketua penguji, 2 untuk anggota penguji
+    ];
 
     public function mahasiswa()
     {

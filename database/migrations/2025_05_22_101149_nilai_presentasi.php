@@ -12,16 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('nilai_presentasi', function (Blueprint $table) {
-    $table->id();
-    $table->foreignId('id_mahasiswa')->constrained('mahasiswa');
-    $table->foreignId('id_dosen')->constrained('dosen');
-    for ($i = 1; $i <= 6; $i++) {
-        $table->float("nilai_$i")->nullable();
-    }
-    $table->float('total')->nullable();
-    $table->timestamps();
-});
-
+            $table->id();
+            $table->foreignId('id_mahasiswa')->constrained('mahasiswa')->onDelete('cascade');
+            $table->foreignId('id_dosen')->constrained('dosen')->onDelete('cascade');
+            $table->integer('nilai_penyajian')->nullable();
+            $table->integer('nilai_tingkat_penguasaan')->nullable();
+            $table->integer('nilai_kualitas_jawaban')->nullable();
+            $table->integer('nilai_sikap')->nullable();
+            $table->text('catatan')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('nilai_presentasi');
     }
 };

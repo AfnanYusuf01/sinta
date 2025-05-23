@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Form Nilai Desk Evaluasi</title>
+  <title>Form Penilaian Desk Evaluation</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     :root {
       --primary: #E30613;
@@ -23,7 +24,7 @@
       background-color: #f5f5f5;
       padding: 5px 20px;
       color: var(--text-dark);
-      background-image: 
+      background-image:
         radial-gradient(circle at 20% 30%, rgba(227, 6, 19, 0.05) 0%, transparent 25%),
         radial-gradient(circle at 80% 70%, rgba(227, 6, 19, 0.05) 0%, transparent 25%);
     }
@@ -70,11 +71,32 @@
       border-radius: 3px;
     }
 
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 20px;
+      margin: 20px;
+      background-color: #f8f9fa;
+      color: #1A1A2E;
+      border: 1px solid #dee2e6;
+      border-radius: 30px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: var(--transition);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .back-button:hover {
+      background-color: #e9ecef;
+      text-decoration: none;
+      color: #1A1A2E;
+    }
+
     table {
       width: 100%;
       border-collapse: separate;
       border-spacing: 0;
-      margin: 20px 0;
+      margin-top: 20px;
       border-radius: 10px;
       overflow: hidden;
       box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
@@ -86,48 +108,16 @@
       padding: 15px;
       text-align: left;
       font-weight: 600;
-      position: sticky;
-      top: 0;
     }
 
     td {
       padding: 15px;
       border-bottom: 1px solid #eee;
       background-color: white;
-      transition: var(--transition);
     }
 
     tr:hover td {
       background-color: rgba(227, 6, 19, 0.03);
-    }
-
-    .number-cell {
-      text-align: center;
-      font-weight: 600;
-      color: var(--primary);
-    }
-
-    .max-score-cell {
-      background-color: rgba(227, 6, 19, 0.05);
-      text-align: center;
-      font-weight: 600;
-    }
-
-    .aspect-title {
-      font-weight: 600;
-      color: var(--secondary);
-      margin-bottom: 5px;
-    }
-
-    .aspect-desc {
-      color: #4A5568;
-      font-size: 0.9rem;
-      line-height: 1.5;
-      margin-left: 5px;
-    }
-
-    .aspect-desc li {
-      margin-bottom: 3px;
     }
 
     input[type="number"] {
@@ -137,61 +127,7 @@
       border-radius: 6px;
       font-family: inherit;
       font-size: 0.95rem;
-      transition: var(--transition);
       text-align: center;
-    }
-
-    input[type="text"] {
-      width: 35%;
-      padding: 10px 15px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 1rem;
-      transition: var(--transition);
-    }
-
-    input[type="text"]:focus,
-    input[type="number"]:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(227, 6, 19, 0.1);
-    }
-
-    textarea {
-      width: 100%;
-      height: 150px;
-      padding: 15px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 0.95rem;
-      resize: vertical;
-      transition: var(--transition);
-    }
-
-    textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(227, 6, 19, 0.1);
-    }
-
-    .notes-header {
-      background: linear-gradient(135deg, var(--secondary), #2D3748) !important;
-    }
-
-    .total-row {
-      background-color: rgba(227, 6, 19, 0.05);
-    }
-
-    .total-row td {
-      font-weight: 700;
-    }
-
-    .total-row input {
-      background-color: rgba(227, 6, 19, 0.1);
-      font-weight: 600;
-      color: var(--primary);
     }
 
     .submit-btn {
@@ -205,7 +141,6 @@
       font-weight: 600;
       cursor: pointer;
       transition: var(--transition);
-      box-shadow: 0 4px 12px rgba(227, 6, 19, 0.2);
     }
 
     .submit-btn:hover {
@@ -213,155 +148,312 @@
       box-shadow: 0 6px 16px rgba(227, 6, 19, 0.3);
     }
 
-    .name-input {
+    .criteria-title {
+      font-weight: 600;
+      color: var(--secondary);
+      margin-bottom: 5px;
+    }
+
+    .criteria-desc {
+      color: #4A5568;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .select-wrapper {
+      position: relative;
+      width: 100%;
       margin-bottom: 20px;
     }
 
-    .name-input label {
+    select.form-control {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      background-color: white;
+    }
+
+    select.form-control:hover {
+      border-color: var(--primary);
+    }
+
+    .alert {
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+    }
+
+    .alert-success {
+      color: #0f5132;
+      background-color: #d1e7dd;
+      border-color: #badbcc;
+    }
+
+    .alert-danger {
+      color: #842029;
+      background-color: #f8d7da;
+      border-color: #f5c2c7;
+    }
+
+    .alert-info {
+      color: #055160;
+      background-color: #cff4fc;
+      border-color: #b6effb;
+    }
+
+    .select-wrapper select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .select-wrapper select:focus {
+      outline: none;
+      border-color: #E30613;
+      box-shadow: 0 0 0 2px rgba(227, 6, 19, 0.1);
+    }
+
+    .form-select {
       display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-      color: var(--secondary);
+      width: 100%;
+      padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #212529;
+      background-color: #fff;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      background-size: 16px 12px;
+      border: 1px solid #ced4da;
+      border-radius: 0.25rem;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
     }
 
-    @media (max-width: 768px) {
-      .form-container {
-        padding: 20px 15px;
-      }
-
-      table {
-        display: block;
-        overflow-x: auto;
-      }
-
-      th, td {
-        min-width: 150px;
-      }
+    .form-select:focus {
+      border-color: var(--primary);
+      outline: 0;
+      box-shadow: 0 0 0 0.25rem rgba(227, 6, 19, 0.25);
     }
 
-    /* Style untuk tombol kembali ke beranda (warna abu-abu) */
-        .back-button {
-            display: inline-flex;
-            align-items: center;
-            padding: 10px 20px;
-            margin: 20px;
-            background-color: #f8f9fa; /* Warna abu-abu muda */
-            color: #1A1A2E; /* Warna teks abu-abu gelap */
-            border: 1px solid #dee2e6; /* Border abu-abu */
-            border-radius: 30px;
-            font-weight: 500;
-            text-decoration: none;
-            transition: var(--transition);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
+    .nilai-input {
+      width: 100px !important;
+    }
 
+    .debug-info {
+      background: #f8f9fa;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 5px;
+      border: 1px solid #dee2e6;
+    }
   </style>
 </head>
 <body>
-
   <div class="container">
-        <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <a href="{{ url('penilaiandosen') }}" class="back-button">
-                    <i class="fas fa-arrow-left me-1"></i> Kembali ke Beranda
-                </a>
-            </div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <a href="{{ url('penilaiandosen') }}" class="back-button">
+            <i class="fas fa-arrow-left mr-2"></i> Kembali ke Beranda
+          </a>
         </div>
+      </div>
     </div>
 
-  <div class="form-container">
-    <h2><i class="fas fa-clipboard-check"></i> Form Nilai Desk Evaluasi</h2>
+    @if(session('success'))
+      <div class="alert alert-success">
+        {{ session('success') }}
+      </div>
+    @endif
 
-    <div class="name-input">
-      <label for="nama"><i class="fas fa-user"></i> Nama Mahasiswa</label>
-      <input type="text" id="nama" name="nama" placeholder="Masukkan nama mahasiswa">
+    @if(session('error'))
+      <div class="alert alert-danger">
+        {{ session('error') }}
+      </div>
+    @endif
+
+    @if($errors->any())
+      <div class="alert alert-danger">
+        <ul>
+          @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+          @endforeach
+        </ul>
+      </div>
+    @endif
+
+    <!-- Debug Info -->
+
+    <div class="form-container">
+      <h2>Form Penilaian Desk Evaluation</h2>
+
+      <form action="{{ route('nilai-de.store') }}" method="POST" id="formNilai">
+        @csrf
+
+        <div class="form-group">
+          <label for="mahasiswa_id" class="form-label">Pilih Mahasiswa:</label>
+          <select name="mahasiswa_id" id="mahasiswa_id" class="form-select" required>
+            <option value="">-- Pilih Mahasiswa --</option>
+            @foreach($mahasiswa as $mhs)
+              <option value="{{ $mhs->id }}">
+                {{ $mhs->nama }} ({{ $mhs->nim }})
+              </option>
+            @endforeach
+          </select>
+        </div>
+
+        @if($mahasiswa->isEmpty())
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            Semua mahasiswa sudah dinilai.
+          </div>
+        @else
+          <div class="mb-3 text-muted">
+            <small>Jumlah mahasiswa yang belum dinilai: {{ $mahasiswa->count() }}</small>
+          </div>
+
+          <table class="table table-bordered mt-4">
+            <thead class="table-primary">
+              <tr>
+                <th width="5%">No</th>
+                <th>Kriteria Penilaian</th>
+                <th width="15%">Nilai (0-100)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>
+                  <div class="criteria-title">Orisinalitas</div>
+                  <div class="criteria-desc">Keaslian dan keunikan ide penelitian</div>
+                </td>
+                <td>
+                  <input type="number" name="nilai_1" class="form-control nilai-input" min="0" max="100" required>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>
+                  <div class="criteria-title">Kebaruan/Novelty</div>
+                  <div class="criteria-desc">Kontribusi baru terhadap bidang penelitian</div>
+                </td>
+                <td>
+                  <input type="number" name="nilai_2" class="form-control nilai-input" min="0" max="100" required>
+                </td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>
+                  <div class="criteria-title">Urgensi Penelitian</div>
+                  <div class="criteria-desc">Tingkat kepentingan dan dampak penelitian</div>
+                </td>
+                <td>
+                  <input type="number" name="nilai_3" class="form-control nilai-input" min="0" max="100" required>
+                </td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>
+                  <div class="criteria-title">Metodologi</div>
+                  <div class="criteria-desc">Kesesuaian dan kelayakan metode penelitian</div>
+                </td>
+                <td>
+                  <input type="number" name="nilai_4" class="form-control nilai-input" min="0" max="100" required>
+                </td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>
+                  <div class="criteria-title">Tinjauan Pustaka</div>
+                  <div class="criteria-desc">Kualitas dan relevansi referensi</div>
+                </td>
+                <td>
+                  <input type="number" name="nilai_5" class="form-control nilai-input" min="0" max="100" required>
+                </td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td>
+                  <div class="criteria-title">Kontribusi Penelitian</div>
+                  <div class="criteria-desc">Potensi kontribusi terhadap pengembangan ilmu</div>
+                </td>
+                <td>
+                  <input type="number" name="nilai_6" class="form-control nilai-input" min="0" max="100" required>
+                </td>
+              </tr>
+              <tr>
+                <td>7</td>
+                <td>
+                  <div class="criteria-title">Kelayakan Tim Peneliti</div>
+                  <div class="criteria-desc">Kemampuan dan kesiapan peneliti</div>
+                </td>
+                <td>
+                  <input type="number" name="nilai_7" class="form-control nilai-input" min="0" max="100" required>
+                </td>
+              </tr>
+              <tr class="table-info">
+                <td colspan="2" class="text-end"><strong>Rata-rata Nilai:</strong></td>
+                <td><strong id="total">0</strong></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <button type="submit" class="submit-btn">Simpan Penilaian</button>
+        @endif
+      </form>
     </div>
-
-    <table>
-      <tr>
-        <th style="width: 50px;">No.</th>
-        <th>Aspek Penilaian</th>
-        <th style="width: 100px;">Nilai Maks</th>
-        <th style="width: 120px;">Nilai</th>
-      </tr>
-      <tr>
-        <td rowspan="2" class="number-cell">1</td>
-        <td>
-          <div class="aspect-title">Latar Belakang</div>
-          <ul class="aspect-desc">
-            <li>Motivasi</li>
-            <li>Kemanfaatan / Dampak</li>
-          </ul>
-        </td>
-        <td class="max-score-cell">25</td>
-        <td><input type="number" max="25" min="0"></td>
-      </tr>
-      <tr>
-        <td>
-          <div class="aspect-title">Formulasi Masalah</div>
-          <ul class="aspect-desc">
-            <li>Tujuan</li>
-            <li>Batasan/Asumsi yang digunakan</li>
-            <li>Kelayakan waktu dan sarana pendukung</li>
-          </ul>
-        </td>
-        <td class="max-score-cell">30</td>
-        <td><input type="number" max="30" min="0"></td>
-      </tr>
-      <tr>
-        <td class="number-cell">3</td>
-        <td>
-          <div class="aspect-title">Teori Pendukung / Penelusuran Literatur</div>
-        </td>
-        <td class="max-score-cell">30</td>
-        <td><input type="number" max="30" min="0"></td>
-      </tr>
-      <tr>
-        <td class="number-cell">4</td>
-        <td>
-          <div class="aspect-title">Ide/Metode Penyelesaian Masalah</div>
-        </td>
-        <td class="max-score-cell">15</td>
-        <td><input type="number" max="15" min="0"></td>
-      </tr>
-      <tr class="total-row">
-        <td colspan="2" style="text-align: center;"><strong>Total</strong></td>
-        <td class="max-score-cell"><strong>100</strong></td>
-        <td><input type="number" readonly></td>
-      </tr>
-    </table>
-{{-- 
-    <table>
-      <tr>
-        <th class="notes-header"><i class="fas fa-comment-dots"></i> CATATAN REVIEWER / USULAN PERBAIKAN</th>
-      </tr>
-      <tr>
-        <td><textarea placeholder="Tulis catatan evaluasi dan usulan perbaikan di sini..."></textarea></td>
-      </tr>
-    </table> --}}
-
-    <button type="submit" class="submit-btn">
-      <i class="fas fa-paper-plane"></i> Submit Evaluasi
-    </button>
   </div>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Calculate total score automatically
-    const scoreInputs = document.querySelectorAll('input[type="number"]:not([readonly])');
-    const totalInput = document.querySelector('.total-row input');
-    
-    function calculateTotal() {
-      let total = 0;
-      scoreInputs.forEach(input => {
-        const value = parseFloat(input.value) || 0;
-        total += value;
+    $(document).ready(function() {
+      console.log('Document ready');
+
+      // Debug: Log mahasiswa data
+      const mahasiswaData = @json($mahasiswa);
+      console.log('Mahasiswa data:', mahasiswaData);
+
+      // Handle select change
+      $('#mahasiswa_id').on('change', function() {
+        console.log('Select changed:', this.value);
+        const selectedId = $(this).val();
+        if (selectedId) {
+          loadNilaiMahasiswa(selectedId);
+        } else {
+          resetForm();
+        }
       });
-      totalInput.value = total;
-    }
-    
-    scoreInputs.forEach(input => {
-      input.addEventListener('input', calculateTotal);
+
+      // Debug: Test select functionality
+      $('#mahasiswa_id').click(function() {
+        console.log('Select clicked');
+      });
+
+      function loadNilaiMahasiswa(mahasiswaId) {
+        console.log('Loading nilai for mahasiswa:', mahasiswaId);
+        // ... rest of the function
+      }
+
+      function resetForm() {
+        $('#formNilai')[0].reset();
+        $('#total').text('0');
+      }
+
+      // Add this to check if jQuery is working
+      console.log('jQuery version:', $.fn.jquery);
     });
   </script>
 </body>

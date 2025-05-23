@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Form Nilai Literatur Review Proposal TA</title>
+  <title>Form Nilai Literature Review Proposal TA</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     :root {
@@ -21,382 +21,272 @@
     body {
       font-family: 'Segoe UI', 'Poppins', sans-serif;
       background-color: #f5f5f5;
-      padding: 5px 20px;
+      padding: 20px;
       color: var(--text-dark);
-      background-image: 
-        radial-gradient(circle at 20% 30%, rgba(227, 6, 19, 0.05) 0%, transparent 25%),
-        radial-gradient(circle at 80% 70%, rgba(227, 6, 19, 0.05) 0%, transparent 25%);
     }
 
     .form-container {
-      max-width: 900px;
+      max-width: 1000px;
       margin: 0 auto;
       background: white;
       border-radius: 12px;
       box-shadow: var(--shadow);
       padding: 30px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .form-container::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 5px;
-      height: 100%;
-      background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
     }
 
     h2 {
       color: var(--secondary);
       text-align: center;
-      margin-bottom: 25px;
-      font-weight: 700;
-      position: relative;
-      padding-bottom: 10px;
+      margin-bottom: 30px;
+      font-weight: 600;
     }
 
-    h2::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 3px;
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text-dark);
+    }
+
+    select, input[type="number"], textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    input[type="number"] {
+      width: 100%;
+    }
+
+    .alert {
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+
+    .alert-success {
+      background-color: #d4edda;
+      border-color: #c3e6cb;
+      color: #155724;
+    }
+
+    .alert-danger {
+      background-color: #f8d7da;
+      border-color: #f5c6cb;
+      color: #721c24;
+    }
+
+    .btn-submit {
       background: var(--primary);
-      border-radius: 3px;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .btn-submit:hover {
+      background: var(--primary-dark);
     }
 
     table {
       width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      margin: 20px 0;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
-    }
-
-    th {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: var(--text-light);
-      padding: 15px;
-      text-align: center;
-      font-weight: 600;
-      position: sticky;
-      top: 0;
-    }
-
-    td {
-      padding: 15px;
-      border-bottom: 1px solid #eee;
-      background-color: white;
-      transition: var(--transition);
-      text-align: center;
-    }
-
-    tr:hover td {
-      background-color: rgba(227, 6, 19, 0.03);
-    }
-
-    .left {
-      text-align: left !important;
-    }
-
-    .criteria {
-      color: #4A5568;
-      font-size: 0.95rem;
-      line-height: 1.5;
-    }
-
-    .max-score {
-      background-color: rgba(227, 6, 19, 0.05);
-      font-weight: 600;
-    }
-
-    input[type="number"] {
-      width: 80px;
-      padding: 8px 12px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 0.95rem;
-      transition: var(--transition);
-      text-align: center;
-    }
-    
-    input[type="text"] {
-      width: 35%;
-      padding: 10px 15px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 1rem;
-      transition: var(--transition);
-    }
-
-    input[type="number"]:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(227, 6, 19, 0.1);
-    }
-
-    input[readonly] {
-      background-color: rgba(227, 6, 19, 0.05);
-      font-weight: 600;
-      color: var(--primary);
-    }
-
-    .total-row {
-      background-color: rgba(227, 6, 19, 0.05);
-    }
-
-    .total-row td {
-      font-weight: 700;
-    }
-
-    .average-row {
-      background-color: rgba(41, 128, 185, 0.05);
-    }
-
-    .average-row td {
-      font-weight: 700;
-      color: var(--secondary);
-    }
-
-    .note {
-      font-size: 0.85rem;
-      color: #718096;
-      margin-top: 5px;
-      text-align: center;
-    }
-
-    .reviewer-box {
-      background: linear-gradient(135deg, var(--secondary), #2D3748);
-      color: white;
-      padding: 12px 15px;
-      font-weight: 600;
-      border-radius: 8px 8px 0 0;
+      border-collapse: collapse;
       margin-top: 30px;
     }
 
-    .reviewer-box i {
-      margin-right: 8px;
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
     }
 
-    textarea {
-      width: 100%;
-      height: 120px;
-      padding: 15px;
-      border: 1px solid #ddd;
-      border-radius: 0 0 8px 8px;
-      font-family: inherit;
-      font-size: 0.95rem;
-      resize: vertical;
-      transition: var(--transition);
-      border-top: none;
-    }
-
-    textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(227, 6, 19, 0.1);
-    }
-
-    .submit-btn {
-      display: block;
-      margin: 30px auto 0;
-      padding: 12px 30px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    th {
+      background-color: var(--primary);
       color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
-      box-shadow: 0 4px 12px rgba(227, 6, 19, 0.2);
     }
 
-    .submit-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(227, 6, 19, 0.3);
+    tr:nth-child(even) {
+      background-color: #f8f9fa;
     }
 
-    .name-input {
+    .back-button {
+      display: inline-block;
+      padding: 10px 20px;
       margin-bottom: 20px;
+      background-color: #f8f9fa;
+      color: var(--text-dark);
+      text-decoration: none;
+      border-radius: 6px;
+      border: 1px solid #ddd;
     }
 
-    .name-input label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-      color: var(--secondary);
+    .back-button:hover {
+      background-color: #e9ecef;
     }
-
-
-    @media (max-width: 768px) {
-      .form-container {
-        padding: 20px 15px;
-      }
-
-      table {
-        display: block;
-        overflow-x: auto;
-      }
-
-      th, td {
-        min-width: 150px;
-      }
-    }
-
-    /* Style untuk tombol kembali ke beranda (warna abu-abu) */
-        .back-button {
-            display: inline-flex;
-            align-items: center;
-            padding: 10px 20px;
-            margin: 20px;
-            background-color: #f8f9fa; /* Warna abu-abu muda */
-            color: #1A1A2E; /* Warna teks abu-abu gelap */
-            border: 1px solid #dee2e6; /* Border abu-abu */
-            border-radius: 30px;
-            font-weight: 500;
-            text-decoration: none;
-            transition: var(--transition);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
   </style>
 </head>
 <body>
-
-  <div class="container">
-        <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <a href="{{ url('/penilaiandosen') }}" class="back-button">
-                    <i class="fas fa-arrow-left me-1"></i> Kembali ke Beranda
-                </a>
-            </div>
-        </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <a href="{{ url('/penilaiandosen') }}" class="back-button">
+          <i class="fas fa-arrow-left me-1"></i> Kembali ke Beranda
+        </a>
+      </div>
     </div>
-
-  <div class="form-container">
-    <h2><i class="fas fa-book-open"></i> Form Nilai Literatur Review Proposal TA</h2>
-
-    <div class="name-input">
-      <label for="nama"><i class="fas fa-user"></i> Nama Mahasiswa</label>
-      <input type="text" id="nama" name="nama" placeholder="Masukkan nama mahasiswa">
-    </div>
-
-    <table>
-      <tr>
-        <th rowspan="2" style="min-width: 300px;">Aspek Penilaian</th>
-        <th rowspan="2" style="width: 100px;">Nilai Maks</th>
-        <th colspan="2">Nilai</th>
-      </tr>
-      <tr>
-        <th style="width: 120px;">Calon Pembimbing I<br><small>(60%)</small></th>
-        <th style="width: 120px;">Calon Pembimbing II<br><small>(40%)</small></th>
-      </tr>
-
-      <tr>
-        <td class="left criteria">Kualitas pustaka sebagai referensi utama</td>
-        <td class="max-score">10</td>
-        <td><input type="number" min="0" max="10" class="score-input" data-weight="0.6"></td>
-        <td><input type="number" min="0" max="10" class="score-input" data-weight="0.4"></td>
-      </tr>
-      <tr>
-        <td class="left criteria">Konten pustaka mengenai rumusan masalah</td>
-        <td class="max-score">10</td>
-        <td><input type="number" min="0" max="10" class="score-input" data-weight="0.6"></td>
-        <td><input type="number" min="0" max="10" class="score-input" data-weight="0.4"></td>
-      </tr>
-      <tr>
-        <td class="left criteria">Analisis pustaka terkait tujuan atau ide pokok</td>
-        <td class="max-score">10</td>
-        <td><input type="number" min="0" max="10" class="score-input" data-weight="0.6"></td>
-        <td><input type="number" min="0" max="10" class="score-input" data-weight="0.4"></td>
-      </tr>
-      <tr>
-        <td class="left criteria">Kelengkapan kajian teori mengenai metode atau algoritma</td>
-        <td class="max-score">10</td>
-        <td><input type="number" min="0" max="10" class="score-input" data-weight="0.6"></td>
-        <td><input type="number" min="0" max="10" class="score-input" data-weight="0.4"></td>
-      </tr>
-      <tr>
-        <td class="left criteria">Kelebihan dan kekurangan penelitian</td>
-        <td class="max-score">40</td>
-        <td><input type="number" min="0" max="40" class="score-input" data-weight="0.6"></td>
-        <td><input type="number" min="0" max="40" class="score-input" data-weight="0.4"></td>
-      </tr>
-      <tr>
-        <td class="left criteria">Relasi teori terhadap topik proposal</td>
-        <td class="max-score">20</td>
-        <td><input type="number" min="0" max="20" class="score-input" data-weight="0.6"></td>
-        <td><input type="number" min="0" max="20" class="score-input" data-weight="0.4"></td>
-      </tr>
-
-      <tr class="total-row">
-        <td><strong>Jumlah</strong></td>
-        <td><strong>100</strong></td>
-        <td><input type="number" readonly id="total1"></td>
-        <td><input type="number" readonly id="total2"></td>
-      </tr>
-      <tr class="average-row">
-        <td colspan="2"><strong>Rata-rata nilai Calon Pembimbing</strong></td>
-        <td colspan="2"><input type="number" readonly id="average"></td>
-      </tr>
-    </table>
-{{-- 
-    <p class="note">*) Diisi bila presentasi dilakukan kepada dua orang calon pembimbing</p>
-
-    <div class="reviewer-box">
-      <i class="fas fa-comment-dots"></i> CATATAN REVIEWER / USULAN PERBAIKAN
-    </div>
-    <textarea placeholder="Masukkan catatan evaluasi dan usulan perbaikan di sini..."></textarea> --}}
-
-    <button type="submit" class="submit-btn">
-      <i class="fas fa-paper-plane"></i> Submit Penilaian
-    </button>
   </div>
 
-  <script>
-    // Calculate weighted scores
-    const scoreInputs = document.querySelectorAll('.score-input');
-    const total1 = document.getElementById('total1');
-    const total2 = document.getElementById('total2');
-    const average = document.getElementById('average');
+  <div class="form-container">
+    <h2><i class="fas fa-book"></i> Form Nilai Literature Review Proposal TA</h2>
 
-    function calculateScores() {
-      let sum1 = 0;
-      let sum2 = 0;
-      
-      // Get all inputs for supervisor 1 (60%)
-      const inputs1 = document.querySelectorAll('td:nth-child(3) input.score-input');
-      inputs1.forEach(input => {
-        const weight = parseFloat(input.dataset.weight);
-        sum1 += (parseFloat(input.value) || 0) * weight;
-      });
-      
-      // Get all inputs for supervisor 2 (40%)
-      const inputs2 = document.querySelectorAll('td:nth-child(4) input.score-input');
-      inputs2.forEach(input => {
-        const weight = parseFloat(input.dataset.weight);
-        sum2 += (parseFloat(input.value) || 0) * weight;
-      });
-      
-      total1.value = Math.round(sum1);
-      total2.value = Math.round(sum2);
-      average.value = ((sum1 + sum2) / 2).toFixed(2);
-    }
+    @if(session('success'))
+      <div class="alert alert-success">
+        {{ session('success') }}
+      </div>
+    @endif
 
-    // Add event listeners to all input fields
-    scoreInputs.forEach(input => {
-      input.addEventListener('input', calculateScores);
-    });
-  </script>
+    @if(session('error'))
+      <div class="alert alert-danger">
+        {{ session('error') }}
+      </div>
+    @endif
+
+    <form action="{{ route('nilai-literatur.store') }}" method="POST">
+      @csrf
+
+      <div class="form-group">
+        <label for="id_mahasiswa">Pilih Mahasiswa:</label>
+        <select name="id_mahasiswa" id="id_mahasiswa" required>
+          <option value="">-- Pilih Mahasiswa --</option>
+          @if(isset($mahasiswa) && count($mahasiswa) > 0)
+            @foreach($mahasiswa as $mhs)
+              <option value="{{ $mhs->id }}" {{ old('id_mahasiswa', request('id_mahasiswa')) == $mhs->id ? 'selected' : '' }}>
+                {{ $mhs->nama }} ({{ $mhs->nim }})
+              </option>
+            @endforeach
+          @else
+            <option value="" disabled>Tidak ada mahasiswa yang perlu dinilai</option>
+          @endif
+        </select>
+        @error('id_mahasiswa')
+          <div class="alert alert-danger">{{ $message }}</div>
+        @enderror
+      </div>
+
+      <table>
+        <tr>
+          <th style="width: 60%">Komponen Penilaian</th>
+          <th style="width: 40%">Nilai (0-100)</th>
+        </tr>
+        <tr>
+          <td>
+            <strong>Pemahaman Literatur</strong>
+            <br>
+            <small>Kemampuan memahami dan menjelaskan isi literatur yang digunakan</small>
+          </td>
+          <td>
+            <input type="number" name="nilai_pemahaman" min="0" max="100"
+              value="{{ old('nilai_pemahaman', request('nilai_pemahaman')) }}" required>
+            @error('nilai_pemahaman')
+              <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Analisis Literatur</strong>
+            <br>
+            <small>Kemampuan menganalisis dan mengkritisi literatur</small>
+          </td>
+          <td>
+            <input type="number" name="nilai_analisis" min="0" max="100"
+              value="{{ old('nilai_analisis', request('nilai_analisis')) }}" required>
+            @error('nilai_analisis')
+              <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Sintesis Literatur</strong>
+            <br>
+            <small>Kemampuan menghubungkan dan mensintesis berbagai literatur</small>
+          </td>
+          <td>
+            <input type="number" name="nilai_sintesis" min="0" max="100"
+              value="{{ old('nilai_sintesis', request('nilai_sintesis')) }}" required>
+            @error('nilai_sintesis')
+              <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Kesimpulan dan Rekomendasi</strong>
+            <br>
+            <small>Kemampuan menarik kesimpulan dan memberikan rekomendasi</small>
+          </td>
+          <td>
+            <input type="number" name="nilai_kesimpulan" min="0" max="100"
+              value="{{ old('nilai_kesimpulan', request('nilai_kesimpulan')) }}" required>
+            @error('nilai_kesimpulan')
+              <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+          </td>
+        </tr>
+      </table>
+
+      <div class="form-group">
+        <label for="catatan">Catatan/Komentar:</label>
+        <textarea name="catatan" id="catatan" rows="4">{{ old('catatan', request('catatan')) }}</textarea>
+        @error('catatan')
+          <div class="alert alert-danger">{{ $message }}</div>
+        @enderror
+      </div>
+
+      <button type="submit" class="btn-submit">
+        <i class="fas fa-save"></i> Simpan Nilai
+      </button>
+    </form>
+
+    @if($nilaiLiteraturs->isNotEmpty())
+      <h3 style="margin-top: 40px;">Riwayat Penilaian</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Mahasiswa</th>
+            <th>Pemahaman</th>
+            <th>Analisis</th>
+            <th>Sintesis</th>
+            <th>Kesimpulan</th>
+            <th>Catatan</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach($nilaiLiteraturs as $nilai)
+            <tr>
+              <td>{{ $nilai->mahasiswa->nama }} ({{ $nilai->mahasiswa->nim }})</td>
+              <td>{{ $nilai->nilai_pemahaman }}</td>
+              <td>{{ $nilai->nilai_analisis }}</td>
+              <td>{{ $nilai->nilai_sintesis }}</td>
+              <td>{{ $nilai->nilai_kesimpulan }}</td>
+              <td>{{ $nilai->catatan }}</td>
+            </tr>
+          @endforeach
+        </tbody>
+      </table>
+    @endif
+  </div>
 </body>
 </html>

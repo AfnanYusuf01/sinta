@@ -44,7 +44,7 @@
         <img src="assets/img/logo.jpeg" alt="Logo SINTA" class="logo-img">
         <h1 class="sitename">SINTA</h1>
       </a>
-  
+
       <!-- Navigation Menu -->
       <nav id="navmenu" class="navmenu">
         <ul>
@@ -64,7 +64,7 @@
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
-  
+
       <!-- User Section -->
       <div class="user-section ms-auto d-flex align-items-center">
         @auth
@@ -72,7 +72,7 @@
           <div class="dropdown user-dropdown">
             <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
               <div class="user-avatar me-2">
-                
+
               </div>
               <span class="user-name d-none d-lg-inline">{{ Auth::user()->name }}</span>
             </a>
@@ -98,7 +98,7 @@
       </div>
     </div>
   </header>
-  
+
   <style>
     /* Navbar Styling */
     .header {
@@ -107,13 +107,13 @@
       /* padding: 15px 0; */
       transition: all 0.3s ease;
     }
-    
+
     .logo-img {
       height: 40px;
       width: auto;
       margin-right: 10px;
     }
-    
+
     .sitename {
       font-family: 'Raleway', sans-serif;
       font-weight: 700;
@@ -121,7 +121,7 @@
       margin: 0;
       font-size: 1.5rem;
     }
-    
+
     /* Navigation Menu */
     .navmenu ul {
       display: flex;
@@ -129,12 +129,12 @@
       padding: 0;
       list-style: none;
     }
-    
+
     .navmenu ul li {
       position: relative;
       padding: 0 10px;
     }
-    
+
     .navmenu ul li a {
       color: #2c3e50;
       font-weight: 500;
@@ -144,12 +144,12 @@
       display: flex;
       align-items: center;
     }
-    
+
     .navmenu ul li a:hover,
     .navmenu ul li a.active {
       color: #dc3545; /* Warna merah */
     }
-    
+
     /* Dropdown Menu */
     .dropdown-menu {
       position: absolute;
@@ -165,28 +165,28 @@
       transition: all 0.3s ease;
       z-index: 999;
     }
-    
+
     .dropdown:hover .dropdown-menu {
       opacity: 1;
       visibility: visible;
     }
-    
+
     .dropdown-menu li {
       padding: 0;
     }
-    
+
     .dropdown-menu li a {
       padding: 8px 20px;
       color: #555;
       transition: all 0.2s;
     }
-    
+
     .dropdown-menu li a:hover {
       background-color: #f8f9fa;
       color: #dc3545; /* Warna merah */
       padding-left: 25px;
     }
-    
+
     /* User Section */
     .user-avatar img {
       width: 36px;
@@ -195,26 +195,26 @@
       border: 2px solid #dc3545; /* Border merah */
       transition: all 0.3s ease;
     }
-    
+
     .user-avatar:hover img {
       border-color: #bb2d3b; /* Warna merah lebih gelap */
     }
-    
+
     .user-name {
       font-weight: 500;
       color: #2c3e50;
     }
-    
+
     .dropdown-menu .dropdown-item {
       padding: 8px 15px;
       font-size: 0.9rem;
     }
-    
+
     .dropdown-menu .dropdown-item:hover {
       color: #dc3545; /* Warna merah */
       background-color: #f8f9fa;
     }
-    
+
     /* Mobile Toggle */
     .mobile-nav-toggle {
       color: #dc3545; /* Warna merah */
@@ -222,20 +222,20 @@
       cursor: pointer;
       display: none;
     }
-    
+
     /* Responsive */
     @media (max-width: 1199.98px) {
       .navmenu ul li {
         padding: 0 8px;
       }
-      
+
       .navmenu ul li a {
         padding: 8px 12px;
         font-size: 0.9rem;
       }
     }
   </style>
-  
+
 
   <main class="main">
 
@@ -271,7 +271,7 @@
             <div class="custom-image-wrapper">
               <img src="assets/img/tentang.jpg" class="img-fluid" alt="Tentang Sistem Informasi Tugas Akhir">
             </div>
-          </div>          
+          </div>
           <div class="col-lg-6" data-aos="fade-left">
             <div class="content ps-lg-5">
               <h3>SINTA membantu mahasiswa dalam proses penyelesaian Tugas Akhir</h3>
@@ -304,7 +304,7 @@
               <img src="assets/img/info.png" class="img-fluid rounded-2" alt="Alur Proses Tugas Akhir">
             </div>
           </div>
-          
+
           <div class="col-lg-6" data-aos="fade-left" data-aos-delay="200">
             <div class="process-steps">
               <div class="step-card mb-4 p-4 bg-white rounded-3 shadow-sm border-start border-danger border-4">
@@ -370,10 +370,10 @@
 
   <div class="container">
     <div class="row gy-4">
-      
+
       <!-- Pengajuan Pembimbing - Tidak tampil untuk Dosen -->
         @auth
-          @if (!Auth::user()->hasRole('dosen'))
+          @if (Auth::user()->hasRole('mahasiswa'))
           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
             <div class="service-item position-relative">
               <div class="icon">
@@ -389,7 +389,7 @@
 
       <!-- Log Bimbingan - Tidak tampil untuk Dosen -->
       @auth
-        @if (!Auth::user()->hasRole('dosen'))
+        @if (Auth::user()->hasRole('mahasiswa'))
         <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
           <div class="service-item position-relative">
             <div class="icon">
@@ -403,9 +403,8 @@
         @endif
       @endauth
 
-      <!-- Pendaftaran - Tidak tampil untuk Dosen -->
       @auth
-        @if (!Auth::user()->hasRole('dosen'))
+        @if (Auth::user()->hasRole('dosen'))
         <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
           <div class="service-item position-relative">
             <div class="icon">
@@ -417,11 +416,11 @@
           </div>
         </div>
         @endif
-      @endauth
+        @endauth
 
       <!-- Penilaian Dosen - Tidak tampil untuk Mahasiswa -->
       @auth
-        @if (!Auth::user()->hasRole('mahasiswa'))
+        @if (!Auth::user()->hasRole('dosen'))
         <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
           <div class="service-item position-relative">
             <div class="icon">
@@ -566,7 +565,7 @@
   <!-- Preloader -->
   <div id="preloader"></div>
 
- 
+
   </div>
 
   <!-- Vendor JS Files -->
@@ -582,6 +581,6 @@
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
 
-  
+
 </body>
 </html>

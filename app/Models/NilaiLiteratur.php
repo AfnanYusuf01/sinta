@@ -3,11 +3,23 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class NilaiLiteratur extends Model
 {
+    use HasFactory;
+
     protected $table = 'nilai_literatur';
-    protected $fillable = ['id_mahasiswa', 'id_dosen', 'nilai_1', 'nilai_2', 'nilai_3', 'nilai_4', 'nilai_5', 'nilai_6', 'nilai_7', 'total'];
+
+    protected $fillable = [
+        'id_mahasiswa',
+        'id_dosen',
+        'nilai_pemahaman',
+        'nilai_analisis',
+        'nilai_sintesis',
+        'nilai_kesimpulan',
+        'catatan'
+    ];
 
     public function mahasiswa()
     {
