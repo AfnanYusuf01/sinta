@@ -8,11 +8,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use Spatie\Permission\Traits\HasRoles;
 
 class AuthenticatedSessionController extends Controller
 {
-
     /**
      * Display the login view.
      */
@@ -24,26 +22,24 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
- public function store(LoginRequest $request): RedirectResponse
-{
-    $request->authenticate();
+    public function store(LoginRequest $request): RedirectResponse
+    {
+        $request->authenticate();
 
-    $request->session()->regenerate();
+        $request->session()->regenerate();
 
-    $user = Auth::user();
+        $user = Auth::user();
 
-    if ($user->hasRole('admin')) {
-        return redirect('/nilaipresentasiproposalta');
-    } elseif ($user->hasRole('dosen')) {
-        return redirect('/');
-    } elseif ($user->hasRole('mahasiswa')) {
-        return redirect('/');
+        if ($user->hasRole('admin')) {
+            return redirect('/nilaipresentasiproposalta');
+        } elseif ($user->hasRole('dosen')) {
+            return redirect('/');
+        } elseif ($user->hasRole('mahasiswa')) {
+            return redirect('/');
+        }
+
+        return redirect('/'); // fallback
     }
-
-    return redirect('/'); // fallback
-}
-
-
 
     /**
      * Destroy an authenticated session.
@@ -61,14 +57,11 @@ class AuthenticatedSessionController extends Controller
 
     public function logout(Request $request)
     {
-        // Melakukan logout dengan Auth::logout()
         Auth::logout();
 
-        // Menghapus sesi dan cookie
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        // Redirect pengguna ke halaman login
         return redirect()->route('login');
     }
 }

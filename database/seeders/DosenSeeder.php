@@ -9,20 +9,25 @@ class DosenSeeder extends Seeder
 {
     public function run(): void
     {
-        for ($i = 1; $i <= 10; $i++) {
+        // Create 3 dosen
+        for ($i = 1; $i <= 3; $i++) {
+            // Create user first
             $user = User::create([
-                'name' => 'Dosen ' . $i,
-                'email' => 'dosen' . $i . '@example.com',
-                'password' => Hash::make('password123'),
+                'name' => "Dosen $i",
+                'email' => "dosen$i@example.com",
+                'password' => bcrypt('password'),
+                'role' => 'dosen'
             ]);
-            $user->assignRole('dosen');
 
+            // Create dosen record
             Dosen::create([
-                'nama' => $user->name,
-                'nidn' => 'NIDN' . str_pad($i, 4, '0', STR_PAD_LEFT),
-                'email' => $user->email,
                 'user_id' => $user->id,
+                'nama' => "Dosen $i",
+                'nip' => "987654" . str_pad($i, 3, '0', STR_PAD_LEFT),
+                'program_studi' => 'Teknik Informatika'
             ]);
         }
+
+        $this->command->info('3 dosen created successfully.');
     }
 }

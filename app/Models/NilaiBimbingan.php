@@ -2,20 +2,30 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Pembimbing extends Model
+class NilaiBimbingan extends Model
 {
     use HasFactory;
 
-    protected $table = 'pembimbing';
+    protected $table = 'nilai_bimbingan';
     
     protected $fillable = [
         'id_mahasiswa',
         'id_dosen',
-        'status',
-        'jenis_pembimbing' // 1 untuk pembimbing 1, 2 untuk pembimbing 2
+        'nilai_1',
+        'nilai_2',
+        'nilai_3',
+        'nilai_4',
+        'nilai_5',
+        'nilai_6',
+        'nilai_7',
+        'total_nilai'
+    ];
+
+    protected $casts = [
+        'total_nilai' => 'float',
     ];
 
     public function mahasiswa()
@@ -28,3 +38,4 @@ class Pembimbing extends Model
         return $this->belongsTo(Dosen::class, 'id_dosen');
     }
 }
+

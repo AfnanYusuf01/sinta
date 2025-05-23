@@ -21,7 +21,7 @@
     body {
       font-family: 'Segoe UI', 'Poppins', sans-serif;
       background-color: #f5f5f5;
-      padding: 30px 20px;
+      padding: 5px 20px;
       color: var(--text-dark);
       background-image: 
         radial-gradient(circle at 20% 30%, rgba(227, 6, 19, 0.05) 0%, transparent 25%),
@@ -190,107 +190,162 @@
         min-width: 150px;
       }
     }
+
+    /* Style untuk tombol kembali ke beranda (warna abu-abu) */
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 20px;
+      margin: 20px;
+      background-color: #f8f9fa; /* Warna abu-abu muda */
+      color: #1A1A2E; /* Warna teks abu-abu gelap */
+      border: 1px solid #dee2e6; /* Border abu-abu */
+      border-radius: 30px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: var(--transition);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    input[type="text"] {
+      width: 35%;
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .name-input {
+      margin-bottom: 20px;
+    }
+
+    .name-input label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--secondary);
+    }
+
   </style>
 </head>
 <body>
-  <div class="form-container">
-    <h2><i class="fas fa-chalkboard-teacher"></i> Form Nilai Presentasi Proposal TA</h2>
 
-    <table>
-      <tr>
-        <th rowspan="2" style="width: 150px;">Komponen Penilaian</th>
-        <th rowspan="2" style="min-width: 300px;">Kriteria Penilaian</th>
-        <th rowspan="2" style="width: 100px;">Nilai Maks</th>
-        <th colspan="2">Nilai</th>
-      </tr>
-      <tr>
-        <th style="width: 120px;">Calon Pembimbing I</th>
-        <th style="width: 120px;">Calon Pembimbing II</th>
-      </tr>
+  <div class="container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <a href="{{ url('/penilaiandosen') }}" class="back-button">
+            <i class="fas fa-arrow-left me-1"></i> Kembali ke Beranda
+          </a>
+        </div>
+      </div>
+    </div>
 
-      <tr>
-        <td rowspan="3">Penguasaan Materi Proposal</td>
-        <td class="left criteria">Menjawab latar belakang permasalahan, perumusan masalah, tujuan dan metodologi secara restruktur</td>
-        <td class="max-score">25</td>
-        <td><input type="number" min="0" max="25"></td>
-        <td><input type="number" min="0" max="25"></td>
-      </tr>
-      <tr>
-        <td class="left criteria">Menguasai Teori Pendukung TA</td>
-        <td class="max-score">15</td>
-        <td><input type="number" min="0" max="15"></td>
-        <td><input type="number" min="0" max="15"></td>
-      </tr>
-      <tr>
-        <td class="left criteria">Menguasai materi terkait dengan tools pemodelan, simulasi ataupun implementasi</td>
-        <td class="max-score">10</td>
-        <td><input type="number" min="0" max="10"></td>
-        <td><input type="number" min="0" max="10"></td>
-      </tr>
+    <div class="form-container">
+      <h2><i class="fas fa-chalkboard-teacher"></i> Form Nilai Presentasi Proposal TA</h2>
 
-      <tr>
-        <td rowspan="2">Expert Judgement</td>
-        <td class="left criteria">Pemaparan/cara menjawab</td>
-        <td class="max-score">25</td>
-        <td><input type="number" min="0" max="25"></td>
-        <td><input type="number" min="0" max="25"></td>
-      </tr>
-      <tr>
-        <td class="left criteria">Komunikasi interpersonal</td>
-        <td class="max-score">25</td>
-        <td><input type="number" min="0" max="25"></td>
-        <td><input type="number" min="0" max="25"></td>
-      </tr>
+      <div class="name-input">
+        <label for="nama"><i class="fas fa-user"></i> Nama Mahasiswa</label>
+        <input type="text" id="nama" name="nama" placeholder="Masukkan nama mahasiswa">
+      </div>
 
-      <tr class="total-row">
-        <td colspan="2"><strong>Jumlah</strong></td>
-        <td><strong>100</strong></td>
-        <td><input type="number" readonly id="total1"></td>
-        <td><input type="number" readonly id="total2"></td>
-      </tr>
-      <tr class="average-row">
-        <td colspan="3"><strong>Rata-rata nilai Calon Pembimbing</strong></td>
-        <td colspan="2"><input type="number" readonly id="average"></td>
-      </tr>
-    </table>
+      <table>
+        <tr>
+          <th rowspan="2" style="width: 150px;">Komponen Penilaian</th>
+          <th rowspan="2" style="min-width: 300px;">Kriteria Penilaian</th>
+          <th rowspan="2" style="width: 100px;">Nilai Maks</th>
+          <th colspan="2">Nilai</th>
+        </tr>
+        <tr>
+          <th style="width: 120px;">Calon Pembimbing I</th>
+          <th style="width: 120px;">Calon Pembimbing II</th>
+        </tr>
 
-    <button type="submit" class="submit-btn">
-      <i class="fas fa-paper-plane"></i> Submit Penilaian
-    </button>
-  </div>
+        <tr>
+          <td rowspan="3">Penguasaan Materi Proposal</td>
+          <td class="left criteria">Menjawab latar belakang permasalahan, perumusan masalah, tujuan dan metodologi secara restruktur</td>
+          <td class="max-score">25</td>
+          <td><input type="number" min="0" max="25"></td>
+          <td><input type="number" min="0" max="25"></td>
+        </tr>
+        <tr>
+          <td class="left criteria">Menguasai Teori Pendukung TA</td>
+          <td class="max-score">15</td>
+          <td><input type="number" min="0" max="15"></td>
+          <td><input type="number" min="0" max="15"></td>
+        </tr>
+        <tr>
+          <td class="left criteria">Menguasai materi terkait dengan tools pemodelan, simulasi ataupun implementasi</td>
+          <td class="max-score">10</td>
+          <td><input type="number" min="0" max="10"></td>
+          <td><input type="number" min="0" max="10"></td>
+        </tr>
 
-  <script>
-    // Calculate totals and average
-    const inputs1 = document.querySelectorAll('td:nth-child(4) input:not([readonly])');
-    const inputs2 = document.querySelectorAll('td:nth-child(5) input:not([readonly])');
-    const total1 = document.getElementById('total1');
-    const total2 = document.getElementById('total2');
-    const average = document.getElementById('average');
+        <tr>
+          <td rowspan="2">Expert Judgement</td>
+          <td class="left criteria">Pemaparan/cara menjawab</td>
+          <td class="max-score">25</td>
+          <td><input type="number" min="0" max="25"></td>
+          <td><input type="number" min="0" max="25"></td>
+        </tr>
+        <tr>
+          <td class="left criteria">Komunikasi interpersonal</td>
+          <td class="max-score">25</td>
+          <td><input type="number" min="0" max="25"></td>
+          <td><input type="number" min="0" max="25"></td>
+        </tr>
 
-    function calculateScores() {
-      // Calculate first supervisor total
-      let sum1 = 0;
-      inputs1.forEach(input => {
-        sum1 += parseFloat(input.value) || 0;
+        <tr class="total-row">
+          <td colspan="2"><strong>Jumlah</strong></td>
+          <td><strong>100</strong></td>
+          <td><input type="number" readonly id="total1"></td>
+          <td><input type="number" readonly id="total2"></td>
+        </tr>
+        <tr class="average-row">
+          <td colspan="3"><strong>Rata-rata nilai Calon Pembimbing</strong></td>
+          <td colspan="2"><input type="number" readonly id="average"></td>
+        </tr>
+      </table>
+
+      <button type="submit" class="submit-btn">
+        <i class="fas fa-paper-plane"></i> Submit Penilaian
+      </button>
+    </div>
+
+    <script>
+      // Calculate totals and average
+      const inputs1 = document.querySelectorAll('td:nth-child(4) input:not([readonly])');
+      const inputs2 = document.querySelectorAll('td:nth-child(5) input:not([readonly])');
+      const total1 = document.getElementById('total1');
+      const total2 = document.getElementById('total2');
+      const average = document.getElementById('average');
+
+      function calculateScores() {
+        // Calculate first supervisor total
+        let sum1 = 0;
+        inputs1.forEach(input => {
+          sum1 += parseFloat(input.value) || 0;
+        });
+        total1.value = sum1;
+
+        // Calculate second supervisor total
+        let sum2 = 0;
+        inputs2.forEach(input => {
+          sum2 += parseFloat(input.value) || 0;
+        });
+        total2.value = sum2;
+
+        // Calculate average
+        average.value = ((sum1 + sum2) / 2).toFixed(2);
+      }
+
+      // Add event listeners to all input fields
+      const allInputs = document.querySelectorAll('input:not([readonly])');
+      allInputs.forEach(input => {
+        input.addEventListener('input', calculateScores);
       });
-      total1.value = sum1;
-
-      // Calculate second supervisor total
-      let sum2 = 0;
-      inputs2.forEach(input => {
-        sum2 += parseFloat(input.value) || 0;
-      });
-      total2.value = sum2;
-
-      // Calculate average
-      average.value = ((sum1 + sum2) / 2).toFixed(2);
-    }
-
-    // Add event listeners to all input fields
-    const allInputs = document.querySelectorAll('input:not([readonly])');
-    allInputs.forEach(input => {
-      input.addEventListener('input', calculateScores);
-    });
-  </script>
+    </script>
 </body>
 </html>

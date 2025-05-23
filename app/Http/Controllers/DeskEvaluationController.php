@@ -17,7 +17,7 @@ class DeskEvaluationController extends Controller
         $mahasiswa = Mahasiswa::where('user_id', $user->id)->first();
         
         // Get existing evaluations
-        $evaluations = DeskEv   aluasi::where('id_mahasiswa', $mahasiswa->id)
+        $evaluations = DeskEvaluasi::where('id_mahasiswa', $mahasiswa->id)
             ->with('dosen')
             ->get()
             ->keyBy('id_dosen');

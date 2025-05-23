@@ -32,7 +32,7 @@
       background-image: 
         radial-gradient(circle at 10% 20%, rgba(227, 6, 19, 0.03) 0%, transparent 25%),
         radial-gradient(circle at 90% 80%, rgba(227, 6, 19, 0.03) 0%, transparent 25%);
-      padding: 3rem 1.5rem;
+      padding: 1rem 1.5rem;
     }
     
     .header {
@@ -174,10 +174,37 @@
             display: block;
         }
 
+        /* Style untuk tombol kembali ke beranda (warna abu-abu) */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            margin: 20px;
+            background-color: #f8f9fa; /* Warna abu-abu muda */
+            color: #1A1A2E; /* Warna teks abu-abu gelap */
+            border: 1px solid #dee2e6; /* Border abu-abu */
+            border-radius: 30px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+
+  <div class="container">
+        <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <a href="{{ url('/') }}" class="back-button">
+                    <i class="fas fa-arrow-left me-1"></i> Kembali ke Beranda
+                </a>
+            </div>
+        </div>
+    </div>
 
   <div class="header">
     <h1>Formulir Penilaian Proposal Tugas Akhir</h1>

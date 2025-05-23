@@ -22,7 +22,7 @@
         body {
             font-family: 'Segoe UI', 'Poppins', sans-serif;
             background-color: #f5f5f5;
-            padding: 20px;
+            padding: 5px;
             background-image: 
                 radial-gradient(circle at 20% 30%, rgba(227, 6, 19, 0.05) 0%, transparent 25%),
                 radial-gradient(circle at 80% 70%, rgba(227, 6, 19, 0.05) 0%, transparent 25%);

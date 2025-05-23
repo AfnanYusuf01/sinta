@@ -26,7 +26,7 @@
       font-family: 'Segoe UI', 'Poppins', sans-serif;
       background-color: #f5f5f5;
       margin: 0;
-      padding: 40px 20px;
+      padding: 10px 20px;
       background-image: 
         radial-gradient(circle at 20% 30%, rgba(227, 6, 19, 0.05) 0%, transparent 25%),
         radial-gradient(circle at 80% 70%, rgba(227, 6, 19, 0.05) 0%, transparent 25%);
@@ -274,9 +274,36 @@
             position: relative;
         }
 
+        /* Style untuk tombol kembali ke beranda (warna abu-abu) */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            margin: 20px;
+            background-color: #f8f9fa; /* Warna abu-abu muda */
+            color: #1A1A2E; /* Warna teks abu-abu gelap */
+            border: 1px solid #dee2e6; /* Border abu-abu */
+            border-radius: 30px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
   </style>
 </head>
 <body>
+
+        <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <a href="{{ url('/') }}" class="back-button">
+                    <i class="fas fa-arrow-left me-1"></i> Kembali ke Beranda
+                </a>
+            </div>
+        </div>
+    </div>
+
   <div class="container">
     <div class="logo" style="height: 40px; background: var(--border); display: flex; align-items: center; justify-content: center;">
                     <img src="assets/img/logo.jpeg" alt="Logo FIF" style="height: 100%; object-fit: contain;">
@@ -287,28 +314,6 @@
     </div>
 
     <form action="#" method="post" enctype="multipart/form-data">
-      <!-- Data Pribadi -->
-      <div class="form-section">
-        <div class="section-title">
-          <i class="fas fa-user-graduate"></i> Data Pribadi
-        </div>
-
-        <label for="nama" class="required">Nama Lengkap</label>
-        <input type="text" id="nama" name="nama" required>
-
-        <label for="nim" class="required">NIM</label>
-        <input type="text" id="nim" name="nim" required>
-
-        <label for="prodi" class="required">Program Studi</label>
-        <input type="text" id="prodi" name="prodi" required>
-
-        <label for="email" class="required">Email Aktif</label>
-        <input type="email" id="email" name="email" required>
-
-        <label for="hp" class="required">Nomor HP</label>
-        <input type="tel" id="hp" name="hp" required>
-      </div>
-
       <!-- Informasi Tugas Akhir -->
       <div class="form-section">
         <div class="section-title">
@@ -318,14 +323,17 @@
         <label for="judul" class="required">Judul Skripsi/Tugas Akhir</label>
         <textarea id="judul" name="judul" required></textarea>
 
-        <label for="pembimbing" class="required">Nama Dosen Pembimbing</label>
+        <label for="pembimbing1" class="required">Nama Dosen Pembimbing 1</label>
+        <input type="text" id="pembimbing" name="pembimbing" required>
+
+        <label for="pembimbing2" class="required">Nama Dosen Pembimbing 2</label>
         <input type="text" id="pembimbing" name="pembimbing" required>
 
         <label for="abstrak">Abstrak (Opsional)</label>
         <textarea id="abstrak" name="abstrak"></textarea>
       </div>
 
-      <!-- Upload Dokumen -->
+      {{-- <!-- Upload Dokumen -->
       <div class="form-section">
         <div class="section-title">
           <i class="fas fa-file-upload"></i> Upload Dokumen
@@ -354,7 +362,7 @@
           <input type="file" id="transkrip" name="transkrip" accept=".pdf" required>
         </div>
         <span class="file-hint">Format: PDF (maks. 5MB)</span>
-      </div>
+      </div> --}}
 
       <!-- Submit -->
       <button type="submit" class="submit-btn">

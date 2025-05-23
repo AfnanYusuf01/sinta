@@ -194,12 +194,13 @@
             <div class="login-header">
                 <h2>Halaman Login</h2>
             </div>
-            <form class="login-form" action="/login" method="post">
+            <form class="login-form" action="{{ route('login') }}" method="POST">
+                @csrf
                 <div class="form-group">
-                    <label for="username">Username</label>
+                    <label for="email">Email</label>
                     <div class="input-wrapper">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="username" name="username" placeholder="Masukkan username Anda" required>
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" name="email" placeholder="Masukkan email Anda" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -209,9 +210,18 @@
                         <input type="password" id="password" name="password" placeholder="Masukkan kata sandi Anda" required>
                     </div>
                 </div>
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <button type="submit" class="login-btn">Masuk</button>
                 <div class="login-footer">
-                    Lupa password? <a href="#">Klik disini</a>
+                    Lupa password? <a href="{{ route('password.request') }}">Klik disini</a>
                 </div>
             </form>
         </div>
