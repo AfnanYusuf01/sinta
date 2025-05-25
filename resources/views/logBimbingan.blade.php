@@ -17,14 +17,14 @@
             --secondary-color: #c00511;
             --light-gray: #f8f9fa;
         }
-        
+
         body {
             font-family: 'Segoe UI', 'Roboto', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f5f7fa;
             color: #333;
             padding-top: 20px;
         }
-        
+
         /* Style untuk tombol kembali ke beranda (warna abu-abu) */
         .back-button {
             display: inline-flex;
@@ -69,14 +69,14 @@
                 margin: 15px 10px;
             }
         }
-        
+
         .card {
             border-radius: 10px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             border: none;
             margin-bottom: 30px;
         }
-        
+
         .card-header {
             background-color: var(--primary-color);
             color: white;
@@ -84,58 +84,58 @@
             padding: 15px 20px;
             font-weight: 600;
         }
-        
+
         .btn-primary {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
         }
-        
+
         .btn-primary:hover {
             background-color: var(--secondary-color);
             border-color: var(--secondary-color);
         }
-        
+
         .btn-outline-secondary {
             border-color: #6c757d;
         }
-        
+
         .table th {
             background-color: var(--light-gray);
             font-weight: 600;
         }
-        
+
         .badge-status {
             padding: 5px 10px;
             border-radius: 20px;
             font-weight: 500;
             font-size: 0.8rem;
         }
-        
+
         .badge-approved {
             background-color: #d4edda;
             color: #155724;
         }
-        
+
         .badge-pending {
             background-color: #fff3cd;
             color: #856404;
         }
-        
+
         .form-label {
             font-weight: 500;
         }
-        
+
         .riwayat-title {
             border-left: 4px solid var(--primary-color);
             padding-left: 10px;
             margin-top: 30px;
             margin-bottom: 20px;
         }
-        
+
         .btn-back {
             margin-bottom: 20px;
         }
-        
+
         .detail-content {
             background-color: #f8f9fa;
             border-radius: 5px;
@@ -204,7 +204,7 @@
 
         <!-- Riwayat Bimbingan -->
         <h4 class="riwayat-title">Riwayat Bimbingan</h4>
-        
+
         <div class="card">
             <div class="card-header">
                 <i class="bi bi-clock-history me-2"></i>Daftar Bimbingan
@@ -250,7 +250,7 @@
                                                 <p><strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($log->tanggal)->format('d F Y') }}</p>
                                                 <p><strong>Pembimbing:</strong> {{ $log->dosen->nama }}</p>
                                                 <p><strong>Materi:</strong> {{ $log->catatan }}</p>
-                                                <p><strong>Status:</strong> 
+                                                <p><strong>Status:</strong>
                                                     @if($log->nilai !== null)
                                                         <span class="badge badge-approved badge-status">Disetujui</span>
                                                     @else
@@ -272,7 +272,7 @@
                         </tbody>
                     </table>
                 </div>
-                
+
                 <!-- Pagination -->
                 @if($logs->hasPages())
                     <nav aria-label="Page navigation">

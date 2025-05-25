@@ -10,6 +10,8 @@ use App\Http\Controllers\NilaiBimbinganController;
 use App\Http\Controllers\NilaiDeController;
 use App\Http\Controllers\NilaiPresentasiController;
 use App\Http\Controllers\NilaiLiteraturController;
+use App\Http\Controllers\DashboardAdminController;
+use App\Http\Controllers\RekapLogBimbinganController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -42,7 +44,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Mahasiswa routes
     Route::get('/pendaftaran', function () {
-        return view('pendaftaran');
+        return view('pendaftaranproposal');
     });
 
     Route::get('/pengajuan', function () {
@@ -77,9 +79,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/nilailiteratur', [NilaiLiteraturController::class, 'index'])->name('nilai-literatur.index');
 
     // Admin routes
-    Route::get('/dashboardadmin', function () {
-        return view('dashboardadmin');
-    });
+    Route::get('/dashboardadmin', [DashboardAdminController::class, 'index'])->name('dashboard.admin');
+    Route::post('/dashboardadmin/update-status/{id}', [DashboardAdminController::class, 'updateStatus'])->name('dashboard.updateStatus');
 
     Route::get('/skPenguji', function () {
         return view('skPenguji');
@@ -89,14 +90,10 @@ Route::middleware(['auth'])->group(function () {
         return view('skPembimbing');
     });
 
-    // Other routes
-    Route::get('/pendaftaranproposal', function () {
-        return view('pendaftaranproposal');
-    });
 
-    Route::get('/dlogbimbingan', function () {
-        return view('dlogbimbingan');
-    });
+
+    Route::get('/dlogbimbingan', [RekapLogBimbinganController::class, 'index'])->name('rekap.logbimbingan');
+    Route::get('/dlogbimbingan/export', [RekapLogBimbinganController::class, 'export'])->name('rekap.logbimbingan.export');
 
     Route::get('/dpendaftaranproposal', function () {
         return view('dpendaftaranproposal');

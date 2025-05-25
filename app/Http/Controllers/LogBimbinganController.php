@@ -18,16 +18,16 @@ class LogBimbinganController extends Controller
         // Ambil data mahasiswa yang login
         $mahasiswa = Mahasiswa::where('user_id', Auth::id())->first();
         // dd($mahasiswa);
-        
+
         // Ambil daftar dosen pembimbing
         $dosen = Dosen::all();
-        
+
         // Ambil riwayat log bimbingan dengan pagination
         $logs = LogBimbingan::where('id_user', Auth::id())
             ->with('dosen')
             ->orderBy('tanggal', 'desc')
             ->paginate(10);
-        
+
         return view('logBimbingan', compact('mahasiswa', 'dosen', 'logs'));
     }
 

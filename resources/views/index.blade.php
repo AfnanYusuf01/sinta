@@ -373,7 +373,7 @@
 
       <!-- Pengajuan Pembimbing - Tidak tampil untuk Dosen -->
         @auth
-          @if (Auth::user()->hasRole('mahasiswa'))
+          @if (!Auth::user()->hasRole('mahasiswa'))
           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
             <div class="service-item position-relative">
               <div class="icon">
@@ -389,7 +389,7 @@
 
       <!-- Log Bimbingan - Tidak tampil untuk Dosen -->
       @auth
-        @if (Auth::user()->hasRole('mahasiswa'))
+        @if (!Auth::user()->hasRole('mahasiswa'))
         <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
           <div class="service-item position-relative">
             <div class="icon">
@@ -404,7 +404,7 @@
       @endauth
 
       @auth
-        @if (Auth::user()->hasRole('dosen'))
+        @if (!Auth::user()->hasRole('dosen'))
         <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
           <div class="service-item position-relative">
             <div class="icon">
