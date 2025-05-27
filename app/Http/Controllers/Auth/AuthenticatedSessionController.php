@@ -30,11 +30,19 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::user();
 
+<<<<<<< HEAD
         if ($user->hasRole('admin')) {
             return redirect('/nilaipresentasiproposalta');
         } elseif ($user->hasRole('dosen')) {
             return redirect('/');
         } elseif ($user->hasRole('mahasiswa')) {
+=======
+        if ($user->role === 'admin') {
+            return redirect('/dashboardadmin');
+        } elseif ($user->role === 'dosen') {
+            return redirect('/');
+        } elseif ($user->role === 'mahasiswa') {
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
             return redirect('/');
         }
 

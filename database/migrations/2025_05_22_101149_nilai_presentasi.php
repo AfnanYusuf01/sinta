@@ -19,6 +19,10 @@ return new class extends Migration
             $table->integer('nilai_tingkat_penguasaan')->nullable();
             $table->integer('nilai_kualitas_jawaban')->nullable();
             $table->integer('nilai_sikap')->nullable();
+<<<<<<< HEAD
+=======
+            $table->float('total_nilai')->nullable();
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
             $table->text('catatan')->nullable();
             $table->timestamps();
         });

@@ -18,9 +18,32 @@ class NilaiPresentasi extends Model
         'nilai_tingkat_penguasaan',
         'nilai_kualitas_jawaban',
         'nilai_sikap',
+<<<<<<< HEAD
         'catatan'
     ];
 
+=======
+        'catatan',
+        'total_nilai'
+    ];
+
+    protected $casts = [
+        'total_nilai' => 'float',
+    ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($model) {
+            $model->total_nilai = $model->nilai_penyajian + 
+                                $model->nilai_tingkat_penguasaan + 
+                                $model->nilai_kualitas_jawaban + 
+                                $model->nilai_sikap;
+        });
+    }
+
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
     public function mahasiswa()
     {
         return $this->belongsTo(Mahasiswa::class, 'id_mahasiswa');

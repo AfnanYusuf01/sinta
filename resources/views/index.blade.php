@@ -389,7 +389,11 @@
 
       <!-- Log Bimbingan - Tidak tampil untuk Dosen -->
       @auth
+<<<<<<< HEAD
         @if (!Auth::user()->hasRole('mahasiswa'))
+=======
+        @if (Auth::user()->hasRole('mahasiswa'))
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
         <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
           <div class="service-item position-relative">
             <div class="icon">
@@ -404,7 +408,11 @@
       @endauth
 
       @auth
+<<<<<<< HEAD
         @if (!Auth::user()->hasRole('dosen'))
+=======
+        @if (!Auth::user()->hasRole('mahasiswa'))
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
         <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
           <div class="service-item position-relative">
             <div class="icon">
@@ -412,7 +420,11 @@
             </div>
             <h3>Pendaftaran</h3>
             <p>Registrasi seminar proposal dan penjadwalan presentasi Tugas Akhir</p>
+<<<<<<< HEAD
             <a href="{{ url('/pendaftaran') }}" class="stretched-link"></a>
+=======
+            <a href="{{ url('pendaftaranproposal') }}" class="stretched-link"></a>
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
           </div>
         </div>
         @endif

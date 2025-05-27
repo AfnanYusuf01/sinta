@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<<<<<<< HEAD
+=======
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
   <title>Dashboard Admin</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -166,7 +170,11 @@
       justify-content: center;
       font-weight: bold;
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
     /* Card Styles */
     .card {
       background-color: var(--white);
@@ -363,6 +371,80 @@
     .pagination-btn-primary:hover {
       background-color: var(--primary-dark);
     }
+<<<<<<< HEAD
+=======
+
+    .dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  left: 0;
+  background-color: white;
+  padding: 10px 0;
+  list-style: none;
+  border: 1px solid #ccc;
+  z-index: 999;
+  min-width: 250px;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu li {
+  padding: 5px 20px;
+}
+
+.dropdown-menu li a {
+  text-decoration: none;
+  color: #333;
+  display: block;
+}
+
+.dropdown-menu li a:hover {
+  background-color: #f0f0f0;
+}
+
+.user-avatar-container {
+  position: relative;
+  cursor: pointer;
+}
+
+.user-avatar-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: var(--white);
+  border: 1px solid var(--gray-medium);
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 1000;
+  min-width: 150px;
+  margin-top: 8px;
+}
+
+.user-avatar-dropdown.show {
+  display: block;
+}
+
+.user-avatar-dropdown a {
+  display: block;
+  padding: 8px 16px;
+  color: var(--text);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.user-avatar-dropdown a:hover {
+  background-color: var(--primary-light);
+  color: var(--primary);
+}
+
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
   </style>
 </head>
 <body>
@@ -378,7 +460,11 @@
           <li>
             <a href="{{ url('/dashboardadmin') }}">
               <i class="fas fa-file-alt"></i>
+<<<<<<< HEAD
               <span>Rekapan Pengajuan Pembimbing</span>
+=======
+              <span>Rekapan Pengajuan</span>
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
               <span class="badge">3</span>
             </a>
           </li>
@@ -394,12 +480,28 @@
               <span>Pendaftaran Proposal</span>
             </a>
           </li>
+<<<<<<< HEAD
           <li>
             <a href="#">
               <i class="fas fa-chalkboard-teacher"></i>
               <span>Penilaian Dosen</span>
             </a>
           </li>
+=======
+          <li class="dropdown">
+  <a href="#">
+    <i class="fas fa-chalkboard-teacher"></i>
+    <span>Penilaian Dosen</span>
+    <i class="fas fa-caret-down"></i>
+  </a>
+  <ul class="dropdown-menu">
+    <li><a href="{{ url('/dnilaibimprota') }}">Formulir Nilai Bimbingan Proposal TA</a></li>
+    <li><a href="{{ url('/dnilaide') }}">Formulir Nilai Desk Evaluasi</a></li>
+    <li><a href="{{ url('/dnilaipresentasita') }}">Formulir Nilai Presentasi Proposal TA</a></li>
+    <li><a href="{{ url('/dnilailiteratur') }}">Formulir Nilai Literatur Review Proposal TA</a></li>
+  </ul>
+</li>
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
         </ul>
       </nav>
     </aside>
@@ -413,7 +515,21 @@
             <i class="fas fa-bell"></i>
             <span class="notification-dot"></span>
           </button>
+<<<<<<< HEAD
           <div class="user-avatar">A</div>
+=======
+          <div class="user-avatar-container">
+            <div class="user-avatar">A</div>
+            <div class="user-avatar-dropdown">
+              <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <i class="fas fa-sign-out-alt"></i> Logout
+              </a>
+            </div>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+              @csrf
+            </form>
+          </div>
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
         </div>
       </div>
 
@@ -421,6 +537,7 @@
       <div class="card">
         <div class="card-header">
           <h2>Rekap Pengajuan Pembimbing</h2>
+<<<<<<< HEAD
           <div class="action-buttons">
             <button class="btn btn-outline">
               <i class="fas fa-download"></i>
@@ -431,6 +548,9 @@
               Tambah Data
             </button>
           </div>
+=======
+          
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
         </div>
         
         <div class="table-container">
@@ -442,6 +562,7 @@
                 <th>Pembimbing 1</th>
                 <th>Pembimbing 2</th>
                 <th>Abstrak</th>
+<<<<<<< HEAD
               </tr>
             </thead>
             <tbody>
@@ -505,6 +626,49 @@
                   <span class="show-more">Lihat selengkapnya</span>
                 </td>
               </tr>
+=======
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($proposalList ?? [] as $proposal)
+              <tr>
+                <td>
+                  <div class="user-info">
+                    <div class="user-avatar-sm">{{ substr($proposal->mahasiswa->nama ?? '', 0, 2) }}</div>
+                    <div class="user-details">
+                      <span class="user-name">{{ $proposal->mahasiswa->nama ?? '' }}</span>
+                      <span class="user-id">{{ $proposal->mahasiswa->nim ?? '' }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td>{{ $proposal->judul_ta }}</td>
+                <td>{{ $proposal->dosen1->nama ?? '' }}</td>
+                <td>{{ $proposal->dosen2->nama ?? '-' }}</td>
+                <td>{{ $proposal->abstrak }}</td>
+                <td>
+                  @if($proposal->status === 'menunggu')
+                    <div class="action-buttons-group">
+                      <button class="action-btn approve-btn" type="button" data-id="{{ $proposal->id }}">
+                        <i class="fas fa-check"></i> Setujui
+                      </button>
+                      <button class="action-btn reject-btn" type="button" data-id="{{ $proposal->id }}">
+                        <i class="fas fa-times"></i> Tolak
+                      </button>
+                    </div>
+                  @elseif($proposal->status === 'diterima')
+                    <div class="status-badge status-approved">
+                      <i class="fas fa-check-circle"></i> Disetujui
+                    </div>
+                  @elseif($proposal->status === 'ditolak')
+                    <div class="status-badge status-rejected">
+                      <i class="fas fa-times-circle"></i> Tidak Disetujui
+                    </div>
+                  @endif
+                </td>
+              </tr>
+              @endforeach
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
             </tbody>
           </table>
         </div>
@@ -521,5 +685,95 @@
       </div>
     </main>
   </div>
+<<<<<<< HEAD
+=======
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const avatarContainer = document.querySelector('.user-avatar-container');
+    const dropdown = document.querySelector('.user-avatar-dropdown');
+
+    // Toggle dropdown on avatar click
+    avatarContainer.addEventListener('click', function(e) {
+      e.stopPropagation();
+      dropdown.classList.toggle('show');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!avatarContainer.contains(e.target)) {
+        dropdown.classList.remove('show');
+      }
+    });
+  });
+  </script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Handle approve and reject actions
+    const handleAction = async (action, id, button) => {
+        try {
+            const confirmMessage = action === 'approve' 
+                ? 'Apakah anda yakin ingin menyetujui pendaftaran proposal ini?'
+                : 'Apakah anda yakin ingin menolak pendaftaran proposal ini? Data akan dihapus dari sistem.';
+                
+            if (!confirm(confirmMessage)) {
+                return;
+            }
+
+            // Disable the button while processing
+            button.disabled = true;
+
+            const response = await fetch(`/pendaftaran-proposal/${action}/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                credentials: 'same-origin'
+            });
+
+            // Check if response is JSON
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.message || 'Terjadi kesalahan saat memproses pendaftaran');
+                }
+                alert(data.message);
+            } else {
+                throw new Error('Server returned an invalid response');
+            }
+            
+            // Reload the page to show updated status
+            window.location.reload();
+
+        } catch (error) {
+            alert('Terjadi kesalahan: ' + error.message);
+            // Re-enable the button if there's an error
+            button.disabled = false;
+        }
+    };
+
+    // Add click event listeners to approve buttons
+    document.querySelectorAll('.approve-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            handleAction('approve', id, this);
+        });
+    });
+
+    // Add click event listeners to reject buttons
+    document.querySelectorAll('.reject-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            handleAction('reject', id, this);
+        });
+    });
+  });
+  </script>
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
 </body>
 </html>

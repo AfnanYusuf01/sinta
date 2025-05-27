@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
+=======
+{{-- <!DOCTYPE html>
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -229,4 +233,8 @@
 </footer>
 
 </body>
+<<<<<<< HEAD
 </html>
+=======
+</html> --}}
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)

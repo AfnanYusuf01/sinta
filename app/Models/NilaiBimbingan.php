@@ -28,6 +28,24 @@ class NilaiBimbingan extends Model
         'total_nilai' => 'float',
     ];
 
+<<<<<<< HEAD
+=======
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($model) {
+            $model->total_nilai = $model->nilai_1 + 
+                                $model->nilai_2 + 
+                                $model->nilai_3 + 
+                                $model->nilai_4 + 
+                                $model->nilai_5 + 
+                                $model->nilai_6 + 
+                                $model->nilai_7;
+        });
+    }
+
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
     public function mahasiswa()
     {
         return $this->belongsTo(Mahasiswa::class, 'id_mahasiswa');

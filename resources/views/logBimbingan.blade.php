@@ -17,14 +17,22 @@
             --secondary-color: #c00511;
             --light-gray: #f8f9fa;
         }
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
         body {
             font-family: 'Segoe UI', 'Roboto', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f5f7fa;
             color: #333;
             padding-top: 20px;
         }
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
         /* Style untuk tombol kembali ke beranda (warna abu-abu) */
         .back-button {
             display: inline-flex;
@@ -69,14 +77,22 @@
                 margin: 15px 10px;
             }
         }
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
         .card {
             border-radius: 10px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             border: none;
             margin-bottom: 30px;
         }
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
         .card-header {
             background-color: var(--primary-color);
             color: white;
@@ -84,58 +100,102 @@
             padding: 15px 20px;
             font-weight: 600;
         }
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
         .btn-primary {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
         }
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
         .btn-primary:hover {
             background-color: var(--secondary-color);
             border-color: var(--secondary-color);
         }
+<<<<<<< HEAD
 
         .btn-outline-secondary {
             border-color: #6c757d;
         }
 
+=======
+        
+        .btn-outline-secondary {
+            border-color: #6c757d;
+        }
+        
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
         .table th {
             background-color: var(--light-gray);
             font-weight: 600;
         }
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
         .badge-status {
             padding: 5px 10px;
             border-radius: 20px;
             font-weight: 500;
             font-size: 0.8rem;
         }
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
         .badge-approved {
             background-color: #d4edda;
             color: #155724;
         }
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
         .badge-pending {
             background-color: #fff3cd;
             color: #856404;
         }
+<<<<<<< HEAD
 
         .form-label {
             font-weight: 500;
         }
 
+=======
+        
+        .form-label {
+            font-weight: 500;
+        }
+        
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
         .riwayat-title {
             border-left: 4px solid var(--primary-color);
             padding-left: 10px;
             margin-top: 30px;
             margin-bottom: 20px;
         }
+<<<<<<< HEAD
 
         .btn-back {
             margin-bottom: 20px;
         }
 
+=======
+        
+        .btn-back {
+            margin-bottom: 20px;
+        }
+        
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
         .detail-content {
             background-color: #f8f9fa;
             border-radius: 5px;
@@ -204,7 +264,11 @@
 
         <!-- Riwayat Bimbingan -->
         <h4 class="riwayat-title">Riwayat Bimbingan</h4>
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
         <div class="card">
             <div class="card-header">
                 <i class="bi bi-clock-history me-2"></i>Daftar Bimbingan
@@ -250,7 +314,11 @@
                                                 <p><strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($log->tanggal)->format('d F Y') }}</p>
                                                 <p><strong>Pembimbing:</strong> {{ $log->dosen->nama }}</p>
                                                 <p><strong>Materi:</strong> {{ $log->catatan }}</p>
+<<<<<<< HEAD
                                                 <p><strong>Status:</strong>
+=======
+                                                <p><strong>Status:</strong> 
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
                                                     @if($log->nilai !== null)
                                                         <span class="badge badge-approved badge-status">Disetujui</span>
                                                     @else
@@ -272,7 +340,11 @@
                         </tbody>
                     </table>
                 </div>
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
                 <!-- Pagination -->
                 @if($logs->hasPages())
                     <nav aria-label="Page navigation">

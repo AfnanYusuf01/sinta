@@ -10,7 +10,11 @@ class Pembimbing extends Model
     use HasFactory;
 
     protected $table = 'pembimbing';
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
     protected $fillable = [
         'id_mahasiswa',
         'id_dosen',

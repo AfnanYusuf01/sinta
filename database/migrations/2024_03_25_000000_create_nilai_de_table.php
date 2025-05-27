@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_mahasiswa')->constrained('mahasiswa')->onDelete('cascade');
             $table->foreignId('id_dosen')->constrained('dosen')->onDelete('cascade');
+<<<<<<< HEAD
             $table->integer('nilai_1'); // Orisinalitas (0-100)
             $table->integer('nilai_2'); // Kebaruan/Novelty (0-100)
             $table->integer('nilai_3'); // Urgensi Penelitian (0-100)
@@ -20,6 +21,16 @@ return new class extends Migration
             $table->integer('nilai_6'); // Kontribusi Penelitian (0-100)
             $table->integer('nilai_7'); // Kelayakan Tim Peneliti (0-100)
             $table->float('total_nilai');
+=======
+            $table->integer('nilai_1')->nullable(); // Orisinalitas (0-100)
+            $table->integer('nilai_2')->nullable(); // Kebaruan/Novelty (0-100)
+            $table->integer('nilai_3')->nullable(); // Urgensi Penelitian (0-100)
+            $table->integer('nilai_4')->nullable(); // Metodologi (0-100)
+            $table->integer('nilai_5')->nullable(); // Tinjauan Pustaka (0-100)
+            $table->integer('nilai_6')->nullable(); // Kontribusi Penelitian (0-100)
+            $table->integer('nilai_7')->nullable(); // Kelayakan Tim Peneliti (0-100)
+            $table->float('total_nilai')->nullable();
+>>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
             $table->timestamps();
 
             // Memastikan satu dosen hanya bisa memberi satu nilai untuk satu mahasiswa
