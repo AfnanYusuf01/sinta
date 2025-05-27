@@ -23,7 +23,7 @@ class PendaftaranProposalController extends Controller
         $dosenList = Dosen::all();
         // Ambil data pendaftaran proposal mahasiswa
         $pendaftaran = PendaftaranProposal::where('id_mahasiswa', $mahasiswa->id)
-            ->whereIn('status', ['menunggu', 'diterima'])
+            ->whereIn('status', ['menunggu', 'diterima', 'ditolak'])
             ->latest()
             ->first();
 
@@ -94,22 +94,22 @@ class PendaftaranProposalController extends Controller
     }
 
     public function reject($id)
-    {
-        try {
-            $proposal = PendaftaranProposal::findOrFail($id);
-            
-            // Langsung hapus data ketika ditolak
-            $proposal->delete();
+{
+    try {
+        $proposal = PendaftaranProposal::findOrFail($id);
+        $proposal->status = 'ditolak';
+        $proposal->save();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Pendaftaran proposal telah ditolak dan dihapus dari sistem'
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
-            ], 500);
-        }
+        return response()->json([
+            'success' => true,
+            'message' => 'Pendaftaran proposal telah ditolak'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+        ], 500);
     }
+}
+
 }

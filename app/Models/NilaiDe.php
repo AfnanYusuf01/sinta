@@ -28,8 +28,7 @@ class NilaiDe extends Model
         'total_nilai' => 'float',
     ];
 
-<<<<<<< HEAD
-=======
+
     protected static function boot()
     {
         parent::boot();
@@ -45,7 +44,7 @@ class NilaiDe extends Model
         });
     }
 
->>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
+
     public function mahasiswa()
     {
         return $this->belongsTo(Mahasiswa::class, 'id_mahasiswa');

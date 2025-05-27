@@ -12,7 +12,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_mahasiswa')->constrained('mahasiswa')->onDelete('cascade');
             $table->foreignId('id_dosen')->constrained('dosen')->onDelete('cascade');
-<<<<<<< HEAD
             $table->integer('nilai_1')->comment('Penguasaan Dasar Teori');
             $table->integer('nilai_2')->comment('Tingkat Penguasaan Materi');
             $table->integer('nilai_3')->comment('Tinjauan Pustaka');
@@ -21,16 +20,6 @@ return new class extends Migration
             $table->integer('nilai_6')->comment('Teknik Penulisan');
             $table->integer('nilai_7')->comment('Format Penulisan');
             $table->float('total_nilai');
-=======
-            $table->integer('nilai_1')->nullable()->comment('Penguasaan Dasar Teori');
-            $table->integer('nilai_2')->nullable()->comment('Tingkat Penguasaan Materi');
-            $table->integer('nilai_3')->nullable()->comment('Tinjauan Pustaka');
-            $table->integer('nilai_4')->nullable()->comment('Kontribusi Praktis');
-            $table->integer('nilai_5')->nullable()->comment('Kontribusi Teoritis');
-            $table->integer('nilai_6')->nullable()->comment('Teknik Penulisan');
-            $table->integer('nilai_7')->nullable()->comment('Format Penulisan');
-            $table->float('total_nilai')->nullable();
->>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
             $table->timestamps();
         });
     }

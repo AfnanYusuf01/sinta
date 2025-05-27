@@ -4,375 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Form Pendaftaran Proposal</title>
-<<<<<<< HEAD
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <style>
-    :root {
-      --primary: #E30613;
-      --primary-dark: #c00511;
-      --primary-light: #FF6B74;
-      --secondary: #1A1A2E;
-      --text-dark: #2D3748;
-      --text-light: #FFFFFF;
-      --bg-light: #F8F9FA;
-      --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-      --card-bg: rgba(255, 255, 255, 0.98);
-      --shadoww: 0 8px 30px rgba(15, 23, 42, 0.12);
-      --glow: 0 0 15px rgba(227, 6, 19, 0.2);
-      --accent: #E30613;
-    }
 
-    body {
-      font-family: 'Segoe UI', 'Poppins', sans-serif;
-      background-color: #f5f5f5;
-      margin: 0;
-      padding: 10px 20px;
-      background-image: 
-        radial-gradient(circle at 20% 30%, rgba(227, 6, 19, 0.05) 0%, transparent 25%),
-        radial-gradient(circle at 80% 70%, rgba(227, 6, 19, 0.05) 0%, transparent 25%);
-    }
-
-    .logo {
-            width: 120px;
-            margin-bottom: 20px;
-            filter: drop-shadow(var(--glow));
-        }
-
-    .form-container {
-      max-width: 800px;
-      margin: 0 auto;
-      background: white;
-      border-radius: 16px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      position: relative;
-    }
-
-    .form-header {
-      background: var(--text-light);
-      color: #1E293B;
-      padding: 25px 40px;
-      position: relative;
-    }
-
-    .form-header h1 {
-      margin: 0;
-      font-size: 1.8rem;
-      font-weight: 700;
-      text-align: center;
-      position: relative;
-      z-index: 2;
-    }
-
-    .subtitle {
-            color: var(--primary);
-            text-align: center;
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            display: block;
-        }
-
-    form {
-      padding: 30px 40px;
-    }
-
-    .form-section {
-      margin-bottom: 30px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid #eee;
-    }
-
-    .form-section:last-child {
-      border-bottom: none;
-    }
-
-    .section-title {
-      color: var(--primary);
-      font-weight: 600;
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-    }
-
-    .section-title i {
-      margin-right: 10px;
-      font-size: 1.1rem;
-    }
-
-    label {
-      display: block;
-      margin-top: 20px;
-      font-weight: 600;
-      color: var(--secondary);
-      font-size: 0.95rem;
-    }
-
-    label.required::after {
-      content: ' *';
-      color: var(--primary);
-    }
-
-    input:not([type="file"]), 
-    textarea, 
-    select {
-      width: 100%;
-      padding: 12px 16px;
-      margin-top: 8px;
-      border: 1px solid #E2E8F0;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 0.95rem;
-      transition: var(--transition);
-    }
-
-    input:focus, 
-    textarea:focus, 
-    select:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.1);
-    }
-
-    textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-
-    .file-upload {
-      position: relative;
-      margin-top: 8px;
-    }
-
-    .file-upload input[type="file"] {
-      width: 100%;
-      padding: 12px;
-      border: 1px dashed #E2E8F0;
-      border-radius: 8px;
-      background-color: var(--bg-light);
-    }
-
-    .file-upload::after {
-      content: 'Pilih File';
-      position: absolute;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: var(--primary);
-      color: white;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      pointer-events: none;
-    }
-
-    .file-hint {
-      font-size: 0.85rem;
-      color: #718096;
-      margin-top: 6px;
-      display: block;
-    }
-
-    .submit-btn {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: white;
-      border: none;
-      padding: 14px 28px;
-      font-weight: 600;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: var(--transition);
-      width: 100%;
-      margin-top: 30px;
-      font-size: 1rem;
-      box-shadow: 0 4px 12px rgba(227, 6, 19, 0.2);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .submit-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(227, 6, 19, 0.3);
-    }
-
-    .submit-btn:active {
-      transform: translateY(1px);
-    }
-
-    .submit-btn::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-    }
-
-    .submit-btn:hover::after {
-      left: 100%;
-    }
-
-    @media (max-width: 768px) {
-      body {
-        padding: 20px 15px;
-      }
-
-      .form-container {
-        border-radius: 12px;
-      }
-
-      .form-header {
-        padding: 20px;
-      }
-
-      .form-header h1 {
-        font-size: 1.5rem;
-      }
-
-      form {
-        padding: 25px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .form-header h1 {
-        font-size: 1.3rem;
-      }
-
-      form {
-        padding: 20px 15px;
-      }
-    }
-
-    .container {
-      background: var(--card-bg);
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 40px;
-      border-radius: 16px;
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.4);
-    }
-    
-    .container::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 5px;
-      height: 100%;
-      background: linear-gradient(to bottom, var(--primary), var(--accent));
-    }
-
-    header {
-            text-align: center;
-            margin-bottom: 40px;
-            position: relative;
-        }
-
-        /* Style untuk tombol kembali ke beranda (warna abu-abu) */
-        .back-button {
-            display: inline-flex;
-            align-items: center;
-            padding: 10px 20px;
-            margin: 20px;
-            background-color: #f8f9fa; /* Warna abu-abu muda */
-            color: #1A1A2E; /* Warna teks abu-abu gelap */
-            border: 1px solid #dee2e6; /* Border abu-abu */
-            border-radius: 30px;
-            font-weight: 500;
-            text-decoration: none;
-            transition: var(--transition);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-  </style>
-</head>
-<body>
-
-        <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <a href="{{ url('/') }}" class="back-button">
-                    <i class="fas fa-arrow-left me-1"></i> Kembali ke Beranda
-                </a>
-            </div>
-        </div>
-    </div>
-
-  <div class="container">
-    <div class="logo" style="height: 40px; background: var(--border); display: flex; align-items: center; justify-content: center;">
-                    <img src="assets/img/logo.jpeg" alt="Logo FIF" style="height: 100%; object-fit: contain;">
-                </div>
-    <div class="form-header">
-      <h1><i class="fas"></i> Form Pendaftaran Proposal</h1>
-      <span class="subtitle">Fakultas Informatika</span>
-    </div>
-
-    <form action="#" method="post" enctype="multipart/form-data">
-      <!-- Informasi Tugas Akhir -->
-      <div class="form-section">
-        <div class="section-title">
-          <i class="fas fa-file-alt"></i> Informasi Tugas Akhir
-        </div>
-
-        <label for="judul" class="required">Judul Skripsi/Tugas Akhir</label>
-        <textarea id="judul" name="judul" required></textarea>
-
-        <label for="pembimbing1" class="required">Nama Dosen Pembimbing 1</label>
-        <input type="text" id="pembimbing" name="pembimbing" required>
-
-        <label for="pembimbing2" class="required">Nama Dosen Pembimbing 2</label>
-        <input type="text" id="pembimbing" name="pembimbing" required>
-
-        <label for="abstrak">Abstrak (Opsional)</label>
-        <textarea id="abstrak" name="abstrak"></textarea>
-      </div>
-
-      {{-- <!-- Upload Dokumen -->
-      <div class="form-section">
-        <div class="section-title">
-          <i class="fas fa-file-upload"></i> Upload Dokumen
-        </div>
-
-        <label for="draft" class="required">Draft Skripsi</label>
-        <div class="file-upload">
-          <input type="file" id="draft" name="draft" accept=".pdf" required>
-        </div>
-        <span class="file-hint">Format: PDF (maks. 10MB)</span>
-
-        <label for="persetujuan" class="required">Lembar Persetujuan Pembimbing</label>
-        <div class="file-upload">
-          <input type="file" id="persetujuan" name="persetujuan" accept=".pdf" required>
-        </div>
-        <span class="file-hint">Format: PDF (maks. 5MB)</span>
-
-        <label for="bukti_bebas" class="required">Bukti Bebas Perpustakaan/Administrasi</label>
-        <div class="file-upload">
-          <input type="file" id="bukti_bebas" name="bukti_bebas" accept=".pdf" required>
-        </div>
-        <span class="file-hint">Format: PDF (maks. 5MB)</span>
-
-        <label for="transkrip" class="required">Transkrip Nilai Sementara</label>
-        <div class="file-upload">
-          <input type="file" id="transkrip" name="transkrip" accept=".pdf" required>
-        </div>
-        <span class="file-hint">Format: PDF (maks. 5MB)</span>
-      </div> --}}
-
-      <!-- Submit -->
-      <button type="submit" class="submit-btn">
-        <i class="fas fa-paper-plane"></i> Daftar Proposal
-      </button>
-    </form>
-  </div>
-=======
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     :root {
@@ -610,7 +242,7 @@
     @endif
 
     @if(isset($pendaftaran))
-      @if($pendaftaran->status == 'menunggu'))
+      @if($pendaftaran->status == 'menunggu')
         <div class="status-card status-waiting">
           <i class="fas fa-clock"></i> Menunggu Persetujuan
           <p><strong>Judul TA:</strong> {{ $pendaftaran->judul_ta }}</p>
@@ -670,13 +302,10 @@
       <label for="judul_ta" class="required">Judul Skripsi/Tugas Akhir</label>
       <textarea id="judul_ta" name="judul_ta" placeholder="Masukkan judul proposal Anda..." required>{{ old('judul_ta', isset($pendaftaran) ? $pendaftaran->judul_ta : '') }}</textarea>
 
-      <label for="abstrak" class="required">Abstrak</label>
-      <textarea id="abstrak" name="abstrak" placeholder="Masukkan abstrak proposal Anda..." required>{{ old('abstrak', isset($pendaftaran) ? $pendaftaran->abstrak : '') }}</textarea>
-
       <label for="dosen1" class="required">Dosen Pembimbing 1</label>
       <select id="dosen1" name="dosen1" required>
         @foreach ($dosenList as $dosen)
-          <option value="{{ $dosen->id }}" {{ (isset($pendaftaran) && $pendaftaran->id_dosen_1 == $dosen->id) ? 'selected' : '' }}>
+          <option value="{{ $dosen->id }}" {{ (isset($pendaftaran) && $pendaftaran->dosen1 == $dosen->id) ? 'selected' : '' }}>
             {{ $dosen->nama }}
           </option>
         @endforeach
@@ -686,11 +315,16 @@
       <select id="dosen2" name="dosen2">
         <option value="">Pilih jika ada</option>
         @foreach ($dosenList as $dosen)
-          <option value="{{ $dosen->id }}" {{ (isset($pendaftaran) && $pendaftaran->id_dosen_2 == $dosen->id) ? 'selected' : '' }}>
+          <option value="{{ $dosen->id }}" {{ (isset($pendaftaran) && $pendaftaran->dosen2 == $dosen->id) ? 'selected' : '' }}>
             {{ $dosen->nama }}
           </option>
         @endforeach
       </select>
+
+
+      <label for="abstrak" class="required">Abstrak</label>
+      <textarea id="abstrak" name="abstrak" placeholder="Masukkan abstrak proposal Anda..." required>{{ old('abstrak', isset($pendaftaran) ? $pendaftaran->abstrak : '') }}</textarea>
+
 
       <button type="submit" class="submit-btn">
         <i class="fas fa-paper-plane me-2"></i>
@@ -712,6 +346,5 @@
       @endif
     });
   </script>
->>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
 </body>
 </html>

@@ -14,14 +14,52 @@ class DashboardAdminController extends Controller
     public function index()
     {
         // Mengambil semua usulan dengan relasi mahasiswa dan dosen
-        $usulan = UsulDospem::with(['mahasiswa', 'dosen1', 'dosen2'])
+        $pengajuanList = UsulDospem::with(['mahasiswa', 'dosen1', 'dosen2'])
                            ->orderBy('created_at', 'desc')
                            ->get();
 
         // Hitung jumlah pengajuan yang masih menunggu
         $pending_count = UsulDospem::where('status', 'menunggu')->count();
 
-        return view('dashboardadmin', compact('usulan', 'pending_count'));
+        return view('dashboardadmin', compact('pengajuanList', 'pending_count'));
+    }
+
+    public function approve($id)
+    {
+        try {
+            $usulan = UsulDospem::findOrFail($id);
+            $usulan->status = 'diterima';
+            $usulan->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Pengajuan pembimbing berhasil disetujui'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function reject($id)
+    {
+        try {
+            $usulan = UsulDospem::findOrFail($id);
+            $usulan->status = 'ditolak';
+            $usulan->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Pengajuan pembimbing berhasil ditolak'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function updateStatus(Request $request, $id)

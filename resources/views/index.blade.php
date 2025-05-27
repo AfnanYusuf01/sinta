@@ -372,8 +372,8 @@
     <div class="row gy-4">
 
       <!-- Pengajuan Pembimbing - Tidak tampil untuk Dosen -->
-        @auth
-          @if (!Auth::user()->hasRole('mahasiswa'))
+      @auth
+        @if (!Auth::user()->hasRole('dosen'))
           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
             <div class="service-item position-relative">
               <div class="icon">
@@ -381,68 +381,57 @@
               </div>
               <h3>Pengajuan Pembimbing</h3>
               <p>Pengajuan dosen pembimbing Tugas Akhir secara online dengan tracking status real-time</p>
-              <a href="{{ url('/pengajuanpembibing') }}" class="stretched-link"></a>
+              <a href="{{ url('/pengajuanpembimbing') }}" class="stretched-link"></a>
             </div>
           </div>
-          @endif
-        @endauth
-
-      <!-- Log Bimbingan - Tidak tampil untuk Dosen -->
-      @auth
-<<<<<<< HEAD
-        @if (!Auth::user()->hasRole('mahasiswa'))
-=======
-        @if (Auth::user()->hasRole('mahasiswa'))
->>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
-        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-          <div class="service-item position-relative">
-            <div class="icon">
-              <i class="bi bi-journal-text"></i>
-            </div>
-            <h3>Log Bimbingan</h3>
-            <p>Pencatatan kegiatan bimbingan antara mahasiswa dan dosen pembimbing</p>
-            <a href="{{ url('/logBimbingan') }}" class="stretched-link"></a>
-          </div>
-        </div>
         @endif
       @endauth
 
+      <!-- Log Bimbingan - Tidak tampil untuk Dosen -->
       @auth
-<<<<<<< HEAD
         @if (!Auth::user()->hasRole('dosen'))
-=======
-        @if (!Auth::user()->hasRole('mahasiswa'))
->>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
-        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-          <div class="service-item position-relative">
-            <div class="icon">
-              <i class="bi bi-calendar-check"></i>
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="service-item position-relative">
+              <div class="icon">
+                <i class="bi bi-journal-text"></i>
+              </div>
+              <h3>Log Bimbingan</h3>
+              <p>Pencatatan kegiatan bimbingan antara mahasiswa dan dosen pembimbing</p>
+              <a href="{{ url('/logBimbingan') }}" class="stretched-link"></a>
             </div>
-            <h3>Pendaftaran</h3>
-            <p>Registrasi seminar proposal dan penjadwalan presentasi Tugas Akhir</p>
-<<<<<<< HEAD
-            <a href="{{ url('/pendaftaran') }}" class="stretched-link"></a>
-=======
-            <a href="{{ url('pendaftaranproposal') }}" class="stretched-link"></a>
->>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
           </div>
-        </div>
         @endif
-        @endauth
+      @endauth
+
+      <!-- Pendaftaran - Tidak tampil untuk Dosen -->
+      @auth
+        @if (!Auth::user()->hasRole('dosen'))
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="service-item position-relative">
+              <div class="icon">
+                <i class="bi bi-calendar-check"></i>
+              </div>
+              <h3>Pendaftaran</h3>
+              <p>Registrasi seminar proposal dan penjadwalan presentasi Tugas Akhir</p>
+              <a href="{{ url('pendaftaranproposal') }}" class="stretched-link"></a>
+            </div>
+          </div>
+        @endif
+      @endauth
 
       <!-- Penilaian Dosen - Tidak tampil untuk Mahasiswa -->
       @auth
-        @if (!Auth::user()->hasRole('dosen'))
-        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
-          <div class="service-item position-relative">
-            <div class="icon">
-              <i class="bi bi-file-earmark-check"></i>
+        @if (!Auth::user()->hasRole('mahasiswa'))
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+            <div class="service-item position-relative">
+              <div class="icon">
+                <i class="bi bi-file-earmark-check"></i>
+              </div>
+              <h3>Penilaian Dosen</h3>
+              <p>Sistem penilaian online oleh dosen pembimbing dan penguji</p>
+              <a href="/penilaiandosen" class="stretched-link penilaian-dosen-link"></a>
             </div>
-            <h3>Penilaian Dosen</h3>
-            <p>Sistem penilaian online oleh dosen pembimbing dan penguji</p>
-            <a href="/penilaiandosen" class="stretched-link penilaian-dosen-link"></a>
           </div>
-        </div>
         @endif
       @endauth
 
@@ -577,9 +566,6 @@
   <!-- Preloader -->
   <div id="preloader"></div>
 
-
-  </div>
-
   <!-- Vendor JS Files -->
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="assets/vendor/php-email-form/validate.js"></script>
@@ -592,7 +578,6 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
-
 
 </body>
 </html>

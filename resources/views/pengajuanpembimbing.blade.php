@@ -358,6 +358,16 @@
                 <div class="form-body">
                     <form action="{{ route('pengajuanpembimbing.store') }}" method="POST">
                         @csrf
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        
                         <div class="form-group">
                             <label for="judul_ta">
                                 <i class="fas fa-heading"></i> Usulan Judul Tugas Akhir

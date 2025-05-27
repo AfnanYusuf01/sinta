@@ -18,11 +18,6 @@ class NilaiPresentasi extends Model
         'nilai_tingkat_penguasaan',
         'nilai_kualitas_jawaban',
         'nilai_sikap',
-<<<<<<< HEAD
-        'catatan'
-    ];
-
-=======
         'catatan',
         'total_nilai'
     ];
@@ -43,7 +38,6 @@ class NilaiPresentasi extends Model
         });
     }
 
->>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
     public function mahasiswa()
     {
         return $this->belongsTo(Mahasiswa::class, 'id_mahasiswa');

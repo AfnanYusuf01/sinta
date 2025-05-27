@@ -10,15 +10,11 @@ use Illuminate\Support\Facades\Auth;
 
 class PengajuanPembimbingController extends Controller
 {
-<<<<<<< HEAD
-        public function index()
-=======
     public function index()
->>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
     {
         $mahasiswa = Mahasiswa::where('user_id', Auth::id())->first();
-        // dd(Auth::id());
         $mahasiswa_id = $mahasiswa->id;
+        
         // Cek apakah mahasiswa sudah pernah mengajukan
         $usulan = UsulDospem::where('id_mahasiswa', $mahasiswa_id)
                             ->latest()
@@ -26,9 +22,8 @@ class PengajuanPembimbingController extends Controller
 
         // Ambil data dosen untuk dropdown
         $dosenList = Dosen::orderBy('nama')->get();
-        // dd($dosenList);
 
-        return view('pengajuanpembibing', compact('usulan', 'dosenList'));
+        return view('pengajuanpembimbing', compact('usulan', 'dosenList'));
     }
 
     public function store(Request $request)
@@ -40,8 +35,8 @@ class PengajuanPembimbingController extends Controller
         ]);
 
         $mahasiswa = Mahasiswa::where('user_id', Auth::id())->first();
-        // dd(Auth::id());
         $mahasiswa_id = $mahasiswa->id;
+
         // Cek apakah mahasiswa sudah memiliki usulan yang belum diproses
         $existingUsulan = UsulDospem::where('id_mahasiswa', $mahasiswa_id)
                                     ->whereIn('status', ['menunggu', 'diterima'])
@@ -51,11 +46,6 @@ class PengajuanPembimbingController extends Controller
             return redirect()->back()->with('error', 'Anda sudah memiliki usulan yang belum diproses.');
         }
 
-<<<<<<< HEAD
-
-        
-=======
->>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
         UsulDospem::create([
             'judul_ta' => $request->judul_ta,
             'id_mahasiswa' => $mahasiswa_id,
@@ -66,8 +56,6 @@ class PengajuanPembimbingController extends Controller
 
         return redirect()->route('pengajuanpembimbing')->with('success', 'Usulan pembimbing berhasil dikirim!');
     }
-<<<<<<< HEAD
-=======
 
     public function adminIndex()
     {
@@ -101,8 +89,6 @@ class PengajuanPembimbingController extends Controller
     {
         try {
             $usulan = UsulDospem::findOrFail($id);
-            
-            // Langsung hapus data ketika ditolak
             $usulan->delete();
 
             return response()->json([
@@ -116,5 +102,4 @@ class PengajuanPembimbingController extends Controller
             ], 500);
         }
     }
->>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
 }

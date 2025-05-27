@@ -18,17 +18,12 @@ class NilaiLiteratur extends Model
         'nilai_analisis',
         'nilai_sintesis',
         'nilai_kesimpulan',
-<<<<<<< HEAD
+        'total_nilai',
         'catatan'
     ];
 
-=======
-        'catatan',
-        'total_nilai'
-    ];
-
     protected $casts = [
-        'total_nilai' => 'float',
+        'total_nilai' => 'float'
     ];
 
     protected static function boot()
@@ -43,7 +38,6 @@ class NilaiLiteratur extends Model
         });
     }
 
->>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
     public function mahasiswa()
     {
         return $this->belongsTo(Mahasiswa::class, 'id_mahasiswa');
