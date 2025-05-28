@@ -19,12 +19,12 @@
                 </div>
             </div>
         </div>
-    </div>
+      </div>
     <div class="col-xl-3 col-md-6">
         <div class="card stat-card bg-success text-white">
             <div class="card-body">
                 <div class="stat-icon">
-                    <i class="fas fa-chalkboard-teacher"></i>
+              <i class="fas fa-chalkboard-teacher"></i>
                 </div>
                 <div class="stat-content">
                     <h3>{{ count($dosens) }}</h3>
@@ -57,11 +57,11 @@
                     <p>Menunggu Persetujuan</p>
                 </div>
             </div>
+          </div>
         </div>
-    </div>
-</div>
+      </div>
 
-<!-- Rekap Pengajuan Pembimbing -->
+      <!-- Rekap Pengajuan Pembimbing -->
 <div class="card custom-card mb-4">
     <div class="card-header bg-white">
         <div class="d-flex justify-content-between align-items-center">
@@ -72,11 +72,11 @@
             <div class="btn-group">
                 <button class="btn btn-outline-primary btn-sm">
                     <i class="fas fa-download me-1"></i> Export
-                </button>
+            </button>
                 <button class="btn btn-primary btn-sm ms-2">
                     <i class="fas fa-plus me-1"></i> Tambah Data
-                </button>
-            </div>
+            </button>
+          </div>
         </div>
     </div>
 
@@ -84,17 +84,17 @@
         <div class="table-responsive">
             <table class="table table-hover custom-table mb-0">
                 <thead class="table-light">
-                    <tr>
-                        <th>Nama Mahasiswa</th>
-                        <th>Judul Tugas Akhir</th>
-                        <th>Pembimbing 1</th>
-                        <th>Pembimbing 2</th>
-                        <th>Status</th>
+              <tr>
+                <th>Nama Mahasiswa</th>
+                <th>Judul Tugas Akhir</th>
+                <th>Pembimbing 1</th>
+                <th>Pembimbing 2</th>
+                <th>Status</th>
                         <th width="150">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($pengajuanList as $pengajuan)
+              </tr>
+            </thead>
+            <tbody>
+              @forelse($pengajuanList as $pengajuan)
                     <tr>
                         <td>
                             <div class="d-flex align-items-center">
@@ -104,17 +104,17 @@
                                 <div>
                                     <div class="fw-bold">{{ $pengajuan->mahasiswa->nama ?? '' }}</div>
                                     <small class="text-muted">{{ $pengajuan->mahasiswa->nim ?? '' }}</small>
-                                </div>
-                            </div>
-                        </td>
+                    </div>
+                  </div>
+                </td>
                         <td>
                             <div class="text-wrap" style="max-width: 300px;">
                                 {{ $pengajuan->judul_ta }}
                             </div>
                         </td>
-                        <td>{{ $pengajuan->dosen1->nama ?? '' }}</td>
-                        <td>{{ $pengajuan->dosen2->nama ?? '-' }}</td>
-                        <td>
+                <td>{{ $pengajuan->dosen1->nama ?? '' }}</td>
+                <td>{{ $pengajuan->dosen2->nama ?? '-' }}</td>
+                <td>
                             @if($pengajuan->status === 'menunggu')
                                 <span class="badge bg-warning">Menunggu</span>
                             @elseif($pengajuan->status === 'diterima')
@@ -124,33 +124,33 @@
                             @endif
                         </td>
                         <td>
-                            @if($pengajuan->status === 'menunggu')
+                    @if($pengajuan->status === 'menunggu')
                                 <div class="btn-group btn-group-sm">
                                     <button class="btn btn-success" onclick="handleAction('approve', {{ $pengajuan->id }}, this)">
                                         <i class="fas fa-check"></i>
-                                    </button>
+                        </button>
                                     <button class="btn btn-danger" onclick="handleAction('reject', {{ $pengajuan->id }}, this)">
                                         <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            @endif
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
+                        </button>
+                      </div>
+                    @endif
+                </td>
+              </tr>
+              @empty
+              <tr>
                         <td colspan="6" class="text-center py-4">
                             <div class="empty-state">
                                 <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
                                 <p class="text-muted">Belum ada pengajuan pembimbing</p>
                             </div>
                         </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
+              </tr>
+              @endforelse
+            </tbody>
+          </table>
         </div>
-    </div>
-</div>
+          </div>
+          </div>
 
 <!-- Pengelolaan Dosen Penguji Section -->
 <div class="card custom-card">
@@ -161,7 +161,7 @@
                 Pengelolaan Dosen Penguji
             </h5>
         </div>
-    </div>
+      </div>
 
     <div class="card-body">
         @if(session('success'))
@@ -234,7 +234,7 @@
                     </div>
                 </form>
             </div>
-        </div>
+  </div>
 
         <!-- Tabel Daftar Penguji -->
         <div class="table-responsive">
@@ -425,32 +425,32 @@
 @section('scripts')
 <script>
     async function handleAction(action, id, button) {
-        try {
-            const confirmMessage = action === 'approve'
-                ? 'Apakah anda yakin ingin menyetujui pengajuan pembimbing ini?'
-                : 'Apakah anda yakin ingin menolak pengajuan pembimbing ini?';
+      try {
+        const confirmMessage = action === 'approve'
+          ? 'Apakah anda yakin ingin menyetujui pengajuan pembimbing ini?'
+          : 'Apakah anda yakin ingin menolak pengajuan pembimbing ini?';
 
-            if (!confirm(confirmMessage)) {
-                return;
-            }
+        if (!confirm(confirmMessage)) {
+          return;
+        }
 
-            button.disabled = true;
+        button.disabled = true;
             const loadingClass = action === 'approve' ? 'btn-success' : 'btn-danger';
             const originalContent = button.innerHTML;
             button.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
             button.classList.add('disabled');
 
-            const response = await fetch(`/pengajuanpembimbing/${action}/${id}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                }
-            });
+        const response = await fetch(`/pengajuanpembimbing/${action}/${id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+          }
+        });
 
-            const data = await response.json();
+        const data = await response.json();
 
-            if (response.ok) {
+        if (response.ok) {
                 // Show success toast
                 const toast = document.createElement('div');
                 toast.className = 'position-fixed bottom-0 end-0 p-3';
@@ -470,12 +470,12 @@
                 setTimeout(() => toast.remove(), 3000);
 
                 // Reload the page
-                window.location.reload();
-            } else {
-                throw new Error(data.message || 'Terjadi kesalahan saat memproses pengajuan');
-            }
+          window.location.reload();
+        } else {
+          throw new Error(data.message || 'Terjadi kesalahan saat memproses pengajuan');
+        }
 
-        } catch (error) {
+      } catch (error) {
             // Show error toast
             const toast = document.createElement('div');
             toast.className = 'position-fixed bottom-0 end-0 p-3';
@@ -495,7 +495,7 @@
             setTimeout(() => toast.remove(), 3000);
 
             // Reset button state
-            button.disabled = false;
+        button.disabled = false;
             button.innerHTML = originalContent;
             button.classList.remove('disabled');
         }
@@ -506,5 +506,5 @@
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl)
     });
-</script>
+  </script>
 @endsection
