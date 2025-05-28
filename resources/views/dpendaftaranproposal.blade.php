@@ -1,779 +1,465 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<<<<<<< HEAD
-=======
-  <meta name="csrf-token" content="{{ csrf_token() }}">
->>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
-  <title>Dashboard Admin</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #E30613;
-      --primary-light: #FFEAEC;
-      --primary-dark: #C00511;
-      --gray-light: #f5f5f5;
-      --gray-medium: #e5e5e5;
-      --gray-dark: #333;
-      --text: #333;
-      --text-light: #666;
-      --white: #fff;
-    }
-    
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f9f9f9;
-      margin: 0;
-      padding: 0;
-      color: var(--text);
-    }
-    
-    .dashboard-container {
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
-    }
-    
-    /* Sidebar Styles */
-    .sidebar {
-      width: 250px;
-      background-color: var(--white);
-      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-    }
-    
-    .sidebar-header {
-      padding: 20px;
-      font-size: 1.25rem;
-      font-weight: bold;
-      color: var(--primary);
-      border-bottom: 1px solid var(--gray-medium);
-      display: flex;
-      align-items: center;
-    }
-    
-    .sidebar-header i {
-      margin-right: 12px;
-    }
-    
-    .sidebar-nav {
-      padding: 10px 0;
-    }
-    
-    .sidebar-nav ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    
-    .sidebar-nav li a {
-      display: flex;
-      align-items: center;
-      padding: 12px 20px;
-      color: var(--text);
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
-    
-    .sidebar-nav li a:hover {
-      background-color: var(--primary-light);
-      color: var(--primary);
-    }
-    
-    .sidebar-nav li a i {
-      margin-right: 12px;
-      color: var(--text-light);
-    }
-    
-    .sidebar-nav li a:hover i {
-      color: var(--primary);
-    }
-    
-    .badge {
-      margin-left: auto;
-      background-color: var(--primary);
-      color: white;
-      font-size: 0.75rem;
-      font-weight: bold;
-      padding: 2px 8px;
-      border-radius: 10px;
-    }
-    
-    /* Main Content Styles */
-    .main-content {
-      flex: 1;
-      overflow-y: auto;
-      padding: 20px;
-    }
-    
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 30px;
-    }
-    
-    .header h1 {
-      font-size: 1.75rem;
-      margin: 0;
-    }
-    
-    .header h1 span {
-      color: var(--primary);
-    }
-    
-    .user-controls {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-    
-    .notification-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background-color: var(--primary-light);
-      color: var(--primary);
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      position: relative;
-      transition: all 0.3s ease;
-    }
-    
-    .notification-btn:hover {
-      background-color: var(--primary);
-      color: white;
-    }
-    
-    .notification-dot {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      width: 8px;
-      height: 8px;
-      background-color: red;
-      border-radius: 50%;
-    }
-    
-    .user-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background-color: var(--primary-light);
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-    }
-<<<<<<< HEAD
-    
-=======
+@extends('layouts.admin')
 
->>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
-    /* Card Styles */
-    .card {
-      background-color: var(--white);
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      padding: 20px;
-      margin-bottom: 30px;
+@section('title', 'Pendaftaran Proposal')
+
+@section('page_title', 'Pendaftaran Proposal')
+
+@section('content')
+<div class="card">
+  <div class="card-header">
+    <h2>Pendaftaran Proposal</h2>
+    <button class="export-btn">
+      <i class="fas fa-download"></i>
+      Export
+    </button>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Tanggal</th>
+          <th>Nama Mahasiswa</th>
+          <th>Judul Proposal</th>
+          <th>Status</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach($pendaftaranProposal as $proposal)
+        <tr>
+          <td>{{ $proposal->created_at->format('Y-m-d') }}</td>
+          <td>{{ $proposal->mahasiswa->nama ?? '-' }}</td>
+          <td>{{ $proposal->judul ?? '-' }}</td>
+          <td>
+            <span class="status-badge {{ strtolower($proposal->status) }}">
+              {{ $proposal->status }}
+            </span>
+          </td>
+          <td>
+            <i class="fas fa-eye eye-icon" onclick="showProposalDetail({{ $proposal->id }})"></i>
+          </td>
+        </tr>
+        @endforeach
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="proposalModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">Detail Pendaftaran Proposal</h3>
+      <button class="close-btn" onclick="hideModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="proposal-info">
+        <div class="info-group">
+          <label>Nama Mahasiswa:</label>
+          <span id="modalStudentName"></span>
+        </div>
+        <div class="info-group">
+          <label>NIM:</label>
+          <span id="modalNIM"></span>
+        </div>
+        <div class="info-group">
+          <label>Program Studi:</label>
+          <span id="modalProdi"></span>
+        </div>
+        <div class="info-group">
+          <label>Tanggal Pengajuan:</label>
+          <span id="modalDate"></span>
+        </div>
+      </div>
+
+      <div class="proposal-detail">
+        <h4>Detail Proposal</h4>
+        <div class="info-group">
+          <label>Judul Proposal:</label>
+          <p id="modalTitle"></p>
+        </div>
+        <div class="info-group">
+          <label>Deskripsi:</label>
+          <p id="modalDescription"></p>
+        </div>
+        <div class="info-group">
+          <label>Bidang Penelitian:</label>
+          <p id="modalResearchField"></p>
+        </div>
+      </div>
+
+      <div class="document-section">
+        <h4>Dokumen Pendukung</h4>
+        <div class="document-list" id="modalDocuments">
+          <!-- Documents will be inserted here -->
+        </div>
+      </div>
+
+      <div class="status-section">
+        <h4>Status Pengajuan</h4>
+        <div class="status-info">
+          <div class="current-status">
+            <label>Status Saat Ini:</label>
+            <span id="modalStatus" class="status-badge"></span>
+          </div>
+          <div class="status-update">
+            <label>Update Status:</label>
+            <select id="statusUpdate" class="form-select">
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+            </select>
+            <button onclick="updateStatus()" class="btn btn-primary">
+              Update Status
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="notes-section">
+        <h4>Catatan Admin</h4>
+        <textarea id="adminNotes" class="form-control" rows="4" placeholder="Tambahkan catatan untuk mahasiswa..."></textarea>
+        <button onclick="saveNotes()" class="btn btn-primary mt-2">
+          Simpan Catatan
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+@endsection
+
+@section('additional_styles')
+  <style>
+  .eye-icon {
+    color: var(--primary);
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 8px;
+    display: inline-block;
+  }
+
+  .eye-icon:hover {
+    color: var(--primary-dark);
+  }
+
+  .status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .status-badge.pending {
+    background-color: #FFF3CD;
+    color: #856404;
+  }
+
+  .status-badge.approved {
+    background-color: #D4EDDA;
+    color: #155724;
+  }
+
+  .status-badge.rejected {
+    background-color: #F8D7DA;
+    color: #721C24;
+  }
+
+  /* Modal Styles */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;
+    justify-content: center;
+      align-items: center;
     }
-    
-    .card-header {
+
+  .modal.show {
+    display: flex;
+  }
+
+  .modal-content {
+    background-color: white;
+    width: 80%;
+    max-width: 800px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .modal-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--gray-medium);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+      margin: 0;
+    }
+
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-light);
+    transition: color 0.3s ease;
+  }
+
+  .close-btn:hover {
+      color: var(--primary);
+    }
+
+  .modal-body {
+    padding: 24px;
+  }
+
+  .proposal-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .info-group {
+    margin-bottom: 16px;
+  }
+
+  .info-group label {
+    display: block;
+    font-weight: 500;
+    color: var(--text-light);
+    margin-bottom: 4px;
+  }
+
+  .info-group p {
+      margin: 0;
+    }
+
+  .proposal-detail {
+    background-color: var(--gray-light);
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+  }
+
+  .proposal-detail h4 {
+    margin: 0 0 16px 0;
+      color: var(--primary);
+    }
+
+  .document-section {
+    margin-bottom: 24px;
+  }
+
+  .document-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .document-item {
+    background-color: var(--gray-light);
+    padding: 12px;
+    border-radius: 6px;
+      display: flex;
+      align-items: center;
+    gap: 8px;
+  }
+
+  .document-item i {
+    color: var(--primary);
+  }
+
+  .status-section {
+      background-color: var(--primary-light);
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+  }
+
+  .status-info {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+    gap: 24px;
+  }
+
+  .status-update {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .form-select {
+    padding: 8px 12px;
+    border: 1px solid var(--gray-medium);
+    border-radius: 4px;
+    background-color: white;
     }
-    
-    .card-header h2 {
-      font-size: 1.25rem;
-      margin: 0;
-    }
-    
-    .action-buttons {
-      display: flex;
-      gap: 10px;
-    }
-    
+
     .btn {
       padding: 8px 16px;
-      border-radius: 6px;
-      font-size: 0.875rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    border-radius: 4px;
+    border: none;
       cursor: pointer;
+    font-weight: 500;
       transition: all 0.3s ease;
     }
-    
+
     .btn-primary {
       background-color: var(--primary);
       color: white;
-      border: none;
     }
-    
+
     .btn-primary:hover {
       background-color: var(--primary-dark);
     }
-    
-    .btn-outline {
-      background-color: var(--primary-light);
-      color: var(--primary);
-      border: none;
-    }
-    
-    .btn-outline:hover {
-      background-color: var(--primary);
-      color: white;
-    }
-    
-    /* Table Styles */
-    .table-container {
-      overflow-x: auto;
-    }
-    
-    table {
+
+  .notes-section textarea {
       width: 100%;
-      border-collapse: collapse;
-    }
-    
-    thead {
-      background-color: var(--primary);
-      color: white;
-    }
-    
-    th {
-      padding: 12px 16px;
-      text-align: left;
-      font-weight: 600;
-      font-size: 0.875rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    
-    tbody tr {
-      border-bottom: 1px solid var(--gray-medium);
-      transition: background-color 0.3s ease;
-    }
-    
-    tbody tr:hover {
-      background-color: var(--primary-light);
-    }
-    
-    td {
-      padding: 16px;
-      font-size: 0.875rem;
-    }
-    
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    
-    .user-avatar-sm {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background-color: var(--primary-light);
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      flex-shrink: 0;
-    }
-    
-    .user-details {
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .user-name {
-      font-weight: 600;
-    }
-    
-    .user-id {
-      font-size: 0.75rem;
-      color: var(--text-light);
-    }
-    
-    .abstract {
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    
-    .show-more {
-      color: var(--primary);
-      font-size: 0.75rem;
-      margin-top: 4px;
-      cursor: pointer;
-      transition: color 0.3s ease;
-    }
-    
-    .show-more:hover {
-      color: var(--primary-dark);
-      text-decoration: underline;
-    }
-    
-    /* Pagination Styles */
-    .pagination {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 16px;
-      margin-top: 16px;
-      border-top: 1px solid var(--gray-medium);
-    }
-    
-    .pagination-info {
-      font-size: 0.875rem;
-      color: var(--text-light);
-    }
-    
-    .pagination-info span {
-      font-weight: 600;
-    }
-    
-    .pagination-buttons {
-      display: flex;
-      gap: 8px;
-    }
-    
-    .pagination-btn {
-      padding: 8px 16px;
-      border-radius: 6px;
-      background-color: var(--gray-light);
-      color: var(--text);
-      border: none;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .pagination-btn:hover {
-      background-color: var(--gray-medium);
-    }
-    
-    .pagination-btn-primary {
-      background-color: var(--primary);
-      color: white;
-    }
-    
-    .pagination-btn-primary:hover {
-      background-color: var(--primary-dark);
-    }
-<<<<<<< HEAD
-=======
+    padding: 12px;
+    border: 1px solid var(--gray-medium);
+    border-radius: 4px;
+    resize: vertical;
+  }
 
-    .dropdown {
-  position: relative;
-}
+  .mt-2 {
+    margin-top: 8px;
+  }
+</style>
+@endsection
 
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  left: 0;
-  background-color: white;
-  padding: 10px 0;
-  list-style: none;
-  border: 1px solid #ccc;
-  z-index: 999;
-  min-width: 250px;
-}
-
-.dropdown:hover .dropdown-menu {
-  display: block;
-}
-
-.dropdown-menu li {
-  padding: 5px 20px;
-}
-
-.dropdown-menu li a {
-  text-decoration: none;
-  color: #333;
-  display: block;
-}
-
-.dropdown-menu li a:hover {
-  background-color: #f0f0f0;
-}
-
-.user-avatar-container {
-  position: relative;
-  cursor: pointer;
-}
-
-.user-avatar-dropdown {
-  display: none;
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: var(--white);
-  border: 1px solid var(--gray-medium);
-  border-radius: 4px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  z-index: 1000;
-  min-width: 150px;
-  margin-top: 8px;
-}
-
-.user-avatar-dropdown.show {
-  display: block;
-}
-
-.user-avatar-dropdown a {
-  display: block;
-  padding: 8px 16px;
-  color: var(--text);
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
-
-.user-avatar-dropdown a:hover {
-  background-color: var(--primary-light);
-  color: var(--primary);
-}
-
->>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
-  </style>
-</head>
-<body>
-  <div class="dashboard-container">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <i class="fas fa-university"></i>
-        <span>Admin Dashboard</span>
-      </div>
-      <nav class="sidebar-nav">
-        <ul>
-          <li>
-            <a href="{{ url('/dashboardadmin') }}">
-              <i class="fas fa-file-alt"></i>
-<<<<<<< HEAD
-              <span>Rekapan Pengajuan Pembimbing</span>
-=======
-              <span>Rekapan Pengajuan</span>
->>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
-              <span class="badge">3</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{ url('/dlogbimbingan') }}">
-              <i class="fas fa-clipboard-list"></i>
-              <span>Log Bimbingan</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{ url('/dpendaftaranproposal') }}">
-              <i class="fas fa-file-signature"></i>
-              <span>Pendaftaran Proposal</span>
-            </a>
-          </li>
-<<<<<<< HEAD
-          <li>
-            <a href="#">
-              <i class="fas fa-chalkboard-teacher"></i>
-              <span>Penilaian Dosen</span>
-            </a>
-          </li>
-=======
-          <li class="dropdown">
-  <a href="#">
-    <i class="fas fa-chalkboard-teacher"></i>
-    <span>Penilaian Dosen</span>
-    <i class="fas fa-caret-down"></i>
-  </a>
-  <ul class="dropdown-menu">
-    <li><a href="{{ url('/dnilaibimprota') }}">Formulir Nilai Bimbingan Proposal TA</a></li>
-    <li><a href="{{ url('/dnilaide') }}">Formulir Nilai Desk Evaluasi</a></li>
-    <li><a href="{{ url('/dnilaipresentasita') }}">Formulir Nilai Presentasi Proposal TA</a></li>
-    <li><a href="{{ url('/dnilailiteratur') }}">Formulir Nilai Literatur Review Proposal TA</a></li>
-  </ul>
-</li>
->>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
-        </ul>
-      </nav>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content">
-      <div class="header">
-        <h1>Selamat Datang, <span>Admin!</span></h1>
-        <div class="user-controls">
-          <button class="notification-btn">
-            <i class="fas fa-bell"></i>
-            <span class="notification-dot"></span>
-          </button>
-<<<<<<< HEAD
-          <div class="user-avatar">A</div>
-=======
-          <div class="user-avatar-container">
-            <div class="user-avatar">A</div>
-            <div class="user-avatar-dropdown">
-              <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <i class="fas fa-sign-out-alt"></i> Logout
-              </a>
-            </div>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-              @csrf
-            </form>
-          </div>
->>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
-        </div>
-      </div>
-
-      <!-- Rekap Pengajuan Pembimbing -->
-      <div class="card">
-        <div class="card-header">
-          <h2>Rekap Pengajuan Pembimbing</h2>
-<<<<<<< HEAD
-          <div class="action-buttons">
-            <button class="btn btn-outline">
-              <i class="fas fa-download"></i>
-              Export
-            </button>
-            <button class="btn btn-primary">
-              <i class="fas fa-plus"></i>
-              Tambah Data
-            </button>
-          </div>
-=======
-          
->>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
-        </div>
-        
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Nama Mahasiswa</th>
-                <th>Judul Skripsi</th>
-                <th>Pembimbing 1</th>
-                <th>Pembimbing 2</th>
-                <th>Abstrak</th>
-<<<<<<< HEAD
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <div class="user-info">
-                    <div class="user-avatar-sm">AR</div>
-                    <div class="user-details">
-                      <span class="user-name">Ahmad Ramadhan</span>
-                      <span class="user-id">120220001</span>
-                    </div>
-                  </div>
-                </td>
-                <td>Analisis Sistem Informasi Akademik Berbasis Web</td>
-                <td>Dr. Rina Marlina</td>
-                <td>Dr. Andi Setiawan</td>
-                <td>
-                  <div class="abstract">
-                    Penelitian ini bertujuan untuk menganalisis efektivitas sistem informasi akademik berbasis web dalam meningkatkan pelayanan administrasi kampus.
-                  </div>
-                  <span class="show-more">Lihat selengkapnya</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="user-info">
-                    <div class="user-avatar-sm">SA</div>
-                    <div class="user-details">
-                      <span class="user-name">Siti Aisyah</span>
-                      <span class="user-id">120220002</span>
-                    </div>
-                  </div>
-                </td>
-                <td>Pengaruh Penggunaan AI dalam Evaluasi Pembelajaran</td>
-                <td>Dr. Dedi Permana</td>
-                <td>Dr. Rina Marlina</td>
-                <td>
-                  <div class="abstract">
-                    Penelitian ini membahas pengaruh penggunaan kecerdasan buatan untuk mengevaluasi pembelajaran secara otomatis dan efisien.
-                  </div>
-                  <span class="show-more">Lihat selengkapnya</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="user-info">
-                    <div class="user-avatar-sm">BS</div>
-                    <div class="user-details">
-                      <span class="user-name">Budi Santoso</span>
-                      <span class="user-id">120220003</span>
-                    </div>
-                  </div>
-                </td>
-                <td>Perancangan Aplikasi Mobile Absensi Mahasiswa</td>
-                <td>Dr. Rina Marlina</td>
-                <td>Dr. Bambang Gunawan</td>
-                <td>
-                  <div class="abstract">
-                    Studi ini merancang aplikasi mobile untuk absensi mahasiswa menggunakan GPS dan QR code guna meningkatkan keakuratan data kehadiran.
-                  </div>
-                  <span class="show-more">Lihat selengkapnya</span>
-                </td>
-              </tr>
-=======
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              @foreach($proposalList ?? [] as $proposal)
-              <tr>
-                <td>
-                  <div class="user-info">
-                    <div class="user-avatar-sm">{{ substr($proposal->mahasiswa->nama ?? '', 0, 2) }}</div>
-                    <div class="user-details">
-                      <span class="user-name">{{ $proposal->mahasiswa->nama ?? '' }}</span>
-                      <span class="user-id">{{ $proposal->mahasiswa->nim ?? '' }}</span>
-                    </div>
-                  </div>
-                </td>
-                <td>{{ $proposal->judul_ta }}</td>
-                <td>{{ $proposal->dosen1->nama ?? '' }}</td>
-                <td>{{ $proposal->dosen2->nama ?? '-' }}</td>
-                <td>{{ $proposal->abstrak }}</td>
-                <td>
-                  @if($proposal->status === 'menunggu')
-                    <div class="action-buttons-group">
-                      <button class="action-btn approve-btn" type="button" data-id="{{ $proposal->id }}">
-                        <i class="fas fa-check"></i> Setujui
-                      </button>
-                      <button class="action-btn reject-btn" type="button" data-id="{{ $proposal->id }}">
-                        <i class="fas fa-times"></i> Tolak
-                      </button>
-                    </div>
-                  @elseif($proposal->status === 'diterima')
-                    <div class="status-badge status-approved">
-                      <i class="fas fa-check-circle"></i> Disetujui
-                    </div>
-                  @elseif($proposal->status === 'ditolak')
-                    <div class="status-badge status-rejected">
-                      <i class="fas fa-times-circle"></i> Tidak Disetujui
-                    </div>
-                  @endif
-                </td>
-              </tr>
-              @endforeach
->>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
-            </tbody>
-          </table>
-        </div>
-        
-        <div class="pagination">
-          <div class="pagination-info">
-            Menampilkan <span>1</span> sampai <span>3</span> dari <span>3</span> hasil
-          </div>
-          <div class="pagination-buttons">
-            <button class="pagination-btn">Sebelumnya</button>
-            <button class="pagination-btn pagination-btn-primary">Selanjutnya</button>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
-<<<<<<< HEAD
-=======
-
-  <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const avatarContainer = document.querySelector('.user-avatar-container');
-    const dropdown = document.querySelector('.user-avatar-dropdown');
-
-    // Toggle dropdown on avatar click
-    avatarContainer.addEventListener('click', function(e) {
-      e.stopPropagation();
-      dropdown.classList.toggle('show');
-    });
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(e) {
-      if (!avatarContainer.contains(e.target)) {
-        dropdown.classList.remove('show');
+@section('scripts')
+<script>
+  async function showProposalDetail(id) {
+    try {
+      const response = await fetch(`/admin/pendaftaran-proposal/${id}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
-    });
-  });
+      const data = await response.json();
+
+      // Update modal content
+      document.getElementById('modalStudentName').textContent = data.mahasiswa.nama;
+      document.getElementById('modalNIM').textContent = data.mahasiswa.nim;
+      document.getElementById('modalProdi').textContent = data.mahasiswa.prodi;
+      document.getElementById('modalDate').textContent = new Date(data.created_at).toLocaleDateString();
+      document.getElementById('modalTitle').textContent = data.judul;
+      document.getElementById('modalDescription').textContent = data.deskripsi;
+      document.getElementById('modalResearchField').textContent = data.bidang_penelitian;
+      document.getElementById('modalStatus').textContent = data.status;
+      document.getElementById('modalStatus').className = `status-badge ${data.status.toLowerCase()}`;
+      document.getElementById('statusUpdate').value = data.status.toLowerCase();
+      document.getElementById('adminNotes').value = data.catatan_admin || '';
+
+      // Update documents list
+      const documentsList = document.getElementById('modalDocuments');
+      documentsList.innerHTML = '';
+      data.documents.forEach(doc => {
+        const docItem = document.createElement('div');
+        docItem.className = 'document-item';
+        docItem.innerHTML = `
+          <i class="fas fa-file-pdf"></i>
+          <span>${doc.name}</span>
+          <a href="${doc.url}" target="_blank" class="btn btn-sm btn-primary">
+            <i class="fas fa-download"></i>
+          </a>
+        `;
+        documentsList.appendChild(docItem);
+      });
+
+      // Show modal
+      document.getElementById('proposalModal').classList.add('show');
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Terjadi kesalahan saat mengambil data. Silakan coba lagi.');
+    }
+  }
+
+  async function updateStatus() {
+    const proposalId = currentProposalId; // You need to store this when opening the modal
+    const newStatus = document.getElementById('statusUpdate').value;
+
+    try {
+      const response = await fetch(`/admin/pendaftaran-proposal/${proposalId}/status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ status: newStatus })
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      // Update the status badge in the modal
+      const statusBadge = document.getElementById('modalStatus');
+      statusBadge.textContent = newStatus.toUpperCase();
+      statusBadge.className = `status-badge ${newStatus}`;
+
+      // Update the status in the table
+      const tableRow = document.querySelector(`tr[data-proposal-id="${proposalId}"]`);
+      if (tableRow) {
+        const statusCell = tableRow.querySelector('.status-badge');
+        statusCell.textContent = newStatus.toUpperCase();
+        statusCell.className = `status-badge ${newStatus}`;
+      }
+
+      alert('Status berhasil diperbarui');
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Terjadi kesalahan saat memperbarui status. Silakan coba lagi.');
+    }
+  }
+
+  async function saveNotes() {
+    const proposalId = currentProposalId; // You need to store this when opening the modal
+    const notes = document.getElementById('adminNotes').value;
+
+    try {
+      const response = await fetch(`/admin/pendaftaran-proposal/${proposalId}/notes`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ notes: notes })
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      alert('Catatan berhasil disimpan');
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Terjadi kesalahan saat menyimpan catatan. Silakan coba lagi.');
+    }
+  }
+
+  function hideModal() {
+    document.getElementById('proposalModal').classList.remove('show');
+  }
+
+  // Close modal when clicking outside of modal content
+  window.onclick = function(event) {
+    const modal = document.getElementById('proposalModal');
+    if (event.target === modal) {
+      hideModal();
+    }
+  }
   </script>
-
-  <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Handle approve and reject actions
-    const handleAction = async (action, id, button) => {
-        try {
-            const confirmMessage = action === 'approve' 
-                ? 'Apakah anda yakin ingin menyetujui pendaftaran proposal ini?'
-                : 'Apakah anda yakin ingin menolak pendaftaran proposal ini? Data akan dihapus dari sistem.';
-                
-            if (!confirm(confirmMessage)) {
-                return;
-            }
-
-            // Disable the button while processing
-            button.disabled = true;
-
-            const response = await fetch(`/pendaftaran-proposal/${action}/${id}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                credentials: 'same-origin'
-            });
-
-            // Check if response is JSON
-            const contentType = response.headers.get('content-type');
-            if (contentType && contentType.includes('application/json')) {
-                const data = await response.json();
-                if (!response.ok) {
-                    throw new Error(data.message || 'Terjadi kesalahan saat memproses pendaftaran');
-                }
-                alert(data.message);
-            } else {
-                throw new Error('Server returned an invalid response');
-            }
-            
-            // Reload the page to show updated status
-            window.location.reload();
-
-        } catch (error) {
-            alert('Terjadi kesalahan: ' + error.message);
-            // Re-enable the button if there's an error
-            button.disabled = false;
-        }
-    };
-
-    // Add click event listeners to approve buttons
-    document.querySelectorAll('.approve-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const id = this.getAttribute('data-id');
-            handleAction('approve', id, this);
-        });
-    });
-
-    // Add click event listeners to reject buttons
-    document.querySelectorAll('.reject-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const id = this.getAttribute('data-id');
-            handleAction('reject', id, this);
-        });
-    });
-  });
-  </script>
->>>>>>> b37f191 (Siap upload ke repo AfnanYusuf01/sinta)
-</body>
-</html>
+@endsection

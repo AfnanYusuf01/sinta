@@ -24,7 +24,7 @@
       background-color: #f5f5f5;
       padding: 5px 20px;
       color: var(--text-dark);
-      background-image: 
+      background-image:
         radial-gradient(circle at 20% 30%, rgba(227, 6, 19, 0.05) 0%, transparent 25%),
         radial-gradient(circle at 80% 70%, rgba(227, 6, 19, 0.05) 0%, transparent 25%);
     }
@@ -134,7 +134,7 @@
     }
 
     input[type="text"] {
-      width: 35%; 
+      width: 35%;
       padding: 10px 15px;
       border: 1px solid #ddd;
       border-radius: 6px;
@@ -306,7 +306,7 @@
         <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                <a href="{{ url('penilaiandosen') }}" class="back-button">
+                <a href="{{ url('/dosen/penilaiandosen') }}" class="back-button">
                     <i class="fas fa-arrow-left mr-2"></i> Kembali ke Beranda
                 </a>
             </div>
@@ -373,7 +373,7 @@
         $(document).ready(function() {
           // Initialize select
           const mahasiswaSelect = $('#mahasiswa_id');
-          
+
           // Add click and change handlers
           mahasiswaSelect.on('click', function() {
             console.log('Dropdown clicked');
@@ -395,7 +395,7 @@
         function loadNilaiMahasiswa(mahasiswaId) {
           console.log('Loading nilai for mahasiswa:', mahasiswaId);
           const nilai = nilaiExisting[mahasiswaId];
-          
+
           if (nilai) {
             console.log('Found existing nilai:', nilai);
             for (let i = 1; i <= 7; i++) {
@@ -413,7 +413,7 @@
         function hitungTotal() {
           let total = 0;
           let count = 0;
-          
+
           for (let i = 1; i <= 7; i++) {
             const nilai = $(`input[name="nilai_${i}"]`).val();
             if (nilai !== '') {
@@ -421,7 +421,7 @@
               count++;
             }
           }
-          
+
           const rata = count > 0 ? (total / count).toFixed(2) : '0';
           $('#total').text(rata);
           return rata;

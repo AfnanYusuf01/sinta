@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('nama');
             $table->string('nip')->unique();
             $table->string('program_studi');
+            $table->string('bidang_keahlian')->nullable();
             $table->timestamps();
         });
     }
@@ -22,4 +23,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('dosen');
     }
-}; 
+};

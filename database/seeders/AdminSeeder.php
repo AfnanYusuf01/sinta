@@ -8,14 +8,13 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        $admin = User::create([
+        User::create([
             'name' => 'Admin',
             'email' => 'admin@admin.com',
             'password' => Hash::make('password'),
+            'role' => 'admin',
         ]);
-
-        $admin->assignRole('admin');
     }
-} 
+}

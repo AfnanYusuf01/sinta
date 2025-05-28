@@ -265,7 +265,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
-          <a href="{{ url('penilaiandosen') }}" class="back-button">
+          <a href="{{ url('/dosen/penilaiandosen') }}" class="back-button">
             <i class="fas fa-arrow-left mr-2"></i> Kembali ke Beranda
           </a>
         </div>

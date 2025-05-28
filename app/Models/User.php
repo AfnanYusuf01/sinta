@@ -4,13 +4,13 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -43,5 +44,43 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    // Tidak perlu mendefinisikan method role() karena HasRoles menangani hubungan otomatis
+    /**
+     * Get the mahasiswa associated with the user.
+     */
+    public function mahasiswa(): HasOne
+    {
+        return $this->hasOne(Mahasiswa::class);
+    }
+
+    /**
+     * Get the dosen associated with the user.
+     */
+    public function dosen(): HasOne
+    {
+        return $this->hasOne(Dosen::class);
+    }
+
+    /**
+     * Check if user is admin
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * Check if user is dosen
+     */
+    public function isDosen(): bool
+    {
+        return $this->role === 'dosen';
+    }
+
+    /**
+     * Check if user is mahasiswa
+     */
+    public function isMahasiswa(): bool
+    {
+        return $this->role === 'mahasiswa';
+    }
 }

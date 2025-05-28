@@ -373,7 +373,7 @@
 
       <!-- Pengajuan Pembimbing - Tidak tampil untuk Dosen -->
       @auth
-        @if (!Auth::user()->hasRole('dosen'))
+        @if (Auth::user()->role !== 'dosen')
           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
             <div class="service-item position-relative">
               <div class="icon">
@@ -381,7 +381,7 @@
               </div>
               <h3>Pengajuan Pembimbing</h3>
               <p>Pengajuan dosen pembimbing Tugas Akhir secara online dengan tracking status real-time</p>
-              <a href="{{ url('/pengajuanpembimbing') }}" class="stretched-link"></a>
+              <a href="{{ route('pengajuanpembimbing') }}" class="stretched-link"></a>
             </div>
           </div>
         @endif
@@ -389,7 +389,7 @@
 
       <!-- Log Bimbingan - Tidak tampil untuk Dosen -->
       @auth
-        @if (!Auth::user()->hasRole('dosen'))
+        @if (Auth::user()->role !== 'dosen')
           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
             <div class="service-item position-relative">
               <div class="icon">
@@ -397,7 +397,7 @@
               </div>
               <h3>Log Bimbingan</h3>
               <p>Pencatatan kegiatan bimbingan antara mahasiswa dan dosen pembimbing</p>
-              <a href="{{ url('/logBimbingan') }}" class="stretched-link"></a>
+              <a href="{{ route('log-bimbingan.create') }}" class="stretched-link"></a>
             </div>
           </div>
         @endif
@@ -405,7 +405,7 @@
 
       <!-- Pendaftaran - Tidak tampil untuk Dosen -->
       @auth
-        @if (!Auth::user()->hasRole('dosen'))
+        @if (Auth::user()->role !== 'dosen')
           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
             <div class="service-item position-relative">
               <div class="icon">
@@ -413,15 +413,15 @@
               </div>
               <h3>Pendaftaran</h3>
               <p>Registrasi seminar proposal dan penjadwalan presentasi Tugas Akhir</p>
-              <a href="{{ url('pendaftaranproposal') }}" class="stretched-link"></a>
+              <a href="{{ route('pendaftaranproposal') }}" class="stretched-link"></a>
             </div>
           </div>
         @endif
       @endauth
 
-      <!-- Penilaian Dosen - Tidak tampil untuk Mahasiswa -->
+      <!-- Penilaian Dosen - Tampil hanya untuk Dosen -->
       @auth
-        @if (!Auth::user()->hasRole('mahasiswa'))
+        @if (Auth::user()->role === 'dosen')
           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
             <div class="service-item position-relative">
               <div class="icon">
@@ -429,7 +429,18 @@
               </div>
               <h3>Penilaian Dosen</h3>
               <p>Sistem penilaian online oleh dosen pembimbing dan penguji</p>
-              <a href="/penilaiandosen" class="stretched-link penilaian-dosen-link"></a>
+              <a href="{{ url('/dosen/penilaiandosen') }}" class="stretched-link penilaian-dosen-link"></a>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+            <div class="service-item position-relative">
+              <div class="icon">
+                <i class="bi bi-file-text"></i>
+              </div>
+              <h3>Persetujuan Proposal</h3>
+              <p>Persetujuan proposal tugas akhir mahasiswa bimbingan</p>
+              <a href="{{ route('dosen.proposal-approval') }}" class="stretched-link"></a>
             </div>
           </div>
         @endif

@@ -15,9 +15,9 @@ class Mahasiswa extends Model
         'user_id',
         'nim',
         'nama',
-        'program_studi',
-        'angkatan',
-        'status'
+        'prodi',
+        'fakultas',
+        'angkatan'
     ];
 
     public function user()
@@ -74,5 +74,10 @@ class Mahasiswa extends Model
     public function nilaiLiteratur()
     {
         return $this->hasMany(NilaiLiteratur::class, 'id_mahasiswa');
+    }
+
+    public function pengujiAssignments()
+    {
+        return $this->hasMany(PengujiAssignment::class, 'mahasiswa_id');
     }
 }

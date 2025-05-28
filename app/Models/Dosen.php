@@ -11,6 +11,14 @@ class Dosen extends Model
 
     protected $table = 'dosen';
 
+    protected $fillable = [
+        'user_id',
+        'nama',
+        'nip',
+        'program_studi',
+        'bidang_keahlian'
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -41,7 +49,6 @@ class Dosen extends Model
         return $this->hasMany(Mahasiswa::class, 'penguji');
     }
 
-    // Tambahkan method ini
 public function usulanPembimbing1()
 {
     return $this->hasMany(UsulDospem::class, 'id_dosen_1');

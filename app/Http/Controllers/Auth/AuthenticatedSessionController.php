@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,11 +31,14 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::user();
 
-        if ($user && $user->role === 'admin') {
-            return redirect()->route('dashboardadmin');
+        // Redirect based on user role
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.dashboardadmin');
+        } elseif ($user->role === 'dosen') {
+            return redirect()->route('dosen.dashboard');
+        } else {
+            return redirect()->route('mahasiswa.dashboard');
         }
-
-        return redirect()->intended('/');
     }
 
     /**
@@ -45,19 +49,8 @@ class AuthenticatedSessionController extends Controller
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
-        return redirect('/');
-    }
-
-    public function logout(Request $request)
-    {
-        Auth::logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect()->route('login');
+        return redirect()->route('login')->with('status', 'Anda telah berhasil logout.');
     }
 }

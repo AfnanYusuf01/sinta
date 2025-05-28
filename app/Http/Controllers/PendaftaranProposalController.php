@@ -7,6 +7,7 @@ use App\Models\PendaftaranProposal;
 use App\Models\Mahasiswa;
 use App\Models\Dosen;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Pembimbing;
 
 class PendaftaranProposalController extends Controller
 {
@@ -21,8 +22,10 @@ class PendaftaranProposalController extends Controller
 
         // Ambil semua dosen dari tabel dosen
         $dosenList = Dosen::all();
+
         // Ambil data pendaftaran proposal mahasiswa
-        $pendaftaran = PendaftaranProposal::where('id_mahasiswa', $mahasiswa->id)
+        $pendaftaran = PendaftaranProposal::with(['dosen1', 'dosen2'])
+            ->where('id_mahasiswa', $mahasiswa->id)
             ->whereIn('status', ['menunggu', 'diterima', 'ditolak'])
             ->latest()
             ->first();
@@ -43,10 +46,8 @@ class PendaftaranProposalController extends Controller
         $mahasiswa_id = $mahasiswa->id;
 
         // Cek apakah mahasiswa sudah memiliki pendaftaran proposal yang belum diproses
-        $pendaftaran = PendaftaranProposal::with(['dosen1', 'dosen2'])
-            ->where('id_mahasiswa', $mahasiswa->id)
-            ->whereIn('status', ['menunggu', 'diterima', 'ditolak'])
-            ->latest()
+        $pendaftaran = PendaftaranProposal::where('id_mahasiswa', $mahasiswa->id)
+            ->whereIn('status', ['menunggu', 'diterima'])
             ->first();
 
         if ($pendaftaran) {
@@ -62,7 +63,7 @@ class PendaftaranProposalController extends Controller
             'status' => 'menunggu',
         ]);
 
-        return redirect()->route('pendaftaranproposal')->with('success', 'Pendaftaran proposal berhasil dikirim!');
+        return redirect()->route('pendaftaranproposal')->with('success', 'Pendaftaran proposal berhasil dikirim dan menunggu persetujuan dosen!');
     }
 
     public function adminIndex()
@@ -80,6 +81,21 @@ class PendaftaranProposalController extends Controller
             $proposal = PendaftaranProposal::findOrFail($id);
             $proposal->status = 'diterima';
             $proposal->save();
+
+            // Tambahkan pembimbing ke tabel pembimbing jika belum ada
+            $pembimbing1 = Pembimbing::firstOrCreate([
+                'id_mahasiswa' => $proposal->id_mahasiswa,
+                'id_dosen' => $proposal->id_dosen_1,
+                'jenis_pembimbing' => '1'
+            ], ['status' => 'aktif']);
+
+            if ($proposal->id_dosen_2) {
+                $pembimbing2 = Pembimbing::firstOrCreate([
+                    'id_mahasiswa' => $proposal->id_mahasiswa,
+                    'id_dosen' => $proposal->id_dosen_2,
+                    'jenis_pembimbing' => '2'
+                ], ['status' => 'aktif']);
+            }
 
             return response()->json([
                 'success' => true,
@@ -112,4 +128,105 @@ class PendaftaranProposalController extends Controller
     }
 }
 
+    public function dosenIndex()
+    {
+        $user = Auth::user();
+        $dosen = Dosen::where('user_id', $user->id)->first();
+
+        if (!$dosen) {
+            return redirect()->back()->with('error', 'Data dosen tidak ditemukan.');
+        }
+
+        // Get proposals where the lecturer is either pembimbing 1 or pembimbing 2
+        $proposals = PendaftaranProposal::with(['mahasiswa'])
+            ->where(function($query) use ($dosen) {
+                $query->where('id_dosen_1', $dosen->id)
+                      ->orWhere('id_dosen_2', $dosen->id);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('dosen.proposal-approval', compact('proposals'));
+    }
+
+    public function dosenApprove($id)
+    {
+        try {
+            $user = Auth::user();
+            $dosen = Dosen::where('user_id', $user->id)->first();
+
+            if (!$dosen) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Data dosen tidak ditemukan.'
+                ], 404);
+            }
+
+            $proposal = PendaftaranProposal::where(function($query) use ($dosen) {
+                $query->where('id_dosen_1', $dosen->id)
+                      ->orWhere('id_dosen_2', $dosen->id);
+            })->findOrFail($id);
+
+            $proposal->status = 'diterima';
+            $proposal->save();
+
+            // Create pembimbing records
+            Pembimbing::firstOrCreate([
+                'id_mahasiswa' => $proposal->id_mahasiswa,
+                'id_dosen' => $proposal->id_dosen_1,
+                'jenis_pembimbing' => '1'
+            ], ['status' => 'aktif']);
+
+            if ($proposal->id_dosen_2) {
+                Pembimbing::firstOrCreate([
+                    'id_mahasiswa' => $proposal->id_mahasiswa,
+                    'id_dosen' => $proposal->id_dosen_2,
+                    'jenis_pembimbing' => '2'
+                ], ['status' => 'aktif']);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Proposal berhasil disetujui'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function dosenReject($id)
+    {
+        try {
+            $user = Auth::user();
+            $dosen = Dosen::where('user_id', $user->id)->first();
+
+            if (!$dosen) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Data dosen tidak ditemukan.'
+                ], 404);
+            }
+
+            $proposal = PendaftaranProposal::where(function($query) use ($dosen) {
+                $query->where('id_dosen_1', $dosen->id)
+                      ->orWhere('id_dosen_2', $dosen->id);
+            })->findOrFail($id);
+
+            $proposal->status = 'ditolak';
+            $proposal->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Proposal telah ditolak'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

@@ -21,7 +21,7 @@
       --shadow: 0 8px 30px rgba(26, 26, 46, 0.12);
       --glow: 0 0 15px rgba(227, 6, 19, 0.15);
     }
-    
+
     body {
       font-family: 'Poppins', sans-serif;
       margin: 0;
@@ -29,18 +29,18 @@
       background-color: var(--bg-light);
       color: var(--text-dark);
       min-height: 100vh;
-      background-image: 
+      background-image:
         radial-gradient(circle at 10% 20%, rgba(227, 6, 19, 0.03) 0%, transparent 25%),
         radial-gradient(circle at 90% 80%, rgba(227, 6, 19, 0.03) 0%, transparent 25%);
       padding: 1rem 1.5rem;
     }
-    
+
     .header {
       text-align: center;
       margin-bottom: 3rem;
       position: relative;
     }
-    
+
     h1 {
       font-size: 2.2rem;
       font-weight: 700;
@@ -49,7 +49,7 @@
       position: relative;
       display: inline-block;
     }
-    
+
     h1::after {
       content: '';
       position: absolute;
@@ -60,14 +60,14 @@
       height: 4px;
       border-radius: 2px;
     }
-    
+
     .subtitle {
       color: #4A5568;
       font-size: 1.1rem;
       max-width: 600px;
       margin: 0 auto;
     }
-    
+
     .grid-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -75,7 +75,7 @@
       max-width: 1200px;
       margin: 0 auto;
     }
-    
+
     .card {
       background: var(--card-bg);
       border-radius: 12px;
@@ -87,7 +87,7 @@
       overflow: hidden;
       border: 1px solid rgba(255, 255, 255, 0.4);
     }
-    
+
     .card::before {
       content: '';
       position: absolute;
@@ -97,12 +97,12 @@
       height: 100%;
       background: linear-gradient(to bottom, var(--primary), var(--accent));
     }
-    
+
     .card:hover {
       transform: translateY(-8px);
       box-shadow: var(--glow), var(--shadow);
     }
-    
+
     .card h2 {
       color: var(--secondary);
       font-weight: 600;
@@ -110,14 +110,14 @@
       margin-bottom: 1rem;
       line-height: 1.4;
     }
-    
+
     .card-icon {
       font-size: 2.5rem;
       color: var(--primary);
       margin-bottom: 1.5rem;
       display: inline-block;
     }
-    
+
     .card-btn {
       display: inline-flex;
       align-items: center;
@@ -136,31 +136,31 @@
       width: 80%;
       max-width: 200px;
     }
-    
+
     .card-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 12px rgba(227, 6, 19, 0.3);
       background: linear-gradient(135deg, var(--primary-dark), var(--primary));
     }
-    
+
     .card-btn i {
       margin-left: 8px;
       transition: transform 0.3s ease;
     }
-    
+
     .card-btn:hover i {
       transform: translateX(4px);
     }
-    
+
     @media (max-width: 768px) {
       body {
         padding: 2rem 1rem;
       }
-      
+
       h1 {
         font-size: 1.8rem;
       }
-      
+
       .grid-container {
         grid-template-columns: 1fr;
       }
@@ -217,37 +217,37 @@
         <i class="fas fa-user-graduate"></i>
       </div>
       <h2>Formulir Nilai Bimbingan Proposal TA</h2>
-      <a href="{{ url('/nilaibimbingan') }}" class="card-btn">
+            <a href="{{ route('nilai-bimbingan.index') }}" class="card-btn">
         Isi Formulir <i class="fas fa-arrow-right"></i>
       </a>
     </div>
-    
+
     <div class="card">
       <div class="card-icon">
         <i class="fas fa-file-alt"></i>
       </div>
       <h2>Formulir Nilai Desk Evaluasi</h2>
-      <a href="{{ url('/nilaideskevaluasi') }}" class="card-btn">
+      <a href="{{ route('nilai-de.index') }}" class="card-btn">
         Isi Formulir <i class="fas fa-arrow-right"></i>
       </a>
     </div>
-    
+
     <div class="card">
       <div class="card-icon">
         <i class="fas fa-chalkboard-teacher"></i>
       </div>
       <h2>Formulir Nilai Presentasi Proposal TA</h2>
-      <a href="{{ url('/nilaipresentasiproposalta') }}" class="card-btn">
+      <a href="{{ route('nilai-presentasi.index') }}" class="card-btn">
         Isi Formulir <i class="fas fa-arrow-right"></i>
       </a>
     </div>
-    
+
     <div class="card">
       <div class="card-icon">
         <i class="fas fa-book-open"></i>
       </div>
       <h2>Formulir Nilai Literatur Review Proposal TA</h2>
-      <a href="{{ url('/nilailiteratur') }}" class="card-btn">
+      <a href="{{ route('nilai-literatur.index') }}" class="card-btn">
         Isi Formulir <i class="fas fa-arrow-right"></i>
       </a>
     </div>

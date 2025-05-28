@@ -1,55 +1,51 @@
-<section class="space-y-6">
-    <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Delete Account') }}
-        </h2>
+@php
+    $user = Auth::user();
+@endphp
 
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
+<section>
+    <header>
+        <h3 class="h4 mb-3">Hapus Akun</h3>
+        <p class="text-muted mb-4">
+            Setelah akun anda dihapus, semua sumber daya dan data akan dihapus secara permanen.
+            Sebelum menghapus akun anda, harap unduh data atau informasi yang ingin anda simpan.
         </p>
     </header>
 
-    <x-danger-button
-        x-data=""
-        x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
-    >{{ __('Delete Account') }}</x-danger-button>
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmUserDeletionModal">
+        Hapus Akun
+    </button>
 
-    <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
-        <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
+    <!-- Modal -->
+    <div class="modal fade" id="confirmUserDeletionModal" tabindex="-1" aria-labelledby="confirmUserDeletionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="post" action="{{ route('profile.destroy') }}" class="modal-content">
             @csrf
             @method('delete')
 
-            <h2 class="text-lg font-medium text-gray-900">
-                {{ __('Are you sure you want to delete your account?') }}
-            </h2>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmUserDeletionModalLabel">Apakah anda yakin ingin menghapus akun?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
 
-            <p class="mt-1 text-sm text-gray-600">
-                {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.') }}
+                <div class="modal-body">
+                    <p class="mb-3">
+                        Setelah akun anda dihapus, semua sumber daya dan data akan dihapus secara permanen. Silakan masukkan password anda untuk mengkonfirmasi bahwa anda ingin menghapus akun anda secara permanen.
             </p>
 
-            <div class="mt-6">
-                <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
-
-                <x-text-input
-                    id="password"
-                    name="password"
-                    type="password"
-                    class="mt-1 block w-3/4"
-                    placeholder="{{ __('Password') }}"
-                />
-
-                <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                        @error('password')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
             </div>
 
-            <div class="mt-6 flex justify-end">
-                <x-secondary-button x-on:click="$dispatch('close')">
-                    {{ __('Cancel') }}
-                </x-secondary-button>
-
-                <x-danger-button class="ms-3">
-                    {{ __('Delete Account') }}
-                </x-danger-button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger">Hapus Akun</button>
             </div>
         </form>
-    </x-modal>
+        </div>
+    </div>
 </section>

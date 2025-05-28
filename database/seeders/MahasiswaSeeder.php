@@ -9,24 +9,47 @@ class MahasiswaSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create 5 mahasiswa
-        for ($i = 1; $i <= 5; $i++) {
-            // Create user first
+        // Create some default mahasiswa accounts
+        $mahasiswa_data = [
+            [
+                'name' => 'Andi Pratama',
+                'email' => 'andi.pratama@mahasiswa.com',
+                'nim' => '2024010001',
+                'program_studi' => 'Teknik Informatika',
+                'angkatan' => '2024',
+            ],
+            [
+                'name' => 'Dewi Lestari',
+                'email' => 'dewi.lestari@mahasiswa.com',
+                'nim' => '2024010002',
+                'program_studi' => 'Teknik Informatika',
+                'angkatan' => '2024',
+            ],
+            [
+                'name' => 'Fajar Ramadhan',
+                'email' => 'fajar.ramadhan@mahasiswa.com',
+                'nim' => '2024010003',
+                'program_studi' => 'Teknik Informatika',
+                'angkatan' => '2024',
+            ],
+        ];
+
+        foreach ($mahasiswa_data as $data) {
+            // Create user account
             $user = User::create([
-                'name' => "Mahasiswa $i",
-                'email' => "mahasiswa$i@example.com",
-                'password' => bcrypt('password'),
-                'role' => 'mahasiswa'
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => Hash::make('password'),
+                'role' => 'mahasiswa', // Default role
             ]);
 
-            // Create mahasiswa record
+            // Create mahasiswa profile
             Mahasiswa::create([
                 'user_id' => $user->id,
-                'nim' => "12345" . str_pad($i, 3, '0', STR_PAD_LEFT),
-                'nama' => "Mahasiswa $i",
-                'program_studi' => 'Teknik Informatika',
-                'angkatan' => '2020',
-                'status' => 'aktif'
+                'name' => $data['name'],
+                'nim' => $data['nim'],
+                'program_studi' => $data['program_studi'],
+                'angkatan' => $data['angkatan'],
             ]);
         }
 

@@ -7,39 +7,62 @@ use App\Models\UsulDospem;
 use App\Models\Mahasiswa;
 use App\Models\Dosen;
 use App\Models\Pembimbing;
+use App\Models\PengujiAssignment;
 use Illuminate\Support\Facades\DB;
 
 class DashboardAdminController extends Controller
 {
     public function index()
     {
-        // Mengambil semua usulan dengan relasi mahasiswa dan dosen
+        // Get pengajuan pembimbing data
         $pengajuanList = UsulDospem::with(['mahasiswa', 'dosen1', 'dosen2'])
                            ->orderBy('created_at', 'desc')
                            ->get();
 
-        // Hitung jumlah pengajuan yang masih menunggu
+        // Count pending submissions
         $pending_count = UsulDospem::where('status', 'menunggu')->count();
 
-        return view('dashboardadmin', compact('pengajuanList', 'pending_count'));
+        // Get penguji assignments data
+        $assignments = PengujiAssignment::with(['mahasiswa', 'dosen'])->get();
+        $mahasiswas = Mahasiswa::whereNotIn('id', PengujiAssignment::pluck('id_mahasiswa'))->get();
+        $dosens = Dosen::all();
+
+        return view('dashboardadmin', compact('pengajuanList', 'pending_count', 'assignments', 'mahasiswas', 'dosens'));
     }
 
     public function approve($id)
     {
         try {
+            DB::beginTransaction();
+
             $usulan = UsulDospem::findOrFail($id);
             $usulan->status = 'diterima';
             $usulan->save();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Pengajuan pembimbing berhasil disetujui'
+            // Add to pembimbing table when approved
+            Pembimbing::create([
+                'id_mahasiswa' => $usulan->id_mahasiswa,
+                'id_dosen' => $usulan->id_dosen_1,
+                'status' => 'aktif',
+                'jenis_pembimbing' => '1'
             ]);
+
+            // Add second pembimbing if exists
+            if ($usulan->id_dosen_2) {
+                Pembimbing::create([
+                    'id_mahasiswa' => $usulan->id_mahasiswa,
+                    'id_dosen' => $usulan->id_dosen_2,
+                    'status' => 'aktif',
+                    'jenis_pembimbing' => '2'
+                ]);
+            }
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Pengajuan pembimbing berhasil disetujui');
+
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
-            ], 500);
+            DB::rollback();
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
@@ -50,15 +73,9 @@ class DashboardAdminController extends Controller
             $usulan->status = 'ditolak';
             $usulan->save();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Pengajuan pembimbing berhasil ditolak'
-            ]);
+            return redirect()->back()->with('success', 'Pengajuan pembimbing berhasil ditolak');
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
-            ], 500);
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
@@ -75,9 +92,9 @@ class DashboardAdminController extends Controller
             $usulan->status = $request->status;
             $usulan->save();
 
-            // Jika status diterima, tambahkan ke tabel pembimbing
+            // If approved, add to pembimbing table
             if ($request->status === 'diterima') {
-                // Tambah pembimbing 1
+                // Add first pembimbing
                 Pembimbing::create([
                     'id_mahasiswa' => $usulan->id_mahasiswa,
                     'id_dosen' => $usulan->id_dosen_1,
@@ -85,7 +102,7 @@ class DashboardAdminController extends Controller
                     'jenis_pembimbing' => '1'
                 ]);
 
-                // Tambah pembimbing 2 jika ada
+                // Add second pembimbing if exists
                 if ($usulan->id_dosen_2) {
                     Pembimbing::create([
                         'id_mahasiswa' => $usulan->id_mahasiswa,
@@ -97,7 +114,6 @@ class DashboardAdminController extends Controller
             }
 
             DB::commit();
-
             return response()->json([
                 'success' => true,
                 'message' => 'Status berhasil diperbarui'
@@ -105,7 +121,6 @@ class DashboardAdminController extends Controller
 
         } catch (\Exception $e) {
             DB::rollback();
-
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage()

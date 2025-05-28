@@ -15,7 +15,7 @@ class ProfileUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => [
                 'required',
@@ -25,6 +25,25 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
+            'profile_picture' => ['nullable', 'image', 'max:2048'], // Max 2MB
         ];
+
+        // Add role-specific validation rules
+        if ($this->user()->role === 'mahasiswa') {
+            $rules = array_merge($rules, [
+                'nim' => ['required', 'string', 'max:20'],
+                'prodi' => ['required', 'string', 'max:100'],
+                'fakultas' => ['required', 'string', 'max:100'],
+                'angkatan' => ['required', 'integer', 'min:2000', 'max:' . (date('Y') + 1)],
+            ]);
+        } elseif ($this->user()->role === 'dosen') {
+            $rules = array_merge($rules, [
+                'nip' => ['required', 'string', 'max:20'],
+                'program_studi' => ['required', 'string', 'max:100'],
+                'bidang_keahlian' => ['required', 'string', 'max:100'],
+            ]);
+        }
+
+        return $rules;
     }
 }
