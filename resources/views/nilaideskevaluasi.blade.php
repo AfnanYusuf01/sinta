@@ -302,7 +302,7 @@
       <form action="{{ route('nilai-de.store') }}" method="POST" id="formNilai">
         @csrf
 
-        <div class="form-group">
+        <div class="form-group mb-4">
           <label for="mahasiswa_id" class="form-label">Pilih Mahasiswa:</label>
           <select name="mahasiswa_id" id="mahasiswa_id" class="form-select" required>
             <option value="">-- Pilih Mahasiswa --</option>
@@ -312,106 +312,108 @@
               </option>
             @endforeach
           </select>
+
+          @if($mahasiswa->isEmpty())
+            <div class="alert alert-info mt-3">
+              <i class="fas fa-info-circle"></i>
+              Tidak ada mahasiswa yang perlu dinilai saat ini.
+            </div>
+          @else
+            <div class="mb-3 text-muted">
+              <small>Jumlah mahasiswa yang belum dinilai: {{ $mahasiswa->count() }}</small>
+            </div>
+          @endif
         </div>
 
-        @if($mahasiswa->isEmpty())
-          <div class="alert alert-info">
-            <i class="fas fa-info-circle"></i>
-            Semua mahasiswa sudah dinilai.
-          </div>
-        @else
-          <div class="mb-3 text-muted">
-            <small>Jumlah mahasiswa yang belum dinilai: {{ $mahasiswa->count() }}</small>
-          </div>
+        <table class="table table-bordered mt-4">
+          <thead class="table-primary">
+            <tr>
+              <th width="5%">No</th>
+              <th>Kriteria Penilaian</th>
+              <th width="15%">Nilai (0-100)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>
+                <div class="criteria-title">Orisinalitas</div>
+                <div class="criteria-desc">Keaslian dan keunikan ide penelitian</div>
+              </td>
+              <td>
+                <input type="number" name="nilai_1" class="form-control nilai-input" min="0" max="100" required>
+              </td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>
+                <div class="criteria-title">Kebaruan/Novelty</div>
+                <div class="criteria-desc">Kontribusi baru terhadap bidang penelitian</div>
+              </td>
+              <td>
+                <input type="number" name="nilai_2" class="form-control nilai-input" min="0" max="100" required>
+              </td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>
+                <div class="criteria-title">Urgensi Penelitian</div>
+                <div class="criteria-desc">Tingkat kepentingan dan dampak penelitian</div>
+              </td>
+              <td>
+                <input type="number" name="nilai_3" class="form-control nilai-input" min="0" max="100" required>
+              </td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>
+                <div class="criteria-title">Metodologi</div>
+                <div class="criteria-desc">Kesesuaian dan kelayakan metode penelitian</div>
+              </td>
+              <td>
+                <input type="number" name="nilai_4" class="form-control nilai-input" min="0" max="100" required>
+              </td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>
+                <div class="criteria-title">Tinjauan Pustaka</div>
+                <div class="criteria-desc">Kualitas dan relevansi referensi</div>
+              </td>
+              <td>
+                <input type="number" name="nilai_5" class="form-control nilai-input" min="0" max="100" required>
+              </td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>
+                <div class="criteria-title">Kontribusi Penelitian</div>
+                <div class="criteria-desc">Potensi kontribusi terhadap pengembangan ilmu</div>
+              </td>
+              <td>
+                <input type="number" name="nilai_6" class="form-control nilai-input" min="0" max="100" required>
+              </td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>
+                <div class="criteria-title">Kelayakan Tim Peneliti</div>
+                <div class="criteria-desc">Kemampuan dan kesiapan peneliti</div>
+              </td>
+              <td>
+                <input type="number" name="nilai_7" class="form-control nilai-input" min="0" max="100" required>
+              </td>
+            </tr>
+            <tr class="table-info">
+              <td colspan="2" class="text-end"><strong>Rata-rata Nilai:</strong></td>
+              <td><strong id="total">0</strong></td>
+            </tr>
+          </tbody>
+        </table>
 
-          <table class="table table-bordered mt-4">
-            <thead class="table-primary">
-              <tr>
-                <th width="5%">No</th>
-                <th>Kriteria Penilaian</th>
-                <th width="15%">Nilai (0-100)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>
-                  <div class="criteria-title">Orisinalitas</div>
-                  <div class="criteria-desc">Keaslian dan keunikan ide penelitian</div>
-                </td>
-                <td>
-                  <input type="number" name="nilai_1" class="form-control nilai-input" min="0" max="100" required>
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>
-                  <div class="criteria-title">Kebaruan/Novelty</div>
-                  <div class="criteria-desc">Kontribusi baru terhadap bidang penelitian</div>
-                </td>
-                <td>
-                  <input type="number" name="nilai_2" class="form-control nilai-input" min="0" max="100" required>
-                </td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>
-                  <div class="criteria-title">Urgensi Penelitian</div>
-                  <div class="criteria-desc">Tingkat kepentingan dan dampak penelitian</div>
-                </td>
-                <td>
-                  <input type="number" name="nilai_3" class="form-control nilai-input" min="0" max="100" required>
-                </td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td>
-                  <div class="criteria-title">Metodologi</div>
-                  <div class="criteria-desc">Kesesuaian dan kelayakan metode penelitian</div>
-                </td>
-                <td>
-                  <input type="number" name="nilai_4" class="form-control nilai-input" min="0" max="100" required>
-                </td>
-              </tr>
-              <tr>
-                <td>5</td>
-                <td>
-                  <div class="criteria-title">Tinjauan Pustaka</div>
-                  <div class="criteria-desc">Kualitas dan relevansi referensi</div>
-                </td>
-                <td>
-                  <input type="number" name="nilai_5" class="form-control nilai-input" min="0" max="100" required>
-                </td>
-              </tr>
-              <tr>
-                <td>6</td>
-                <td>
-                  <div class="criteria-title">Kontribusi Penelitian</div>
-                  <div class="criteria-desc">Potensi kontribusi terhadap pengembangan ilmu</div>
-                </td>
-                <td>
-                  <input type="number" name="nilai_6" class="form-control nilai-input" min="0" max="100" required>
-                </td>
-              </tr>
-              <tr>
-                <td>7</td>
-                <td>
-                  <div class="criteria-title">Kelayakan Tim Peneliti</div>
-                  <div class="criteria-desc">Kemampuan dan kesiapan peneliti</div>
-                </td>
-                <td>
-                  <input type="number" name="nilai_7" class="form-control nilai-input" min="0" max="100" required>
-                </td>
-              </tr>
-              <tr class="table-info">
-                <td colspan="2" class="text-end"><strong>Rata-rata Nilai:</strong></td>
-                <td><strong id="total">0</strong></td>
-              </tr>
-            </tbody>
-          </table>
-
-          <button type="submit" class="submit-btn">Simpan Penilaian</button>
-        @endif
+        <button type="submit" class="submit-btn" {{ $mahasiswa->isEmpty() ? 'disabled' : '' }}>
+          Simpan Penilaian
+        </button>
       </form>
     </div>
   </div>
@@ -420,40 +422,35 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     $(document).ready(function() {
-      console.log('Document ready');
+      // Fungsi untuk menghitung rata-rata
+      function hitungRataRata() {
+        let total = 0;
+        let count = 0;
 
-      // Debug: Log mahasiswa data
-      const mahasiswaData = @json($mahasiswa);
-      console.log('Mahasiswa data:', mahasiswaData);
+        $('.nilai-input').each(function() {
+          const nilai = parseFloat($(this).val()) || 0;
+          if (nilai > 0) {
+            total += nilai;
+            count++;
+          }
+        });
 
-      // Handle select change
+        const rataRata = count > 0 ? (total / count).toFixed(2) : '0';
+        $('#total').text(rataRata);
+      }
+
+      // Event listener untuk perubahan nilai
+      $('.nilai-input').on('input', hitungRataRata);
+
+      // Event listener untuk perubahan mahasiswa
       $('#mahasiswa_id').on('change', function() {
-        console.log('Select changed:', this.value);
         const selectedId = $(this).val();
-        if (selectedId) {
-          loadNilaiMahasiswa(selectedId);
-        } else {
-          resetForm();
+        if (!selectedId) {
+          // Reset form jika tidak ada mahasiswa dipilih
+          $('#formNilai')[0].reset();
+          $('#total').text('0');
         }
       });
-
-      // Debug: Test select functionality
-      $('#mahasiswa_id').click(function() {
-        console.log('Select clicked');
-      });
-
-      function loadNilaiMahasiswa(mahasiswaId) {
-        console.log('Loading nilai for mahasiswa:', mahasiswaId);
-        // ... rest of the function
-      }
-
-      function resetForm() {
-        $('#formNilai')[0].reset();
-        $('#total').text('0');
-      }
-
-      // Add this to check if jQuery is working
-      console.log('jQuery version:', $.fn.jquery);
     });
   </script>
 </body>

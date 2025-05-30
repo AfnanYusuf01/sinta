@@ -19,6 +19,7 @@ use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\PengujiAssignmentController;
+use App\Http\Controllers\DPengujiController;
 
 require __DIR__.'/auth.php';
 
@@ -98,6 +99,12 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/admin/pengajuanpembimbing/reject/{id}', [AdminController::class, 'reject'])->name('admin.pengajuanpembimbing.reject');
         Route::post('/admin/pendaftaranproposal/approve/{id}', [AdminController::class, 'approveProposal'])->name('admin.pendaftaranproposal.approve');
         Route::post('/admin/pendaftaranproposal/reject/{id}', [AdminController::class, 'rejectProposal'])->name('admin.pendaftaranproposal.reject');
+
+        // Dosen Penguji routes
+        Route::get('/dpenguji', [DPengujiController::class, 'index'])->name('dpenguji.index');
+        Route::post('/dpenguji', [DPengujiController::class, 'store'])->name('dpenguji.store');
+        Route::put('/dpenguji/{id}', [DPengujiController::class, 'update'])->name('dpenguji.update');
+        Route::delete('/dpenguji/{id}', [DPengujiController::class, 'destroy'])->name('dpenguji.destroy');
     });
 
     // Dosen routes

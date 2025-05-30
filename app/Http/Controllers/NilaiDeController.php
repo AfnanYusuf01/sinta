@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\NilaiDe;
 use App\Models\Mahasiswa;
 use App\Models\Dosen;
-use App\Models\Penguji;
+use App\Models\PengujiAssignment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -22,9 +22,9 @@ class NilaiDeController extends Controller
         }
 
         // Ambil data mahasiswa yang belum dinilai
-        // Mahasiswa yang dipilih adalah yang memiliki relasi dengan dosen di tabel penguji
-        $mahasiswa = Mahasiswa::whereHas('penguji', function($query) use ($dosen) {
-            $query->where('id_dosen', $dosen->id)
+        // Mahasiswa yang dipilih adalah yang memiliki relasi dengan dosen di tabel penguji_assignments
+        $mahasiswa = Mahasiswa::whereHas('pengujiAssignments', function($query) use ($dosen) {
+            $query->where('dosen_id', $dosen->id)
                   ->where('status', 'aktif');
         })->whereDoesntHave('nilaiDe', function($query) use ($dosen) {
             $query->where('id_dosen', $dosen->id);
@@ -34,11 +34,11 @@ class NilaiDeController extends Controller
         Log::info('Dosen ID: ' . $dosen->id);
         Log::info('Jumlah Mahasiswa yang belum dinilai DE: ' . $mahasiswa->count());
 
-        // Cek data penguji
-        $penguji = Penguji::where('id_dosen', $dosen->id)
+        // Cek data penguji assignment
+        $pengujiAssignments = PengujiAssignment::where('dosen_id', $dosen->id)
                          ->where('status', 'aktif')
                          ->get();
-        Log::info('Data Penguji: ' . $penguji->toJson());
+        Log::info('Data Penguji Assignments: ' . $pengujiAssignments->toJson());
 
         // Ambil nilai DE yang sudah ada
         $nilaiExisting = NilaiDe::where('id_dosen', $dosen->id)
@@ -68,15 +68,15 @@ class NilaiDeController extends Controller
             return redirect()->back()->with('error', 'Akses ditolak. Anda bukan dosen.');
         }
 
-        // Verifikasi bahwa mahasiswa adalah mahasiswa yang diuji oleh dosen ini
-        $isMahasiswaPenguji = Mahasiswa::where('id', $request->mahasiswa_id)
-            ->whereHas('penguji', function($query) use ($dosen) {
-                $query->where('id_dosen', $dosen->id)
+        // Verifikasi bahwa mahasiswa adalah mahasiswa yang diassign ke dosen ini
+        $isMahasiswaAssigned = Mahasiswa::where('id', $request->mahasiswa_id)
+            ->whereHas('pengujiAssignments', function($query) use ($dosen) {
+                $query->where('dosen_id', $dosen->id)
                       ->where('status', 'aktif');
             })->exists();
 
-        if (!$isMahasiswaPenguji) {
-            return redirect()->back()->with('error', 'Mahasiswa bukan mahasiswa yang Anda uji.');
+        if (!$isMahasiswaAssigned) {
+            return redirect()->back()->with('error', 'Mahasiswa bukan mahasiswa yang ditugaskan kepada Anda.');
         }
 
         // Hitung total nilai

@@ -199,26 +199,32 @@ class AdminController extends Controller
     {
         try {
             $request->validate([
-                'dosen_id' => [
-                    'required',
-                    'exists:dosens,id'
-                ]
+                'dosen_id' => 'sometimes|required|exists:dosens,id',
+                'status' => 'sometimes|required|in:aktif,nonaktif'
             ]);
 
             $assignment = \App\Models\PengujiAssignment::findOrFail($id);
 
-            // Nonaktifkan penugasan lama
-            $assignment->update(['status' => 'nonaktif']);
+            if ($request->has('dosen_id')) {
+                // Nonaktifkan penugasan lama
+                $assignment->update(['status' => 'nonaktif']);
 
-            // Buat penugasan baru
-            \App\Models\PengujiAssignment::create([
-                'mahasiswa_id' => $assignment->mahasiswa_id,
-                'dosen_id' => $request->dosen_id,
-                'status' => 'aktif'
-            ]);
+                // Buat penugasan baru
+                \App\Models\PengujiAssignment::create([
+                    'mahasiswa_id' => $assignment->mahasiswa_id,
+                    'dosen_id' => $request->dosen_id,
+                    'status' => 'aktif'
+                ]);
+
+                $message = 'Dosen penguji berhasil diperbarui';
+            } else if ($request->has('status')) {
+                // Update status saja
+                $assignment->update(['status' => $request->status]);
+                $message = 'Status penguji berhasil diperbarui';
+            }
 
             return redirect()->route('admin.penguji')
-                           ->with('success', 'Penguji berhasil diperbarui');
+                           ->with('success', $message);
         } catch (\Exception $e) {
             return redirect()->route('admin.penguji')
                            ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
@@ -229,10 +235,10 @@ class AdminController extends Controller
     {
         try {
             $assignment = \App\Models\PengujiAssignment::findOrFail($id);
-            $assignment->update(['status' => 'nonaktif']);
+            $assignment->delete();
 
             return redirect()->route('admin.penguji')
-                           ->with('success', 'Penguji berhasil dihapus');
+                           ->with('success', 'Penguji berhasil dihapus dari sistem');
         } catch (\Exception $e) {
             return redirect()->route('admin.penguji')
                            ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
