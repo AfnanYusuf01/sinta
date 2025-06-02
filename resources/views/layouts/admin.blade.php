@@ -377,6 +377,12 @@
               <span>Pengelolaan Penguji</span>
             </a>
           </li>
+          <li>
+            <a href="{{ route('admin.pembimbing') }}" class="{{ request()->routeIs('admin.pembimbing') ? 'active' : '' }}">
+              <i class="fas fa-chalkboard-teacher"></i>
+              <span>Management Pembimbing</span>
+            </a>
+          </li>
           <li class="dropdown">
             <a href="#" data-bs-toggle="dropdown">
               <i class="fas fa-star"></i>

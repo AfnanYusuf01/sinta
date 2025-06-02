@@ -138,7 +138,7 @@
                             $mahasiswa = $nilaiGroup->first()->mahasiswa;
                             $avgNilai = $nilaiGroup->avg('total_nilai') / 7;
                         @endphp
-                        <tr>
+        <tr>
                             <td>{{ $nilaiGroup->max('created_at')->format('d/m/Y') }}</td>
                             <td>{{ $mahasiswa->nama ?? '-' }}</td>
                             <td>{{ $mahasiswa->nim ?? '-' }}</td>
@@ -171,13 +171,13 @@
     </table>
   </div>
 </div>
-    </div>
+  </div>
 </div>
 
 <!-- Modal Detail Nilai -->
 <div class="modal fade" id="scoreModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+  <div class="modal-content">
             <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title">Detail Nilai Desk Evaluasi</h5>
                 <button type="button" class="btn-close btn-close-white" onclick="hideModal()"></button>
@@ -280,14 +280,14 @@
     });
 
     async function showNilaiDeskEvaluasi(nilaiIds) {
-        try {
+      try {
             const responses = await Promise.all(nilaiIds.map(id => 
                 fetch(`/admin/nilai-de/${id}`).then(res => res.json())
             ));
 
             if (responses.length === 0) {
                 throw new Error('Tidak ada data nilai yang ditemukan');
-            }
+      }
 
             const firstResponse = responses[0];
             document.getElementById('modalStudentName').textContent = firstResponse.mahasiswa?.nama || '-';

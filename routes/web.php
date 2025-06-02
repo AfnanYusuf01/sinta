@@ -96,6 +96,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/admin/nilaipresentasita', [AdminController::class, 'nilaipresentasita'])->name('admin.nilaipresentasita');
         Route::get('/admin/nilailiteratur', [AdminController::class, 'nilailiteratur'])->name('admin.nilailiteratur');
 
+        // Pembimbing Management Routes
+        Route::group(['prefix' => 'admin/pembimbing'], function () {
+            Route::get('/', [AdminController::class, 'pembimbing'])->name('admin.pembimbing');
+            Route::post('/', [AdminController::class, 'storePembimbing'])->name('admin.pembimbing.store');
+            Route::put('/{pembimbing}', [AdminController::class, 'updatePembimbing'])->name('admin.pembimbing.update');
+            Route::delete('/{pembimbing}', [AdminController::class, 'destroyPembimbing'])->name('admin.pembimbing.destroy');
+        });
+
         // API endpoints for nilai details
         Route::get('/admin/nilai-bimbingan/{id}', [AdminController::class, 'detailNilaiBimbingan'])->name('admin.nilai-bimbingan.detail');
         Route::get('/admin/nilai-de/{id}', [AdminController::class, 'detailNilaiDe'])->name('admin.nilai-de.detail');

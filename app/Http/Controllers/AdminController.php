@@ -487,4 +487,121 @@ class AdminController extends Controller
                 ->with('error', 'Gagal menghapus user: ' . $e->getMessage());
         }
     }
+
+    public function pembimbing()
+    {
+        $pembimbings = \App\Models\Pembimbing::with(['mahasiswa', 'dosen'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $mahasiswas = \App\Models\Mahasiswa::all();
+        $dosens = \App\Models\Dosen::all();
+
+        return view('admin.pembimbing.index', compact('pembimbings', 'mahasiswas', 'dosens'));
+    }
+
+    public function storePembimbing(Request $request)
+    {
+        try {
+            $request->validate([
+                'id_mahasiswa' => 'required|exists:mahasiswa,id',
+                'id_dosen' => 'required|exists:dosen,id',
+                'jenis_pembimbing' => 'required|in:1,2',
+                'status' => 'required|in:aktif,nonaktif'
+            ]);
+
+            // Check if mahasiswa already has a pembimbing with the same jenis_pembimbing
+            $existingPembimbing = \App\Models\Pembimbing::where('id_mahasiswa', $request->id_mahasiswa)
+                ->where('jenis_pembimbing', $request->jenis_pembimbing)
+                ->where('status', 'aktif')
+                ->exists();
+
+            if ($existingPembimbing) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mahasiswa sudah memiliki pembimbing ' . $request->jenis_pembimbing . ' yang aktif'
+                ], 400);
+            }
+
+            $pembimbing = \App\Models\Pembimbing::create([
+                'id_mahasiswa' => $request->id_mahasiswa,
+                'id_dosen' => $request->id_dosen,
+                'jenis_pembimbing' => $request->jenis_pembimbing,
+                'status' => $request->status
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Pembimbing berhasil ditambahkan',
+                'data' => $pembimbing
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function updatePembimbing(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'id_dosen' => 'required|exists:dosen,id',
+                'status' => 'required|in:aktif,nonaktif'
+            ]);
+
+            $pembimbing = \App\Models\Pembimbing::findOrFail($id);
+
+            // If changing to aktif, check if there's already an active pembimbing
+            if ($request->status === 'aktif' && $request->status !== $pembimbing->status) {
+                $existingPembimbing = \App\Models\Pembimbing::where('id_mahasiswa', $pembimbing->id_mahasiswa)
+                    ->where('jenis_pembimbing', $pembimbing->jenis_pembimbing)
+                    ->where('status', 'aktif')
+                    ->where('id', '!=', $id)
+                    ->exists();
+
+                if ($existingPembimbing) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Mahasiswa sudah memiliki pembimbing ' . $pembimbing->jenis_pembimbing . ' yang aktif'
+                    ], 400);
+                }
+            }
+
+            $pembimbing->update([
+                'id_dosen' => $request->id_dosen,
+                'status' => $request->status
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data pembimbing berhasil diperbarui',
+                'data' => $pembimbing
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function destroyPembimbing($id)
+    {
+        try {
+            $pembimbing = \App\Models\Pembimbing::findOrFail($id);
+            $pembimbing->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Pembimbing berhasil dihapus'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }
