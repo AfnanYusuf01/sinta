@@ -321,12 +321,25 @@ class AdminController extends Controller
     public function storeUser(Request $request)
     {
         try {
-            $request->validate([
+            // Basic validation
+            $validationRules = [
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
                 'role' => ['required', 'in:admin,dosen,mahasiswa'],
-            ]);
+            ];
+
+            // Add role-specific validation rules
+            if ($request->role === 'mahasiswa') {
+                $validationRules['nim'] = ['required', 'string', 'max:20', 'unique:mahasiswa'];
+                $validationRules['prodi'] = ['required', 'string', 'max:100'];
+                $validationRules['angkatan'] = ['required', 'string', 'max:4'];
+            } elseif ($request->role === 'dosen') {
+                $validationRules['nip'] = ['required', 'string', 'max:20', 'unique:dosen'];
+                $validationRules['bidang_keahlian'] = ['required', 'string', 'max:100'];
+            }
+
+            $request->validate($validationRules);
 
             // Begin transaction
             DB::beginTransaction();
@@ -345,16 +358,16 @@ class AdminController extends Controller
                     \App\Models\Mahasiswa::create([
                         'user_id' => $user->id,
                         'nama' => $request->name,
-                        'nim' => $request->nim ?? null,
-                        'prodi' => $request->prodi ?? null,
-                        'angkatan' => $request->angkatan ?? null
+                        'nim' => $request->nim,
+                        'prodi' => $request->prodi,
+                        'angkatan' => $request->angkatan
                     ]);
                 } elseif ($request->role === 'dosen') {
                     \App\Models\Dosen::create([
                         'user_id' => $user->id,
                         'nama' => $request->name,
-                        'nip' => $request->nip ?? null,
-                        'bidang_keahlian' => $request->bidang_keahlian ?? null
+                        'nip' => $request->nip,
+                        'bidang_keahlian' => $request->bidang_keahlian
                     ]);
                 }
 

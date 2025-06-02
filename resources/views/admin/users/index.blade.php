@@ -78,7 +78,7 @@
                 <h5 class="modal-title">Tambah User</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form id="addUserForm" method="POST">
+            <form id="addUserForm" method="POST" action="{{ route('admin.users.store') }}">
                 @csrf
                 <div class="modal-body">
                     <!-- Error Messages -->
@@ -302,43 +302,49 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Handle Add User Form Submit
-    addUserForm.addEventListener('submit', async function(e) {
+    $('#addUserForm').on('submit', function(e) {
         e.preventDefault();
         
-        try {
-            const formData = new FormData(this);
-            const response = await fetch(this.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
+        $.ajax({
+            url: $(this).attr('action'),
+            method: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                if (response.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: response.message,
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: response.message
+                    });
                 }
-            });
-
-            const result = await response.json();
-
-            if (!response.ok) {
-                throw new Error(result.message || 'Terjadi kesalahan saat menambah user');
+            },
+            error: function(xhr) {
+                let errorMessage = 'Terjadi kesalahan saat menambah user';
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                }
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    const errors = xhr.responseJSON.errors;
+                    const errorMessages = Object.values(errors).flat();
+                    errorMessage = errorMessages.join('\n');
+                }
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: errorMessage
+                });
             }
-
-            // Show success message
-            await Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: 'User baru berhasil ditambahkan',
-                timer: 1500,
-                showConfirmButton: false
-            });
-
-            // Reload page
-            window.location.reload();
-        } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error!',
-                text: error.message
-            });
-        }
+        });
     });
 
     // Toggle password visibility

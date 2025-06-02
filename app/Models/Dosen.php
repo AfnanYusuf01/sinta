@@ -15,7 +15,6 @@ class Dosen extends Model
         'user_id',
         'nama',
         'nip',
-        'program_studi',
         'bidang_keahlian'
     ];
 
