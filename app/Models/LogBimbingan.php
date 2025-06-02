@@ -27,4 +27,12 @@ class LogBimbingan extends Model
     {
         return $this->belongsTo(User::class, 'id_user');
     }
+
+    /**
+     * Relasi ke tabel mahasiswa
+     */
+    public function mahasiswa()
+    {
+        return $this->belongsTo(Mahasiswa::class);
+    }
 }

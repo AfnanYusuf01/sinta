@@ -2,464 +2,441 @@
 
 @section('title', 'Pendaftaran Proposal')
 
-@section('page_title', 'Pendaftaran Proposal')
-
 @section('content')
-<div class="card">
-  <div class="card-header">
-    <h2>Pendaftaran Proposal</h2>
-    <button class="export-btn">
-      <i class="fas fa-download"></i>
-      Export
-    </button>
-  </div>
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="text-dark mb-1">Pendaftaran Proposal</h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboardadmin') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Pendaftaran Proposal</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-primary" onclick="exportToExcel()">
+                <i class="fas fa-download me-2"></i>Export Data
+            </button>
+            <button class="btn btn-success" onclick="refreshData()">
+                <i class="fas fa-sync-alt me-2"></i>Refresh
+            </button>
+        </div>
+    </div>
 
-  <div class="table-container">
-    <table>
-      <thead>
-        <tr>
-          <th>Tanggal</th>
-          <th>Nama Mahasiswa</th>
-          <th>Judul Proposal</th>
-          <th>Status</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach($pendaftaranProposal as $proposal)
-        <tr>
-          <td>{{ $proposal->created_at->format('Y-m-d') }}</td>
-          <td>{{ $proposal->mahasiswa->nama ?? '-' }}</td>
-          <td>{{ $proposal->judul ?? '-' }}</td>
-          <td>
-            <span class="status-badge {{ strtolower($proposal->status) }}">
-              {{ $proposal->status }}
-            </span>
-          </td>
-          <td>
-            <i class="fas fa-eye eye-icon" onclick="showProposalDetail({{ $proposal->id }})"></i>
-          </td>
-        </tr>
-        @endforeach
-      </tbody>
-    </table>
-  </div>
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="dashboard-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-2">Total Proposal</h6>
+                        <h3 class="mb-0">{{ $pendaftaranProposal->count() }}</h3>
+                    </div>
+                    <div class="stats-icon bg-primary">
+                        <i class="fas fa-file-alt text-white fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="dashboard-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-2">Menunggu Review</h6>
+                        <h3 class="mb-0">{{ $pendaftaranProposal->where('status', 'menunggu')->count() }}</h3>
+                    </div>
+                    <div class="stats-icon bg-warning">
+                        <i class="fas fa-clock text-white fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="dashboard-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-2">Proposal Diterima</h6>
+                        <h3 class="mb-0">{{ $pendaftaranProposal->where('status', 'diterima')->count() }}</h3>
+                    </div>
+                    <div class="stats-icon bg-success">
+                        <i class="fas fa-check-circle text-white fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="dashboard-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-2">Proposal Ditolak</h6>
+                        <h3 class="mb-0">{{ $pendaftaranProposal->where('status', 'ditolak')->count() }}</h3>
+                    </div>
+                    <div class="stats-icon bg-danger">
+                        <i class="fas fa-times-circle text-white fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Card -->
+    <div class="card">
+        <div class="card-body">
+            <!-- Filters -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="statusFilter" class="form-label">Filter Status</label>
+                        <select class="form-select" id="statusFilter">
+                            <option value="">Semua Status</option>
+                            <option value="menunggu">Menunggu</option>
+                            <option value="diterima">Diterima</option>
+                            <option value="ditolak">Ditolak</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="dateFilter" class="form-label">Filter Tanggal</label>
+                        <input type="date" class="form-control" id="dateFilter">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="search" class="form-label">Pencarian</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="search" placeholder="Cari berdasarkan nama atau judul...">
+                            <button class="btn btn-primary" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive">
+                <table class="table table-hover" id="proposalTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th>No</th>
+                            <th>Tanggal Pengajuan</th>
+                            <th>Nama Mahasiswa</th>
+                            <th>NIM</th>
+                            <th>Judul Proposal</th>
+                            <th>Pembimbing</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($pendaftaranProposal as $index => $proposal)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $proposal->created_at->format('d M Y') }}</td>
+                            <td>{{ $proposal->mahasiswa->nama ?? '-' }}</td>
+                            <td>{{ $proposal->mahasiswa->nim ?? '-' }}</td>
+                            <td>
+                                <span class="text-truncate d-inline-block" style="max-width: 300px;" title="{{ $proposal->judul_ta }}">
+                                    {{ $proposal->judul_ta }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column">
+                                    <small class="text-muted">Pembimbing 1:</small>
+                                    <span>{{ $proposal->dosen1->nama ?? '-' }}</span>
+                                    @if($proposal->dosen2)
+                                        <small class="text-muted mt-1">Pembimbing 2:</small>
+                                        <span>{{ $proposal->dosen2->nama }}</span>
+                                    @endif
+                                </div>
+                            </td>
+                            <td>
+                                @php
+                                    $statusClass = [
+                                        'menunggu' => 'bg-warning',
+                                        'diterima' => 'bg-success',
+                                        'ditolak' => 'bg-danger'
+                                    ][$proposal->status] ?? 'bg-secondary';
+                                @endphp
+                                <span class="badge {{ $statusClass }}">
+                                    {{ ucfirst($proposal->status) }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-info" onclick="showDetail({{ $proposal->id }})">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    @if($proposal->status === 'menunggu')
+                                    <button class="btn btn-sm btn-success" onclick="approveProposal({{ $proposal->id }})">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="rejectProposal({{ $proposal->id }})">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
-<!-- Modal -->
-<div class="modal" id="proposalModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3 class="modal-title">Detail Pendaftaran Proposal</h3>
-      <button class="close-btn" onclick="hideModal()">&times;</button>
+<!-- Detail Modal -->
+<div class="modal fade" id="detailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detail Proposal</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-primary mb-3">Informasi Mahasiswa</h6>
+                        <table class="table table-sm">
+                            <tr>
+                                <td class="text-muted">Nama</td>
+                                <td id="modalNama">-</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">NIM</td>
+                                <td id="modalNim">-</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">Program Studi</td>
+                                <td id="modalProdi">-</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-primary mb-3">Informasi Pengajuan</h6>
+                        <table class="table table-sm">
+                            <tr>
+                                <td class="text-muted">Tanggal Pengajuan</td>
+                                <td id="modalTanggal">-</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">Status</td>
+                                <td id="modalStatus">-</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <h6 class="text-primary mb-3">Detail Proposal</h6>
+                    <div class="mb-3">
+                        <label class="text-muted">Judul Proposal:</label>
+                        <p id="modalJudul" class="mb-0">-</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="text-muted">Abstrak:</label>
+                        <p id="modalAbstrak" class="mb-0">-</p>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <h6 class="text-primary mb-3">Dosen Pembimbing</h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">Pembimbing 1</h6>
+                                    <p class="card-text" id="modalDosen1">-</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">Pembimbing 2</h6>
+                                    <p class="card-text" id="modalDosen2">-</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
     </div>
-    <div class="modal-body">
-      <div class="proposal-info">
-        <div class="info-group">
-          <label>Nama Mahasiswa:</label>
-          <span id="modalStudentName"></span>
-        </div>
-        <div class="info-group">
-          <label>NIM:</label>
-          <span id="modalNIM"></span>
-        </div>
-        <div class="info-group">
-          <label>Program Studi:</label>
-          <span id="modalProdi"></span>
-        </div>
-        <div class="info-group">
-          <label>Tanggal Pengajuan:</label>
-          <span id="modalDate"></span>
-        </div>
-      </div>
-
-      <div class="proposal-detail">
-        <h4>Detail Proposal</h4>
-        <div class="info-group">
-          <label>Judul Proposal:</label>
-          <p id="modalTitle"></p>
-        </div>
-        <div class="info-group">
-          <label>Deskripsi:</label>
-          <p id="modalDescription"></p>
-        </div>
-        <div class="info-group">
-          <label>Bidang Penelitian:</label>
-          <p id="modalResearchField"></p>
-        </div>
-      </div>
-
-      <div class="document-section">
-        <h4>Dokumen Pendukung</h4>
-        <div class="document-list" id="modalDocuments">
-          <!-- Documents will be inserted here -->
-        </div>
-      </div>
-
-      <div class="status-section">
-        <h4>Status Pengajuan</h4>
-        <div class="status-info">
-          <div class="current-status">
-            <label>Status Saat Ini:</label>
-            <span id="modalStatus" class="status-badge"></span>
-          </div>
-          <div class="status-update">
-            <label>Update Status:</label>
-            <select id="statusUpdate" class="form-select">
-              <option value="pending">Pending</option>
-              <option value="approved">Approved</option>
-              <option value="rejected">Rejected</option>
-            </select>
-            <button onclick="updateStatus()" class="btn btn-primary">
-              Update Status
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="notes-section">
-        <h4>Catatan Admin</h4>
-        <textarea id="adminNotes" class="form-control" rows="4" placeholder="Tambahkan catatan untuk mahasiswa..."></textarea>
-        <button onclick="saveNotes()" class="btn btn-primary mt-2">
-          Simpan Catatan
-        </button>
-      </div>
-    </div>
-  </div>
 </div>
 @endsection
 
 @section('additional_styles')
-  <style>
-  .eye-icon {
-    color: var(--primary);
-    cursor: pointer;
-    font-size: 1.1rem;
-    padding: 8px;
-    display: inline-block;
-  }
-
-  .eye-icon:hover {
-    color: var(--primary-dark);
-  }
-
-  .status-badge {
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    font-weight: 500;
-  }
-
-  .status-badge.pending {
-    background-color: #FFF3CD;
-    color: #856404;
-  }
-
-  .status-badge.approved {
-    background-color: #D4EDDA;
-    color: #155724;
-  }
-
-  .status-badge.rejected {
-    background-color: #F8D7DA;
-    color: #721C24;
-  }
-
-  /* Modal Styles */
-  .modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    z-index: 1000;
-    justify-content: center;
-      align-items: center;
+<style>
+    .stats-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-  .modal.show {
-    display: flex;
-  }
-
-  .modal-content {
-    background-color: white;
-    width: 80%;
-    max-width: 800px;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    max-height: 80vh;
-    overflow-y: auto;
-  }
-
-  .modal-header {
-    padding: 16px 24px;
-    border-bottom: 1px solid var(--gray-medium);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .modal-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-      margin: 0;
+    .dashboard-card {
+        background: white;
+        border-radius: 10px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-  .close-btn {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: var(--text-light);
-    transition: color 0.3s ease;
-  }
-
-  .close-btn:hover {
-      color: var(--primary);
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
-  .modal-body {
-    padding: 24px;
-  }
-
-  .proposal-info {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-
-  .info-group {
-    margin-bottom: 16px;
-  }
-
-  .info-group label {
-    display: block;
-    font-weight: 500;
-    color: var(--text-light);
-    margin-bottom: 4px;
-  }
-
-  .info-group p {
-      margin: 0;
+    .table th {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
     }
 
-  .proposal-detail {
-    background-color: var(--gray-light);
-    padding: 16px;
-    border-radius: 8px;
-    margin-bottom: 24px;
-  }
-
-  .proposal-detail h4 {
-    margin: 0 0 16px 0;
-      color: var(--primary);
+    .badge {
+        padding: 0.5em 0.75em;
+        font-weight: 500;
     }
 
-  .document-section {
-    margin-bottom: 24px;
-  }
-
-  .document-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-  }
-
-  .document-item {
-    background-color: var(--gray-light);
-    padding: 12px;
-    border-radius: 6px;
-      display: flex;
-      align-items: center;
-    gap: 8px;
-  }
-
-  .document-item i {
-    color: var(--primary);
-  }
-
-  .status-section {
-      background-color: var(--primary-light);
-    padding: 16px;
-    border-radius: 8px;
-    margin-bottom: 24px;
-  }
-
-  .status-info {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    gap: 24px;
-  }
-
-  .status-update {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .form-select {
-    padding: 8px 12px;
-    border: 1px solid var(--gray-medium);
-    border-radius: 4px;
-    background-color: white;
+    .btn-sm {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    .btn {
-      padding: 8px 16px;
-    border-radius: 4px;
-    border: none;
-      cursor: pointer;
-    font-weight: 500;
-      transition: all 0.3s ease;
+    .modal-header {
+        background-color: var(--primary);
+        color: white;
     }
 
-    .btn-primary {
-      background-color: var(--primary);
-      color: white;
+    .modal-title {
+        font-weight: 600;
     }
 
-    .btn-primary:hover {
-      background-color: var(--primary-dark);
+    .btn-close {
+        filter: brightness(0) invert(1);
     }
 
-  .notes-section textarea {
-      width: 100%;
-    padding: 12px;
-    border: 1px solid var(--gray-medium);
-    border-radius: 4px;
-    resize: vertical;
-  }
+    .text-primary {
+        color: var(--primary) !important;
+    }
 
-  .mt-2 {
-    margin-top: 8px;
-  }
+    .form-label {
+        font-weight: 500;
+        color: var(--gray-700);
+    }
 </style>
 @endsection
 
 @section('scripts')
 <script>
-  async function showProposalDetail(id) {
-    try {
-      const response = await fetch(`/admin/pendaftaran-proposal/${id}`);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const data = await response.json();
+    // Initialize DataTable
+    $(document).ready(function() {
+        $('#proposalTable').DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json',
+            },
+            order: [[1, 'desc']]
+        });
+    });
 
-      // Update modal content
-      document.getElementById('modalStudentName').textContent = data.mahasiswa.nama;
-      document.getElementById('modalNIM').textContent = data.mahasiswa.nim;
-      document.getElementById('modalProdi').textContent = data.mahasiswa.prodi;
-      document.getElementById('modalDate').textContent = new Date(data.created_at).toLocaleDateString();
-      document.getElementById('modalTitle').textContent = data.judul;
-      document.getElementById('modalDescription').textContent = data.deskripsi;
-      document.getElementById('modalResearchField').textContent = data.bidang_penelitian;
-      document.getElementById('modalStatus').textContent = data.status;
-      document.getElementById('modalStatus').className = `status-badge ${data.status.toLowerCase()}`;
-      document.getElementById('statusUpdate').value = data.status.toLowerCase();
-      document.getElementById('adminNotes').value = data.catatan_admin || '';
+    // Show proposal detail
+    async function showDetail(id) {
+        try {
+            const response = await fetch(`/admin/pendaftaran-proposal/${id}`);
+            if (!response.ok) throw new Error('Failed to fetch data');
+            const data = await response.json();
 
-      // Update documents list
-      const documentsList = document.getElementById('modalDocuments');
-      documentsList.innerHTML = '';
-      data.documents.forEach(doc => {
-        const docItem = document.createElement('div');
-        docItem.className = 'document-item';
-        docItem.innerHTML = `
-          <i class="fas fa-file-pdf"></i>
-          <span>${doc.name}</span>
-          <a href="${doc.url}" target="_blank" class="btn btn-sm btn-primary">
-            <i class="fas fa-download"></i>
-          </a>
-        `;
-        documentsList.appendChild(docItem);
-      });
+            // Update modal content
+            document.getElementById('modalNama').textContent = data.mahasiswa?.nama || '-';
+            document.getElementById('modalNim').textContent = data.mahasiswa?.nim || '-';
+            document.getElementById('modalProdi').textContent = data.mahasiswa?.prodi || '-';
+            document.getElementById('modalTanggal').textContent = new Date(data.created_at).toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+            document.getElementById('modalStatus').textContent = data.status.charAt(0).toUpperCase() + data.status.slice(1);
+            document.getElementById('modalJudul').textContent = data.judul_ta;
+            document.getElementById('modalAbstrak').textContent = data.abstrak;
+            document.getElementById('modalDosen1').textContent = data.dosen1?.nama || '-';
+            document.getElementById('modalDosen2').textContent = data.dosen2?.nama || '-';
 
-      // Show modal
-      document.getElementById('proposalModal').classList.add('show');
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Terjadi kesalahan saat mengambil data. Silakan coba lagi.');
+            // Show modal
+            new bootstrap.Modal(document.getElementById('detailModal')).show();
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat mengambil data');
+        }
     }
-  }
 
-  async function updateStatus() {
-    const proposalId = currentProposalId; // You need to store this when opening the modal
-    const newStatus = document.getElementById('statusUpdate').value;
+    // Approve proposal
+    async function approveProposal(id) {
+        if (!confirm('Apakah Anda yakin ingin menyetujui proposal ini?')) return;
 
-    try {
-      const response = await fetch(`/admin/pendaftaran-proposal/${proposalId}/status`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-        },
-        body: JSON.stringify({ status: newStatus })
-      });
+        try {
+            const response = await fetch(`/admin/pendaftaranproposal/approve/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            });
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      // Update the status badge in the modal
-      const statusBadge = document.getElementById('modalStatus');
-      statusBadge.textContent = newStatus.toUpperCase();
-      statusBadge.className = `status-badge ${newStatus}`;
-
-      // Update the status in the table
-      const tableRow = document.querySelector(`tr[data-proposal-id="${proposalId}"]`);
-      if (tableRow) {
-        const statusCell = tableRow.querySelector('.status-badge');
-        statusCell.textContent = newStatus.toUpperCase();
-        statusCell.className = `status-badge ${newStatus}`;
-      }
-
-      alert('Status berhasil diperbarui');
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Terjadi kesalahan saat memperbarui status. Silakan coba lagi.');
+            if (!response.ok) throw new Error('Failed to approve proposal');
+            
+            location.reload();
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat menyetujui proposal');
+        }
     }
-  }
 
-  async function saveNotes() {
-    const proposalId = currentProposalId; // You need to store this when opening the modal
-    const notes = document.getElementById('adminNotes').value;
+    // Reject proposal
+    async function rejectProposal(id) {
+        if (!confirm('Apakah Anda yakin ingin menolak proposal ini?')) return;
 
-    try {
-      const response = await fetch(`/admin/pendaftaran-proposal/${proposalId}/notes`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-        },
-        body: JSON.stringify({ notes: notes })
-      });
+        try {
+            const response = await fetch(`/admin/pendaftaranproposal/reject/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            });
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      alert('Catatan berhasil disimpan');
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Terjadi kesalahan saat menyimpan catatan. Silakan coba lagi.');
+            if (!response.ok) throw new Error('Failed to reject proposal');
+            
+            location.reload();
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat menolak proposal');
+        }
     }
-  }
 
-  function hideModal() {
-    document.getElementById('proposalModal').classList.remove('show');
-  }
-
-  // Close modal when clicking outside of modal content
-  window.onclick = function(event) {
-    const modal = document.getElementById('proposalModal');
-    if (event.target === modal) {
-      hideModal();
+    // Export to Excel
+    function exportToExcel() {
+        // Implement export functionality
+        alert('Fitur export akan segera tersedia');
     }
-  }
-  </script>
+
+    // Refresh data
+    function refreshData() {
+        location.reload();
+    }
+</script>
 @endsection

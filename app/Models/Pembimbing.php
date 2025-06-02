@@ -15,7 +15,7 @@ class Pembimbing extends Model
         'id_mahasiswa',
         'id_dosen',
         'status',
-        'jenis_pembimbing' // 1 untuk pembimbing 1, 2 untuk pembimbing 2
+        'jenis_pembimbing'
     ];
 
     public function mahasiswa()

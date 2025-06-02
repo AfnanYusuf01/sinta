@@ -72,9 +72,17 @@ Route::middleware(['auth'])->group(function () {
     // Admin routes
     Route::middleware(['auth', 'role:admin'])->group(function () {
         // Dashboard and main features
-        Route::get('/admin/dashboardadmin', [AdminController::class, 'dashboard'])->name('admin.dashboardadmin');
+        Route::get('/admin/dashboardadmin', [DashboardAdminController::class, 'index'])->name('admin.dashboardadmin');
         Route::get('/admin/logbimbingan', [AdminController::class, 'logbimbingan'])->name('admin.logbimbingan');
         Route::get('/admin/pendaftaranproposal', [AdminController::class, 'pendaftaranproposal'])->name('admin.pendaftaranproposal');
+
+        // User Management Routes
+        Route::group(['prefix' => 'admin/users'], function () {
+            Route::get('/', [AdminController::class, 'users'])->name('admin.users');
+            Route::post('/', [AdminController::class, 'storeUser'])->name('admin.users.store');
+            Route::match(['put', 'patch'], '/{user}', [AdminController::class, 'updateUser'])->name('admin.users.update');
+            Route::delete('/{user}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
+        });
 
         // Penguji management
         Route::get('/admin/penguji', [AdminController::class, 'penguji'])->name('admin.penguji');
@@ -94,9 +102,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/admin/nilai-presentasi/{id}', [AdminController::class, 'detailNilaiPresentasi'])->name('admin.nilai-presentasi.detail');
         Route::get('/admin/nilai-literatur/{id}', [AdminController::class, 'detailNilaiLiteratur'])->name('admin.nilai-literatur.detail');
 
-        // Approval endpoints
-        Route::post('/admin/pengajuanpembimbing/approve/{id}', [AdminController::class, 'approve'])->name('admin.pengajuanpembimbing.approve');
-        Route::post('/admin/pengajuanpembimbing/reject/{id}', [AdminController::class, 'reject'])->name('admin.pengajuanpembimbing.reject');
+        // Pengajuan Pembimbing routes
+        Route::post('/admin/pengajuanpembimbing/approve/{id}', [DashboardAdminController::class, 'approve'])->name('admin.pengajuanpembimbing.approve');
+        Route::post('/admin/pengajuanpembimbing/reject/{id}', [DashboardAdminController::class, 'reject'])->name('admin.pengajuanpembimbing.reject');
         Route::post('/admin/pendaftaranproposal/approve/{id}', [AdminController::class, 'approveProposal'])->name('admin.pendaftaranproposal.approve');
         Route::post('/admin/pendaftaranproposal/reject/{id}', [AdminController::class, 'rejectProposal'])->name('admin.pendaftaranproposal.reject');
 

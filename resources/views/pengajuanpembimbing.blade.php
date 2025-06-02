@@ -352,7 +352,14 @@
             <div class="form-container">
                 <div class="form-header">
                     <h2><i class="fas fa-file-signature"></i> Form Usulan Pembimbing Tugas Akhir</h2>
-                    <p>Silakan lengkapi formulir berikut untuk mengajukan pembimbing tugas akhir Anda</p>
+                    @if(isset($usulan) && $usulan->status == 'ditolak')
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            Usulan sebelumnya ditolak. Silakan ajukan kembali dengan perbaikan yang diperlukan.
+                        </div>
+                    @else
+                        <p>Silakan lengkapi formulir berikut untuk mengajukan pembimbing tugas akhir Anda</p>
+                    @endif
                 </div>
               
                 <div class="form-body">
@@ -385,7 +392,7 @@
                                 <select id="dosen1" name="dosen1" required>
                                     <option value="">-- Pilih Dosen Pembimbing 1 --</option>
                                     @foreach($dosenList as $dosen)
-                                        <option value="{{ $dosen->id }}" {{ old('dosen1', isset($usulan) && $usulan->id_dosen_1 == $dosen->id ? 'selected' : '') }}>
+                                        <option value="{{ $dosen->id }}" {{ old('dosen1', isset($usulan) ? $usulan->id_dosen_1 : '') == $dosen->id ? 'selected' : '' }}>
                                             {{ $dosen->nama }} ({{ $dosen->nidn }})
                                         </option>
                                     @endforeach
@@ -401,7 +408,7 @@
                                 <select id="dosen2" name="dosen2">
                                     <option value="">-- Pilih Dosen Pembimbing 2 --</option>
                                     @foreach($dosenList as $dosen)
-                                        <option value="{{ $dosen->id }}" {{ old('dosen2', isset($usulan) && $usulan->id_dosen_2 == $dosen->id ? 'selected' : '') }}>
+                                        <option value="{{ $dosen->id }}" {{ old('dosen2', isset($usulan) ? $usulan->id_dosen_2 : '') == $dosen->id ? 'selected' : '' }}>
                                             {{ $dosen->nama }} ({{ $dosen->nidn }})
                                         </option>
                                     @endforeach
@@ -411,10 +418,55 @@
                   
                         <div class="form-footer">
                             <button type="submit" class="submit-btn">
-                                <i class="fas fa-paper-plane"></i> Kirim Usulan
+                                <i class="fas fa-paper-plane"></i>
+                                {{ isset($usulan) && $usulan->status == 'ditolak' ? 'Kirim Ulang Usulan' : 'Kirim Usulan' }}
                             </button>
                         </div>
                     </form>
+                </div>
+            </div>
+        @else
+            <div class="alert alert-info">
+                <h4><i class="fas fa-info-circle"></i> Status Pengajuan Pembimbing</h4>
+                <p>Anda sudah memiliki pengajuan pembimbing dengan status: <strong>{{ ucfirst($usulan->status) }}</strong></p>
+                <p>Silakan tunggu proses persetujuan dari admin.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h5>Detail Pengajuan</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <th>Judul TA</th>
+                            <td>{{ $usulan->judul_ta }}</td>
+                        </tr>
+                        <tr>
+                            <th>Pembimbing 1</th>
+                            <td>{{ $usulan->dosen1->nama ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Pembimbing 2</th>
+                            <td>{{ $usulan->dosen2->nama ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td>
+                                @if($usulan->status == 'menunggu')
+                                    <span class="badge bg-warning">Menunggu</span>
+                                @elseif($usulan->status == 'diterima')
+                                    <span class="badge bg-success">Diterima</span>
+                                @else
+                                    <span class="badge bg-danger">Ditolak</span>
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Tanggal Pengajuan</th>
+                            <td>{{ $usulan->created_at->format('d/m/Y H:i') }}</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         @endif

@@ -387,6 +387,21 @@
         @endif
       @endauth
 
+      @auth
+        @if (Auth::user()->role !== 'dosen')
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="service-item position-relative">
+              <div class="icon">
+                <i class="bi bi-calendar-check"></i>
+              </div>
+              <h3>Pendaftaran</h3>
+              <p>Registrasi seminar proposal dan penjadwalan presentasi Tugas Akhir</p>
+              <a href="{{ route('pendaftaranproposal') }}" class="stretched-link"></a>
+            </div>
+          </div>
+        @endif
+      @endauth
+
       <!-- Log Bimbingan - Tidak tampil untuk Dosen -->
       @auth
         @if (Auth::user()->role !== 'dosen')
@@ -398,22 +413,6 @@
               <h3>Log Bimbingan</h3>
               <p>Pencatatan kegiatan bimbingan antara mahasiswa dan dosen pembimbing</p>
               <a href="{{ route('log-bimbingan.create') }}" class="stretched-link"></a>
-            </div>
-          </div>
-        @endif
-      @endauth
-
-      <!-- Pendaftaran - Tidak tampil untuk Dosen -->
-      @auth
-        @if (Auth::user()->role !== 'dosen')
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-calendar-check"></i>
-              </div>
-              <h3>Pendaftaran</h3>
-              <p>Registrasi seminar proposal dan penjadwalan presentasi Tugas Akhir</p>
-              <a href="{{ route('pendaftaranproposal') }}" class="stretched-link"></a>
             </div>
           </div>
         @endif

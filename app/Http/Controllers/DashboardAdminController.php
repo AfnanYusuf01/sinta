@@ -14,20 +14,25 @@ class DashboardAdminController extends Controller
 {
     public function index()
     {
-        // Get pengajuan pembimbing data
+        // Get pengajuan pembimbing data yang berstatus menunggu
         $pengajuanList = UsulDospem::with(['mahasiswa', 'dosen1', 'dosen2'])
-                           ->orderBy('created_at', 'desc')
-                           ->get();
+                            ->where('status', 'menunggu')
+                            ->orderBy('created_at', 'desc')
+                            ->get();
 
-        // Count pending submissions
-        $pending_count = UsulDospem::where('status', 'menunggu')->count();
+        // Count by status untuk statistik
+        $totalPengajuan = UsulDospem::count();
+        $menungguCount = UsulDospem::where('status', 'menunggu')->count();
+        $diterimaCount = UsulDospem::where('status', 'diterima')->count();
+        $ditolakCount = UsulDospem::where('status', 'ditolak')->count();
 
-        // Get penguji assignments data
-        $assignments = PengujiAssignment::with(['mahasiswa', 'dosen'])->get();
-        $mahasiswas = Mahasiswa::whereNotIn('id', PengujiAssignment::pluck('id_mahasiswa'))->get();
-        $dosens = Dosen::all();
-
-        return view('dashboardadmin', compact('pengajuanList', 'pending_count', 'assignments', 'mahasiswas', 'dosens'));
+        return view('dashboardadmin', compact(
+            'pengajuanList',
+            'totalPengajuan',
+            'menungguCount',
+            'diterimaCount',
+            'ditolakCount'
+        ));
     }
 
     public function approve($id)
@@ -36,10 +41,25 @@ class DashboardAdminController extends Controller
             DB::beginTransaction();
 
             $usulan = UsulDospem::findOrFail($id);
+            
+            // Cek apakah sudah ada data pembimbing untuk mahasiswa ini
+            $existingPembimbing = Pembimbing::where('id_mahasiswa', $usulan->id_mahasiswa)
+                ->where('status', 'aktif')
+                ->exists();
+
+            if ($existingPembimbing) {
+                DB::rollback();
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mahasiswa sudah memiliki pembimbing aktif'
+                ], 400);
+            }
+
+            // Update status usulan
             $usulan->status = 'diterima';
             $usulan->save();
 
-            // Add to pembimbing table when approved
+            // Tambahkan pembimbing 1
             Pembimbing::create([
                 'id_mahasiswa' => $usulan->id_mahasiswa,
                 'id_dosen' => $usulan->id_dosen_1,
@@ -47,7 +67,7 @@ class DashboardAdminController extends Controller
                 'jenis_pembimbing' => '1'
             ]);
 
-            // Add second pembimbing if exists
+            // Tambahkan pembimbing 2 jika ada
             if ($usulan->id_dosen_2) {
                 Pembimbing::create([
                     'id_mahasiswa' => $usulan->id_mahasiswa,
@@ -58,11 +78,17 @@ class DashboardAdminController extends Controller
             }
 
             DB::commit();
-            return redirect()->back()->with('success', 'Pengajuan pembimbing berhasil disetujui');
+            return response()->json([
+                'success' => true,
+                'message' => 'Pengajuan pembimbing berhasil disetujui dan data pembimbing telah ditambahkan'
+            ]);
 
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
         }
     }
 
@@ -73,9 +99,15 @@ class DashboardAdminController extends Controller
             $usulan->status = 'ditolak';
             $usulan->save();
 
-            return redirect()->back()->with('success', 'Pengajuan pembimbing berhasil ditolak');
+            return response()->json([
+                'success' => true,
+                'message' => 'Pengajuan pembimbing berhasil ditolak'
+            ]);
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
         }
     }
 

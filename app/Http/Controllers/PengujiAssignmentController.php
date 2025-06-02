@@ -13,16 +13,16 @@ class PengujiAssignmentController extends Controller
     {
         $assignments = PengujiAssignment::with(['mahasiswa', 'dosen'])->get();
         $mahasiswas = Mahasiswa::whereNotIn('id', PengujiAssignment::pluck('mahasiswa_id'))->get();
-        $dosens = Dosen::all();
+        $dosen = Dosen::all();
 
-        return view('dpenguji', compact('assignments', 'mahasiswas', 'dosens'));
+        return view('dpenguji', compact('assignments', 'mahasiswas', 'dosen'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'mahasiswa_id' => 'required',
-            'dosen_id' => 'required|exists:dosens,id'
+            'dosen_id' => 'required|exists:dosen,id'
         ]);
 
         PengujiAssignment::create($request->only(['mahasiswa_id', 'dosen_id']));
@@ -33,7 +33,7 @@ class PengujiAssignmentController extends Controller
     public function update(Request $request, PengujiAssignment $assignment)
     {
         $request->validate([
-            'dosen_id' => 'required|exists:dosens,id'
+            'dosen_id' => 'required|exists:dosen,id'
         ]);
 
         $assignment->update(['dosen_id' => $request->dosen_id]);

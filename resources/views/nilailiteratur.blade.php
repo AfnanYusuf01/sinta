@@ -167,6 +167,7 @@
 
       <div class="form-group">
         <label for="id_mahasiswa">Pilih Mahasiswa:</label>
+       
         <select name="id_mahasiswa" id="id_mahasiswa" required>
           <option value="">-- Pilih Mahasiswa --</option>
           @if(isset($mahasiswa) && count($mahasiswa) > 0)
@@ -260,7 +261,7 @@
       </button>
     </form>
 
-    @if($nilaiLiteraturs->isNotEmpty())
+    @if($nilaiExisting->isNotEmpty())
       <h3 style="margin-top: 40px;">Riwayat Penilaian</h3>
       <table>
         <thead>
@@ -274,7 +275,7 @@
           </tr>
         </thead>
         <tbody>
-          @foreach($nilaiLiteraturs as $nilai)
+          @foreach($nilaiExisting  as $nilai)
             <tr>
               <td>{{ $nilai->mahasiswa->nama }} ({{ $nilai->mahasiswa->nim }})</td>
               <td>{{ $nilai->nilai_pemahaman }}</td>

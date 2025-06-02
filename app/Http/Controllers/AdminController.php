@@ -9,8 +9,12 @@ use App\Models\NilaiDe;
 use App\Models\NilaiPresentasi;
 use App\Models\NilaiLiteratur;
 use App\Models\LogBimbingan;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -305,5 +309,89 @@ class AdminController extends Controller
     {
         $nilai = NilaiLiteratur::with(['mahasiswa', 'dosen'])->findOrFail($id);
         return response()->json($nilai);
+    }
+
+    public function users()
+    {
+        $users = User::all();
+        return view('admin.users.index', compact('users'));
+    }
+
+    public function storeUser(Request $request)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => ['required', 'in:admin,dosen,mahasiswa'],
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role
+        ]);
+
+        return redirect()->route('admin.users')->with('success', 'User berhasil ditambahkan');
+    }
+
+    public function updateUser(Request $request, User $user)
+    {
+        try {
+            $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+                'role' => ['required', Rule::in(['admin', 'dosen', 'mahasiswa'])],
+                'password' => $request->filled('password') ? ['confirmed', Rules\Password::defaults()] : [],
+            ]);
+
+            $data = [
+                'name' => $request->name,
+                'email' => $request->email,
+                'role' => $request->role
+            ];
+
+            if ($request->filled('password')) {
+                $data['password'] = Hash::make($request->password);
+            }
+
+            // Begin transaction
+            DB::beginTransaction();
+
+            try {
+                // Update user
+                $user->update($data);
+
+                // Handle role-specific data
+                if ($request->role === 'mahasiswa') {
+                    $mahasiswa = $user->mahasiswa ?? new \App\Models\Mahasiswa();
+                    $mahasiswa->user_id = $user->id;
+                    $mahasiswa->nama = $request->name;
+                    $mahasiswa->save();
+                } elseif ($request->role === 'dosen') {
+                    $dosen = $user->dosen ?? new \App\Models\Dosen();
+                    $dosen->user_id = $user->id;
+                    $dosen->nama = $request->name;
+                    $dosen->save();
+                }
+
+                DB::commit();
+                return redirect()->route('admin.users')->with('success', 'User berhasil diperbarui');
+            } catch (\Exception $e) {
+                DB::rollback();
+                throw $e;
+            }
+        } catch (\Exception $e) {
+            return redirect()->route('admin.users')
+                ->with('error', 'Gagal memperbarui user: ' . $e->getMessage())
+                ->withInput();
+        }
+    }
+
+    public function destroyUser(User $user)
+    {
+        $user->delete();
+        return redirect()->route('admin.users')->with('success', 'User berhasil dihapus');
     }
 }

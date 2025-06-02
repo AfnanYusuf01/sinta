@@ -1,0 +1,319 @@
+@extends('layouts.admin')
+
+@section('title', 'User Management')
+
+@section('content')
+<div class="container-fluid px-4">
+    <h1 class="mt-4">User Management</h1>
+    
+    @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
+    <!-- Add User Button -->
+    <div class="mb-4">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+            <i class="fas fa-user-plus"></i> Tambah User
+        </button>
+    </div>
+
+    <!-- Users Table -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-users me-1"></i>
+            Daftar User
+        </div>
+        <div class="card-body">
+            <table id="usersTable" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($users as $user)
+                    <tr>
+                        <td>{{ $user->name }}</td>
+                        <td>{{ $user->email }}</td>
+                        <td>{{ ucfirst($user->role) }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary edit-user" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#editUserModal"
+                                    data-user-id="{{ $user->id }}"
+                                    data-user-name="{{ $user->name }}"
+                                    data-user-email="{{ $user->email }}"
+                                    data-user-role="{{ $user->role }}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus user ini?')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Add User Modal -->
+<div class="modal fade" id="addUserModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tambah User Baru</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{{ route('admin.users.store') }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nama</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
+                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Role</label>
+                        <select class="form-select" id="role" name="role" required>
+                            <option value="">Pilih Role</option>
+                            <option value="admin">Admin</option>
+                            <option value="dosen">Dosen</option>
+                            <option value="mahasiswa">Mahasiswa</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit User Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="editUserForm" method="POST">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="_method" value="PUT">
+                <div class="modal-body">
+                    <!-- Error Messages -->
+                    <div class="alert alert-danger d-none" id="editErrorMessages"></div>
+
+                    <div class="mb-3">
+                        <label for="edit_name" class="form-label required">Nama</label>
+                        <input type="text" class="form-control" id="edit_name" name="name" required>
+                        <div class="invalid-feedback" id="edit_name_error"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_email" class="form-label required">Email</label>
+                        <input type="email" class="form-control" id="edit_email" name="email" required>
+                        <div class="invalid-feedback" id="edit_email_error"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_role" class="form-label required">Role</label>
+                        <select class="form-select" id="edit_role" name="role" required>
+                            <option value="admin">Admin</option>
+                            <option value="dosen">Dosen</option>
+                            <option value="mahasiswa">Mahasiswa</option>
+                        </select>
+                        <div class="invalid-feedback" id="edit_role_error"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_password" class="form-label">Password Baru</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="edit_password" name="password">
+                            <button class="btn btn-outline-secondary" type="button" id="toggleEditPassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <small class="form-text text-muted">Kosongkan jika tidak ingin mengubah password</small>
+                        <div class="invalid-feedback" id="edit_password_error"></div>
+                    </div>
+                    <div class="mb-3" id="password_confirmation_group">
+                        <label for="edit_password_confirmation" class="form-label">Konfirmasi Password Baru</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="edit_password_confirmation" name="password_confirmation">
+                            <button class="btn btn-outline-secondary" type="button" id="toggleEditPasswordConfirm">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="invalid-feedback" id="edit_password_confirmation_error"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Simpan Perubahan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@endsection
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize DataTable
+    $('#usersTable').DataTable({
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json',
+        },
+    });
+
+    // Handle Edit User Modal
+    const editUserModal = document.getElementById('editUserModal');
+    const editUserForm = document.getElementById('editUserForm');
+    const editNameInput = document.getElementById('edit_name');
+    const editEmailInput = document.getElementById('edit_email');
+    const editRoleSelect = document.getElementById('edit_role');
+    const editPasswordInput = document.getElementById('edit_password');
+    const editPasswordConfirmInput = document.getElementById('edit_password_confirmation');
+    const passwordConfirmationGroup = document.getElementById('password_confirmation_group');
+
+    // Toggle password visibility
+    document.getElementById('toggleEditPassword').addEventListener('click', function() {
+        const type = editPasswordInput.type === 'password' ? 'text' : 'password';
+        editPasswordInput.type = type;
+        this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+    });
+
+    document.getElementById('toggleEditPasswordConfirm').addEventListener('click', function() {
+        const type = editPasswordConfirmInput.type === 'password' ? 'text' : 'password';
+        editPasswordConfirmInput.type = type;
+        this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+    });
+
+    // Show/hide password confirmation based on password field
+    editPasswordInput.addEventListener('input', function() {
+        if (this.value) {
+            passwordConfirmationGroup.style.display = 'block';
+            editPasswordConfirmInput.required = true;
+        } else {
+            passwordConfirmationGroup.style.display = 'none';
+            editPasswordConfirmInput.required = false;
+            editPasswordConfirmInput.value = '';
+        }
+    });
+
+    // Handle edit button click
+    document.querySelectorAll('.edit-user').forEach(button => {
+        button.addEventListener('click', function() {
+            const userId = this.dataset.userId;
+            const userName = this.dataset.userName;
+            const userEmail = this.dataset.userEmail;
+            const userRole = this.dataset.userRole;
+
+            // Reset form and clear errors
+            editUserForm.reset();
+            clearErrors();
+            
+            // Set form action URL using Laravel's route function
+            editUserForm.setAttribute('action', `{{ url('admin/users') }}/${userId}`);
+            
+            // Set values
+            editNameInput.value = userName;
+            editEmailInput.value = userEmail;
+            editRoleSelect.value = userRole;
+            
+            // Reset password fields
+            editPasswordInput.value = '';
+            editPasswordConfirmInput.value = '';
+            passwordConfirmationGroup.style.display = 'none';
+        });
+    });
+
+    // Clear error messages and states
+    function clearErrors() {
+        document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+        document.getElementById('editErrorMessages').classList.add('d-none');
+        document.getElementById('editErrorMessages').innerHTML = '';
+    }
+
+    // Handle form submission
+    editUserForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        clearErrors();
+
+        // Validate password confirmation if password is set
+        if (editPasswordInput.value && editPasswordInput.value !== editPasswordConfirmInput.value) {
+            editPasswordInput.classList.add('is-invalid');
+            editPasswordConfirmInput.classList.add('is-invalid');
+            document.getElementById('edit_password_error').textContent = 'Password dan konfirmasi password tidak cocok';
+            return;
+        }
+
+        // Submit form
+        this.submit();
+    });
+});
+</script>
+@endsection
+
+<style>
+.required:after {
+    content: " *";
+    color: red;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.form-label {
+    font-weight: 500;
+}
+
+.invalid-feedback {
+    display: block;
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--primary-light);
+    border-color: var(--primary);
+    color: white;
+}
+
+#password_confirmation_group {
+    display: none;
+}
+</style> 

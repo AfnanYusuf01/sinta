@@ -46,6 +46,26 @@ class PengajuanPembimbingController extends Controller
             return redirect()->back()->with('error', 'Anda sudah memiliki usulan yang belum diproses.');
         }
 
+        // Cek apakah ada usulan yang ditolak sebelumnya
+        $rejectedUsulan = UsulDospem::where('id_mahasiswa', $mahasiswa_id)
+                                   ->where('status', 'ditolak')
+                                   ->latest()
+                                   ->first();
+
+        if ($rejectedUsulan) {
+            // Update usulan yang ditolak
+            $rejectedUsulan->update([
+                'judul_ta' => $request->judul_ta,
+                'id_dosen_1' => $request->dosen1,
+                'id_dosen_2' => $request->dosen2,
+                'status' => 'menunggu'
+            ]);
+
+            return redirect()->route('pengajuanpembimbing')
+                           ->with('success', 'Usulan pembimbing berhasil diperbarui dan dikirim ulang!');
+        }
+
+        // Jika tidak ada usulan yang ditolak, buat usulan baru
         UsulDospem::create([
             'judul_ta' => $request->judul_ta,
             'id_mahasiswa' => $mahasiswa_id,
@@ -54,7 +74,8 @@ class PengajuanPembimbingController extends Controller
             'status' => 'menunggu'
         ]);
 
-        return redirect()->route('pengajuanpembimbing')->with('success', 'Usulan pembimbing berhasil dikirim!');
+        return redirect()->route('pengajuanpembimbing')
+                       ->with('success', 'Usulan pembimbing berhasil dikirim!');
     }
 
     public function adminIndex()

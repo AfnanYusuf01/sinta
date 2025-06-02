@@ -20,7 +20,8 @@
         <tr>
           <th>Tanggal</th>
           <th>Nama Mahasiswa</th>
-          <th>Dosen Penguji</th>
+          <th>Dosen Pembimbing 1</th>
+          <th>Dosen Pembimbing 2</th>
           <th>Nilai Rata-rata</th>
           <th>Aksi</th>
         </tr>
@@ -30,6 +31,7 @@
         <tr>
           <td>{{ $nilai->created_at->format('Y-m-d') }}</td>
           <td>{{ $nilai->mahasiswa->nama ?? '-' }}</td>
+          <td>{{ $nilai->dosen->nama ?? '-' }}</td>
           <td>{{ $nilai->dosen->nama ?? '-' }}</td>
           <td>{{ $nilai->total_nilai ?? '-' }}</td>
           <td>
@@ -50,6 +52,7 @@
       <button class="close-btn" onclick="hideModal()">&times;</button>
     </div>
     <div class="modal-body">
+      <p style="margin: 0; color: var(--text-light);">Dosen Penguji: <span id="modalLecturer"></span></p>
       <div style="margin-bottom: 20px;">
         <h4 style="margin: 0 0 10px 0;">Mahasiswa: <span id="modalStudentName"></span></h4>
         <p style="margin: 0; color: var(--text-light);">Tanggal: <span id="modalDate"></span></p>
@@ -65,42 +68,39 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Jumlah Literatur</td>
-              <td><span id="nilai1"></span></td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Kualitas Literatur</td>
-              <td><span id="nilai2"></span></td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>Relevansi dengan Topik</td>
-              <td><span id="nilai3"></span></td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>Analisis dan Sintesis</td>
-              <td><span id="nilai4"></span></td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>Teknik Penulisan</td>
-              <td><span id="nilai5"></span></td>
-            </tr>
-            <tr style="font-weight: bold; background-color: var(--gray-light);">
-              <td colspan="2">Nilai Rata-rata</td>
-              <td><span id="modalTotalScore"></span></td>
-            </tr>
-          </tbody>
+  <tr>
+    <td>1</td>
+    <td>Pemahaman Literatur</td>
+    <td><span id="nilai_pemahaman"></span></td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>Analisis Literatur</td>
+    <td><span id="nilai_analisis"></span></td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>Sintesis Literatur</td>
+    <td><span id="nilai_sintesis"></span></td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>Kesimpulan</td>
+    <td><span id="nilai_kesimpulan"></span></td>
+  </tr>
+  <tr style="font-weight: bold; background-color: var(--gray-light);">
+    <td colspan="2">Total Nilai</td>
+    <td><span id="modalTotalScore"></span></td>
+  </tr>
+</tbody>
+
         </table>
       </div>
 
       <div style="margin-top: 20px; padding: 16px; background-color: var(--primary-light); border-radius: 6px;">
         <h4 style="margin: 0 0 10px 0; color: var(--primary);">Catatan Tambahan:</h4>
-        <p style="margin: 0;">Mahasiswa telah menunjukkan pemahaman yang baik dalam menganalisis literatur, namun perlu meningkatkan jumlah dan kualitas referensi yang digunakan.</p>
+       <p style="margin: 0;" id="modalCatatan"></p>
+
       </div>
     </div>
   </div>
@@ -218,20 +218,14 @@
         document.getElementById('modalDate').textContent = new Date(data.created_at).toLocaleDateString();
         document.getElementById('modalLecturer').textContent = data.dosen.nama;
 
-        // Update nilai-nilai
-      const nilaiElements = {
-        'nilai1': data.nilai_1,
-        'nilai2': data.nilai_2,
-        'nilai3': data.nilai_3,
-        'nilai4': data.nilai_4,
-        'nilai5': data.nilai_5
-      };
-
-      for (const [key, value] of Object.entries(nilaiElements)) {
-        document.getElementById(key).textContent = value;
-      }
+       document.getElementById('nilai_pemahaman').textContent = data.nilai_pemahaman;
+document.getElementById('nilai_analisis').textContent = data.nilai_analisis;
+document.getElementById('nilai_sintesis').textContent = data.nilai_sintesis;
+document.getElementById('nilai_kesimpulan').textContent = data.nilai_kesimpulan;
 
       document.getElementById('modalTotalScore').textContent = data.total_nilai;
+      document.getElementById('modalCatatan').textContent = data.catatan || '-';
+
 
         // Show modal
         document.getElementById('scoreModal').classList.add('show');
@@ -243,7 +237,9 @@
 
     function hideModal() {
       document.getElementById('scoreModal').classList.remove('show');
+    
     }
+
 
     // Close modal when clicking outside of modal content
     window.onclick = function(event) {

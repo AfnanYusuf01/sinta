@@ -5,43 +5,48 @@
 @section('page_title', 'Nilai Bimbingan Proposal TA')
 
 @section('content')
-<div class="card">
-  <div class="card-header">
-    <h2>Nilai Bimbingan Proposal TA</h2>
-    <button class="export-btn">
-      <i class="fas fa-download"></i>
-      Export
-    </button>
-  </div>
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Nilai Bimbingan Tugas Akhir</h1>
+    </div>
 
-  <div class="table-container">
-    <table>
-      <thead>
-        <tr>
-          <th>Tanggal</th>
-          <th>Nama Mahasiswa</th>
-          <th>Dosen Pembimbing 1</th>
-          <th>Dosen Pembimbing 2</th>
-          <th>Nilai Rata-rata</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach($nilaiBimbingan as $nilai)
-        <tr>
-          <td>{{ $nilai->created_at->format('Y-m-d') }}</td>
-          <td>{{ $nilai->mahasiswa->nama ?? '-' }}</td>
-          <td>{{ $nilai->dosen->nama ?? '-' }}</td>
-          <td>{{ $nilai->dosen2->nama ?? '-' }}</td>
-          <td>{{ $nilai->total_nilai ?? '-' }}</td>
-          <td>
-            <i class="fas fa-eye eye-icon" onclick="showNilaiBimbingan({{ $nilai->id }})"></i>
-          </td>
-        </tr>
-        @endforeach
-      </tbody>
-    </table>
-  </div>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Daftar Nilai Bimbingan</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Mahasiswa</th>
+                            <th>NIM</th>
+                            <th>Pembimbing 1</th>
+                            <th>Nilai Pembimbing 1</th>
+                            <th>Pembimbing 2</th>
+                            <th>Nilai Pembimbing 2</th>
+                            <th>Rata-rata Nilai</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($nilaiBimbingan as $index => $nilai)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $nilai['mahasiswa']->nama ?? '-' }}</td>
+                                <td>{{ $nilai['mahasiswa']->nim ?? '-' }}</td>
+                                <td>{{ $nilai['pembimbing1']->nama ?? '-' }}</td>
+                                <td>{{ $nilai['nilai_pembimbing1'] ?? '-' }}</td>
+                                <td>{{ $nilai['pembimbing2']->nama ?? '-' }}</td>
+                                <td>{{ $nilai['nilai_pembimbing2'] ?? '-' }}</td>
+                                <td>{{ $nilai['rata_rata'] ?? '-' }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Modal -->
@@ -217,54 +222,58 @@
 @endsection
 
 @section('scripts')
-  <script>
-    async function showNilaiBimbingan(id) {
-      try {
-      const response = await fetch(`/admin/nilai-bimbingan/${id}`);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-        const data = await response.json();
+<script>
+$(document).ready(function() {
+    $('#dataTable').DataTable();
+});
 
-        document.getElementById('modalStudentName').textContent = data.mahasiswa.nama;
-        document.getElementById('modalDate').textContent = new Date(data.created_at).toLocaleDateString();
-        document.getElementById('modalLecturer').textContent = data.dosen.nama;
+async function showNilaiBimbingan(id) {
+  try {
+  const response = await fetch(`/admin/nilai-bimbingan/${id}`);
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+    const data = await response.json();
 
-        // Update nilai-nilai
-        const nilaiElements = {
-          'nilai1': data.nilai_1,
-          'nilai2': data.nilai_2,
-          'nilai3': data.nilai_3,
-          'nilai4': data.nilai_4,
-          'nilai5': data.nilai_5,
-          'nilai6': data.nilai_6,
-          'nilai7': data.nilai_7
-        };
+    document.getElementById('modalStudentName').textContent = data.mahasiswa.nama;
+    document.getElementById('modalDate').textContent = new Date(data.created_at).toLocaleDateString();
+    document.getElementById('modalLecturer').textContent = data.dosen.nama;
 
-        for (const [key, value] of Object.entries(nilaiElements)) {
-          document.getElementById(key).textContent = value;
-        }
+    // Update nilai-nilai
+    const nilaiElements = {
+      'nilai1': data.nilai_1,
+      'nilai2': data.nilai_2,
+      'nilai3': data.nilai_3,
+      'nilai4': data.nilai_4,
+      'nilai5': data.nilai_5,
+      'nilai6': data.nilai_6,
+      'nilai7': data.nilai_7
+    };
 
-        document.getElementById('modalTotalScore').textContent = data.total_nilai;
-
-        // Show modal
-        document.getElementById('scoreModal').classList.add('show');
-      } catch (error) {
-        console.error('Error:', error);
-      alert('Terjadi kesalahan saat mengambil data. Silakan coba lagi.');
-      }
+    for (const [key, value] of Object.entries(nilaiElements)) {
+      document.getElementById(key).textContent = value;
     }
 
-    function hideModal() {
-      document.getElementById('scoreModal').classList.remove('show');
-    }
+    document.getElementById('modalTotalScore').textContent = data.total_nilai;
 
-    // Close modal when clicking outside of modal content
-    window.onclick = function(event) {
-      const modal = document.getElementById('scoreModal');
-      if (event.target === modal) {
-        hideModal();
-      }
-    }
-  </script>
+    // Show modal
+    document.getElementById('scoreModal').classList.add('show');
+  } catch (error) {
+    console.error('Error:', error);
+  alert('Terjadi kesalahan saat mengambil data. Silakan coba lagi.');
+  }
+}
+
+function hideModal() {
+  document.getElementById('scoreModal').classList.remove('show');
+}
+
+// Close modal when clicking outside of modal content
+window.onclick = function(event) {
+  const modal = document.getElementById('scoreModal');
+  if (event.target === modal) {
+    hideModal();
+  }
+}
+</script>
 @endsection
