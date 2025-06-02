@@ -328,21 +328,52 @@ class AdminController extends Controller
                 'role' => ['required', 'in:admin,dosen,mahasiswa'],
             ]);
 
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'role' => $request->role
-            ]);
+            // Begin transaction
+            DB::beginTransaction();
 
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'User berhasil ditambahkan'
+            try {
+                // Create user
+                $user = User::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                    'role' => $request->role
                 ]);
+
+                // Create corresponding record based on role
+                if ($request->role === 'mahasiswa') {
+                    \App\Models\Mahasiswa::create([
+                        'user_id' => $user->id,
+                        'nama' => $request->name,
+                        'nim' => $request->nim ?? null,
+                        'prodi' => $request->prodi ?? null,
+                        'angkatan' => $request->angkatan ?? null
+                    ]);
+                } elseif ($request->role === 'dosen') {
+                    \App\Models\Dosen::create([
+                        'user_id' => $user->id,
+                        'nama' => $request->name,
+                        'nip' => $request->nip ?? null,
+                        'bidang_keahlian' => $request->bidang_keahlian ?? null
+                    ]);
+                }
+
+                DB::commit();
+
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'User berhasil ditambahkan'
+                    ]);
+                }
+
+                return redirect()->route('admin.users')->with('success', 'User berhasil ditambahkan');
+
+            } catch (\Exception $e) {
+                DB::rollback();
+                throw $e;
             }
 
-            return redirect()->route('admin.users')->with('success', 'User berhasil ditambahkan');
         } catch (ValidationException $e) {
             if ($request->expectsJson()) {
                 return response()->json([

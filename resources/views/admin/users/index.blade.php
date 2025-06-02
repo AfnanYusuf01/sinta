@@ -75,36 +75,71 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah User Baru</h5>
+                <h5 class="modal-title">Tambah User</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form id="addUserForm" action="{{ route('admin.users.store') }}" method="POST">
+            <form id="addUserForm" method="POST">
                 @csrf
                 <div class="modal-body">
+                    <!-- Error Messages -->
+                    <div class="alert alert-danger d-none" id="addErrorMessages"></div>
+
                     <div class="mb-3">
-                        <label for="name" class="form-label">Nama</label>
-                        <input type="text" class="form-control" id="name" name="name" required>
+                        <label for="add_name" class="form-label">Nama</label>
+                        <input type="text" class="form-control" id="add_name" name="name" required>
                     </div>
+
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
+                        <label for="add_email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="add_email" name="email" required>
                     </div>
+
                     <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
-                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="role" class="form-label">Role</label>
-                        <select class="form-select" id="role" name="role" required>
+                        <label for="add_role" class="form-label">Role</label>
+                        <select class="form-select" id="add_role" name="role" required>
                             <option value="">Pilih Role</option>
                             <option value="admin">Admin</option>
                             <option value="dosen">Dosen</option>
                             <option value="mahasiswa">Mahasiswa</option>
                         </select>
+                    </div>
+
+                    <!-- Mahasiswa Fields -->
+                    <div id="mahasiswa_fields" style="display: none;">
+                        <div class="mb-3">
+                            <label for="add_nim" class="form-label">NIM</label>
+                            <input type="text" class="form-control" id="add_nim" name="nim">
+                        </div>
+                        <div class="mb-3">
+                            <label for="add_prodi" class="form-label">Program Studi</label>
+                            <input type="text" class="form-control" id="add_prodi" name="prodi">
+                        </div>
+                        <div class="mb-3">
+                            <label for="add_angkatan" class="form-label">Angkatan</label>
+                            <input type="text" class="form-control" id="add_angkatan" name="angkatan">
+                        </div>
+                    </div>
+
+                    <!-- Dosen Fields -->
+                    <div id="dosen_fields" style="display: none;">
+                        <div class="mb-3">
+                            <label for="add_nip" class="form-label">NIP</label>
+                            <input type="text" class="form-control" id="add_nip" name="nip">
+                        </div>
+                        <div class="mb-3">
+                            <label for="add_bidang_keahlian" class="form-label">Bidang Keahlian</label>
+                            <input type="text" class="form-control" id="add_bidang_keahlian" name="bidang_keahlian">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="add_password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="add_password" name="password" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="add_password_confirmation" class="form-label">Konfirmasi Password</label>
+                        <input type="password" class="form-control" id="add_password_confirmation" name="password_confirmation" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -438,6 +473,30 @@ document.addEventListener('DOMContentLoaded', function() {
                 text: error.message
             });
         }
+    });
+
+    // Handle role selection change
+    $('#add_role').on('change', function() {
+        const role = $(this).val();
+        
+        // Hide all role-specific fields first
+        $('#mahasiswa_fields, #dosen_fields').hide();
+        
+        // Show fields based on selected role
+        if (role === 'mahasiswa') {
+            $('#mahasiswa_fields').show();
+            $('#add_nim, #add_prodi, #add_angkatan').prop('required', true);
+        } else if (role === 'dosen') {
+            $('#dosen_fields').show();
+            $('#add_nip, #add_bidang_keahlian').prop('required', true);
+        }
+    });
+
+    // Reset form and hide role-specific fields when modal is closed
+    $('#addUserModal').on('hidden.bs.modal', function() {
+        $('#addUserForm')[0].reset();
+        $('#mahasiswa_fields, #dosen_fields').hide();
+        $('#add_nim, #add_prodi, #add_angkatan, #add_nip, #add_bidang_keahlian').prop('required', false);
     });
 });
 </script>
