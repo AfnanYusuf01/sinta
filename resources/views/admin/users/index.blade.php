@@ -52,12 +52,14 @@
                                     data-user-role="{{ $user->role }}">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="d-inline">
+                            <button class="btn btn-sm btn-danger delete-user" 
+                                    data-user-id="{{ $user->id }}"
+                                    data-user-name="{{ $user->name }}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            <form id="delete-form-{{ $user->id }}" action="{{ route('admin.users.destroy', $user) }}" method="POST" class="d-none">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus user ini?')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
                             </form>
                         </td>
                     </tr>
@@ -76,7 +78,7 @@
                 <h5 class="modal-title">Tambah User Baru</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('admin.users.store') }}" method="POST">
+            <form id="addUserForm" action="{{ route('admin.users.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
@@ -125,8 +127,6 @@
             <form id="editUserForm" method="POST">
                 @csrf
                 @method('PUT')
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <input type="hidden" name="_method" value="PUT">
                 <div class="modal-body">
                     <!-- Error Messages -->
                     <div class="alert alert-danger d-none" id="editErrorMessages"></div>
@@ -185,105 +185,9 @@
 
 @endsection
 
-@section('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize DataTable
-    $('#usersTable').DataTable({
-        language: {
-            url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json',
-        },
-    });
-
-    // Handle Edit User Modal
-    const editUserModal = document.getElementById('editUserModal');
-    const editUserForm = document.getElementById('editUserForm');
-    const editNameInput = document.getElementById('edit_name');
-    const editEmailInput = document.getElementById('edit_email');
-    const editRoleSelect = document.getElementById('edit_role');
-    const editPasswordInput = document.getElementById('edit_password');
-    const editPasswordConfirmInput = document.getElementById('edit_password_confirmation');
-    const passwordConfirmationGroup = document.getElementById('password_confirmation_group');
-
-    // Toggle password visibility
-    document.getElementById('toggleEditPassword').addEventListener('click', function() {
-        const type = editPasswordInput.type === 'password' ? 'text' : 'password';
-        editPasswordInput.type = type;
-        this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
-    });
-
-    document.getElementById('toggleEditPasswordConfirm').addEventListener('click', function() {
-        const type = editPasswordConfirmInput.type === 'password' ? 'text' : 'password';
-        editPasswordConfirmInput.type = type;
-        this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
-    });
-
-    // Show/hide password confirmation based on password field
-    editPasswordInput.addEventListener('input', function() {
-        if (this.value) {
-            passwordConfirmationGroup.style.display = 'block';
-            editPasswordConfirmInput.required = true;
-        } else {
-            passwordConfirmationGroup.style.display = 'none';
-            editPasswordConfirmInput.required = false;
-            editPasswordConfirmInput.value = '';
-        }
-    });
-
-    // Handle edit button click
-    document.querySelectorAll('.edit-user').forEach(button => {
-        button.addEventListener('click', function() {
-            const userId = this.dataset.userId;
-            const userName = this.dataset.userName;
-            const userEmail = this.dataset.userEmail;
-            const userRole = this.dataset.userRole;
-
-            // Reset form and clear errors
-            editUserForm.reset();
-            clearErrors();
-            
-            // Set form action URL using Laravel's route function
-            editUserForm.setAttribute('action', `{{ url('admin/users') }}/${userId}`);
-            
-            // Set values
-            editNameInput.value = userName;
-            editEmailInput.value = userEmail;
-            editRoleSelect.value = userRole;
-            
-            // Reset password fields
-            editPasswordInput.value = '';
-            editPasswordConfirmInput.value = '';
-            passwordConfirmationGroup.style.display = 'none';
-        });
-    });
-
-    // Clear error messages and states
-    function clearErrors() {
-        document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
-        document.getElementById('editErrorMessages').classList.add('d-none');
-        document.getElementById('editErrorMessages').innerHTML = '';
-    }
-
-    // Handle form submission
-    editUserForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        clearErrors();
-
-        // Validate password confirmation if password is set
-        if (editPasswordInput.value && editPasswordInput.value !== editPasswordConfirmInput.value) {
-            editPasswordInput.classList.add('is-invalid');
-            editPasswordConfirmInput.classList.add('is-invalid');
-            document.getElementById('edit_password_error').textContent = 'Password dan konfirmasi password tidak cocok';
-            return;
-        }
-
-        // Submit form
-        this.submit();
-    });
-});
-</script>
-@endsection
-
+@section('styles')
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <style>
 .required:after {
     content: " *";
@@ -316,4 +220,225 @@ document.addEventListener('DOMContentLoaded', function() {
 #password_confirmation_group {
     display: none;
 }
-</style> 
+</style>
+@endsection
+
+@section('scripts')
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Show success message if exists in session
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            timer: 1500,
+            showConfirmButton: false
+        });
+    @endif
+
+    // Show error message if exists in session
+    @if(session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: '{{ session('error') }}'
+        });
+    @endif
+
+    const editUserForm = document.getElementById('editUserForm');
+    const addUserForm = document.getElementById('addUserForm');
+    const editNameInput = document.getElementById('edit_name');
+    const editEmailInput = document.getElementById('edit_email');
+    const editRoleSelect = document.getElementById('edit_role');
+    const editPasswordInput = document.getElementById('edit_password');
+    const editPasswordConfirmInput = document.getElementById('edit_password_confirmation');
+    const passwordConfirmationGroup = document.getElementById('password_confirmation_group');
+    const toggleEditPasswordBtn = document.getElementById('toggleEditPassword');
+    const toggleEditPasswordConfirmBtn = document.getElementById('toggleEditPasswordConfirm');
+
+    // Initialize DataTable
+    $('#usersTable').DataTable({
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json'
+        }
+    });
+
+    // Handle Add User Form Submit
+    addUserForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        try {
+            const formData = new FormData(this);
+            const response = await fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Terjadi kesalahan saat menambah user');
+            }
+
+            // Show success message
+            await Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'User baru berhasil ditambahkan',
+                timer: 1500,
+                showConfirmButton: false
+            });
+
+            // Reload page
+            window.location.reload();
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: error.message
+            });
+        }
+    });
+
+    // Toggle password visibility
+    toggleEditPasswordBtn.addEventListener('click', function() {
+        const type = editPasswordInput.type === 'password' ? 'text' : 'password';
+        editPasswordInput.type = type;
+        this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+    });
+
+    toggleEditPasswordConfirmBtn.addEventListener('click', function() {
+        const type = editPasswordConfirmInput.type === 'password' ? 'text' : 'password';
+        editPasswordConfirmInput.type = type;
+        this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+    });
+
+    // Show/hide password confirmation based on password field
+    editPasswordInput.addEventListener('input', function() {
+        if (this.value) {
+            passwordConfirmationGroup.style.display = 'block';
+            editPasswordConfirmInput.required = true;
+        } else {
+            passwordConfirmationGroup.style.display = 'none';
+            editPasswordConfirmInput.required = false;
+            editPasswordConfirmInput.value = '';
+        }
+    });
+
+    // Handle edit button click
+    document.querySelectorAll('.edit-user').forEach(button => {
+        button.addEventListener('click', function() {
+            const userId = this.dataset.userId;
+            const userName = this.dataset.userName;
+            const userEmail = this.dataset.userEmail;
+            const userRole = this.dataset.userRole;
+
+            // Reset form and clear errors
+            editUserForm.reset();
+            clearErrors();
+            
+            // Set form action URL
+            editUserForm.action = `{{ route('admin.users.update', '') }}/${userId}`;
+            
+            // Set values
+            editNameInput.value = userName;
+            editEmailInput.value = userEmail;
+            editRoleSelect.value = userRole;
+            
+            // Reset password fields
+            editPasswordInput.value = '';
+            editPasswordConfirmInput.value = '';
+            passwordConfirmationGroup.style.display = 'none';
+            editPasswordConfirmInput.required = false;
+        });
+    });
+
+    // Handle delete button click
+    document.querySelectorAll('.delete-user').forEach(button => {
+        button.addEventListener('click', function() {
+            const userId = this.dataset.userId;
+            const userName = this.dataset.userName;
+
+            Swal.fire({
+                title: 'Konfirmasi Hapus',
+                text: `Apakah Anda yakin ingin menghapus user "${userName}"?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(`delete-form-${userId}`).submit();
+                }
+            });
+        });
+    });
+
+    // Clear error messages and states
+    function clearErrors() {
+        document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+        const errorDiv = document.getElementById('editErrorMessages');
+        errorDiv.classList.add('d-none');
+        errorDiv.innerHTML = '';
+        document.querySelectorAll('.invalid-feedback').forEach(el => el.textContent = '');
+    }
+
+    // Handle edit form submission
+    editUserForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        clearErrors();
+
+        // Validate password confirmation if password is set
+        if (editPasswordInput.value && editPasswordInput.value !== editPasswordConfirmInput.value) {
+            editPasswordInput.classList.add('is-invalid');
+            editPasswordConfirmInput.classList.add('is-invalid');
+            document.getElementById('edit_password_error').textContent = 'Password dan konfirmasi password tidak cocok';
+            return;
+        }
+
+        try {
+            const formData = new FormData(this);
+            const response = await fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Terjadi kesalahan saat memperbarui user');
+            }
+
+            // Show success message
+            await Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Data user berhasil diperbarui',
+                timer: 1500,
+                showConfirmButton: false
+            });
+
+            // Reload page
+            window.location.reload();
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: error.message
+            });
+        }
+    });
+});
+</script>
+@endsection 

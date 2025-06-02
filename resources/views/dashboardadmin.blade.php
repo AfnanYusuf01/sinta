@@ -81,11 +81,11 @@
     </div>
     @endif
 
-    <!-- Statistics Cards -->
-    <div class="row mb-4">
-        <div class="col-xl-3 col-md-6">
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6">
             <div class="card bg-primary text-white mb-4">
-                <div class="card-body">
+            <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h3 class="mb-0">{{ $totalPengajuan }}</h3>
@@ -109,13 +109,13 @@
                         <div>
                             <i class="fas fa-clock fa-2x"></i>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 col-md-6">
+      </div>
+    <div class="col-xl-3 col-md-6">
             <div class="card bg-success text-white mb-4">
-                <div class="card-body">
+            <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h3 class="mb-0">{{ $diterimaCount }}</h3>
@@ -123,14 +123,14 @@
                         </div>
                         <div>
                             <i class="fas fa-check-circle fa-2x"></i>
-                        </div>
-                    </div>
+                </div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 col-md-6">
+    </div>
+    <div class="col-xl-3 col-md-6">
             <div class="card bg-danger text-white mb-4">
-                <div class="card-body">
+            <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h3 class="mb-0">{{ $ditolakCount }}</h3>
@@ -139,7 +139,7 @@
                         <div>
                             <i class="fas fa-times-circle fa-2x"></i>
                         </div>
-                    </div>
+                </div>
                 </div>
             </div>
         </div>
@@ -155,60 +155,60 @@
                 </div>
                 <div>
                     <span class="badge bg-warning">{{ $menungguCount }} Pengajuan Menunggu</span>
-                </div>
             </div>
+          </div>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
+        <div class="table-responsive">
                 <table class="table table-bordered" id="pengajuanTable">
                     <thead>
-                        <tr>
+              <tr>
                             <th>No</th>
                             <th>Tanggal Pengajuan</th>
-                            <th>Nama Mahasiswa</th>
+                <th>Nama Mahasiswa</th>
                             <th>NIM</th>
                             <th>Judul TA</th>
-                            <th>Pembimbing 1</th>
-                            <th>Pembimbing 2</th>
+                <th>Pembimbing 1</th>
+                <th>Pembimbing 2</th>
                             <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+              </tr>
+            </thead>
+            <tbody>
                         @forelse($pengajuanList as $index => $pengajuan)
-                        <tr>
+                    <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $pengajuan->created_at->format('d/m/Y H:i') }}</td>
                             <td>{{ $pengajuan->mahasiswa->nama ?? '-' }}</td>
                             <td>{{ $pengajuan->mahasiswa->nim ?? '-' }}</td>
                             <td>{{ $pengajuan->judul_ta }}</td>
                             <td>{{ $pengajuan->dosen1->nama ?? '-' }}</td>
-                            <td>{{ $pengajuan->dosen2->nama ?? '-' }}</td>
-                            <td>
+                <td>{{ $pengajuan->dosen2->nama ?? '-' }}</td>
+                <td>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-success btn-sm" onclick="handleApprove({{ $pengajuan->id }})" title="Setujui">
                                         <i class="fas fa-check"></i>
-                                    </button>
+                        </button>
                                     <button type="button" class="btn btn-danger btn-sm" onclick="handleReject({{ $pengajuan->id }})" title="Tolak">
                                         <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
+                        </button>
+                      </div>
+                </td>
+              </tr>
+              @empty
+              <tr>
                             <td colspan="8" class="text-center py-4">
                                 <div class="text-muted">
                                     <i class="fas fa-info-circle me-2"></i>
                                     Tidak ada pengajuan pembimbing yang menunggu persetujuan
-                                </div>
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                            </div>
+                        </td>
+              </tr>
+              @endforelse
+            </tbody>
+          </table>
         </div>
-    </div>
+          </div>
+   </div>
 </div>
 @endsection
 
@@ -314,14 +314,14 @@
         if (result.isConfirmed) {
             try {
                 const response = await fetch(`/admin/pengajuanpembimbing/reject/${id}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    }
-                });
+          }
+        });
 
-                const data = await response.json();
+        const data = await response.json();
 
                 if (data.success) {
                     await Swal.fire({
@@ -333,10 +333,10 @@
                         timerProgressBar: true
                     });
                     location.reload();
-                } else {
+        } else {
                     throw new Error(data.message);
-                }
-            } catch (error) {
+        }
+      } catch (error) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error!',
@@ -346,5 +346,5 @@
             }
         }
     }
-</script>
+  </script>
 @endsection

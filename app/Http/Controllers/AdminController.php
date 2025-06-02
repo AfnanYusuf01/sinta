@@ -15,6 +15,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class AdminController extends Controller
 {
@@ -319,21 +320,51 @@ class AdminController extends Controller
 
     public function storeUser(Request $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role' => ['required', 'in:admin,dosen,mahasiswa'],
-        ]);
+        try {
+            $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+                'password' => ['required', 'confirmed', Rules\Password::defaults()],
+                'role' => ['required', 'in:admin,dosen,mahasiswa'],
+            ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => $request->role
-        ]);
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role' => $request->role
+            ]);
 
-        return redirect()->route('admin.users')->with('success', 'User berhasil ditambahkan');
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'User berhasil ditambahkan'
+                ]);
+            }
+
+            return redirect()->route('admin.users')->with('success', 'User berhasil ditambahkan');
+        } catch (ValidationException $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validasi gagal',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            return redirect()->route('admin.users')
+                ->withErrors($e->errors())
+                ->withInput();
+        } catch (\Exception $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gagal menambahkan user: ' . $e->getMessage()
+                ], 500);
+            }
+            return redirect()->route('admin.users')
+                ->with('error', 'Gagal menambahkan user: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 
     public function updateUser(Request $request, User $user)
@@ -369,20 +400,63 @@ class AdminController extends Controller
                     $mahasiswa->user_id = $user->id;
                     $mahasiswa->nama = $request->name;
                     $mahasiswa->save();
+
+                    // Remove dosen record if exists
+                    if ($user->dosen) {
+                        $user->dosen->delete();
+                    }
                 } elseif ($request->role === 'dosen') {
                     $dosen = $user->dosen ?? new \App\Models\Dosen();
                     $dosen->user_id = $user->id;
                     $dosen->nama = $request->name;
                     $dosen->save();
+
+                    // Remove mahasiswa record if exists
+                    if ($user->mahasiswa) {
+                        $user->mahasiswa->delete();
+                    }
+                } else {
+                    // For admin role, remove both mahasiswa and dosen records if they exist
+                    if ($user->mahasiswa) {
+                        $user->mahasiswa->delete();
+                    }
+                    if ($user->dosen) {
+                        $user->dosen->delete();
+                    }
                 }
 
                 DB::commit();
+
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'User berhasil diperbarui'
+                    ]);
+                }
+
                 return redirect()->route('admin.users')->with('success', 'User berhasil diperbarui');
             } catch (\Exception $e) {
                 DB::rollback();
                 throw $e;
             }
+        } catch (ValidationException $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validasi gagal',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            return redirect()->route('admin.users')
+                ->withErrors($e->errors())
+                ->withInput();
         } catch (\Exception $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gagal memperbarui user: ' . $e->getMessage()
+                ], 500);
+            }
             return redirect()->route('admin.users')
                 ->with('error', 'Gagal memperbarui user: ' . $e->getMessage())
                 ->withInput();
@@ -391,7 +465,26 @@ class AdminController extends Controller
 
     public function destroyUser(User $user)
     {
-        $user->delete();
-        return redirect()->route('admin.users')->with('success', 'User berhasil dihapus');
+        try {
+            $user->delete();
+
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'User berhasil dihapus'
+                ]);
+            }
+
+            return redirect()->route('admin.users')->with('success', 'User berhasil dihapus');
+        } catch (\Exception $e) {
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gagal menghapus user: ' . $e->getMessage()
+                ], 500);
+            }
+            return redirect()->route('admin.users')
+                ->with('error', 'Gagal menghapus user: ' . $e->getMessage());
+        }
     }
 }

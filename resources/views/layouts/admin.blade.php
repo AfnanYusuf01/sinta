@@ -7,6 +7,9 @@
   <title>@yield('title') - Admin Dashboard</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- DataTables CSS -->
+  <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+  
   <style>
     :root {
       --primary: #E30613;
@@ -302,8 +305,7 @@
       text-align: center;
     }
 
-    @yield('additional_styles')
-
+    /* Alert Styles */
     .alert {
       margin: 1rem;
       border-radius: 8px;
@@ -330,6 +332,8 @@
       padding-left: 1.5rem;
     }
   </style>
+
+  @yield('additional_styles')
 </head>
 <body>
   <div class="dashboard-container">
@@ -474,7 +478,13 @@
     @csrf
   </form>
 
+  <!-- Core Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- DataTables JS -->
+  <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Initialize all dropdowns
