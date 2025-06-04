@@ -18,9 +18,11 @@ return new class extends Migration
             $table->string('prodi');
             $table->string('fakultas');
             $table->integer('angkatan');
+            $table->string('kelas')->nullable(); // Tambahkan kolom kelas di sini
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
+
     }
 
     /**
