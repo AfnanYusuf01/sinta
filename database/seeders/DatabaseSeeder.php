@@ -113,5 +113,6 @@ class DatabaseSeeder extends Seeder
 
         // Seed penguji assignments
         $this->call(PengujiAssignmentSeeder::class);
+        $this->call(MahasiswaSeeder::class);
     }
 }
