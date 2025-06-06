@@ -82,6 +82,12 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/', [AdminController::class, 'storeUser'])->name('admin.users.store');
             Route::match(['put', 'patch'], '/{user}', [AdminController::class, 'updateUser'])->name('admin.users.update');
             Route::delete('/{user}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
+
+            // Import routes
+            Route::get('/import', [AdminController::class, 'importForm'])->name('admin.users.import');
+            Route::post('/import', [AdminController::class, 'import']);
+            Route::get('/template/mahasiswa', [AdminController::class, 'downloadTemplateMahasiswa'])->name('admin.users.template.mahasiswa');
+            Route::get('/template/dosen', [AdminController::class, 'downloadTemplateDosen'])->name('admin.users.template.dosen');
         });
 
         // Penguji management
@@ -142,6 +148,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/proposal-approval', [PendaftaranProposalController::class, 'dosenIndex'])->name('dosen.proposal-approval');
         Route::post('/proposal/approve/{id}', [PendaftaranProposalController::class, 'dosenApprove'])->name('dosen.proposal.approve');
         Route::post('/proposal/reject/{id}', [PendaftaranProposalController::class, 'dosenReject'])->name('dosen.proposal.reject');
+
+        // Log Bimbingan routes untuk dosen
+        Route::get('/log-bimbingan', [LogBimbinganController::class, 'dosenIndex'])->name('dosen.log-bimbingan');
+        Route::post('/log-bimbingan/{id}/nilai', [LogBimbinganController::class, 'nilaiStore'])->name('dosen.log-bimbingan.nilai');
     });
 
     // Mahasiswa routes

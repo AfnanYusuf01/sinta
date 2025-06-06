@@ -50,10 +50,11 @@ class NilaiLiteraturController extends Controller
             'nilai_pemahaman' => 'required|integer|min:0|max:100',
             'nilai_analisis' => 'required|integer|min:0|max:100',
             'nilai_sintesis' => 'required|integer|min:0|max:100',
-            'nilai_kesimpulan' => 'required|integer|min:0|max:100',
+            'nilai_metodologi' => 'required|integer|min:0|max:100',
+            'nilai_penulisan' => 'required|integer|min:0|max:100',
+            'nilai_referensi' => 'required|integer|min:0|max:100',
             'catatan' => 'nullable|string'
         ]);
-
 
         $dosen = Dosen::where('user_id', Auth::id())->first();
 
@@ -72,7 +73,12 @@ class NilaiLiteraturController extends Controller
         }
 
         // Hitung total nilai literatur
-        $total_nilai = $request->nilai_pemahaman + $request->nilai_analisis + $request->nilai_sintesis + $request->nilai_kesimpulan;
+        $total_nilai = ($request->nilai_pemahaman +
+                       $request->nilai_analisis +
+                       $request->nilai_sintesis +
+                       $request->nilai_metodologi +
+                       $request->nilai_penulisan +
+                       $request->nilai_referensi) / 6;
 
         // Cek jika nilai sudah ada
         $nilai = NilaiLiteratur::where('id_mahasiswa', $request->id_mahasiswa)
@@ -84,7 +90,9 @@ class NilaiLiteraturController extends Controller
                 'nilai_pemahaman' => $request->nilai_pemahaman,
                 'nilai_analisis' => $request->nilai_analisis,
                 'nilai_sintesis' => $request->nilai_sintesis,
-                'nilai_kesimpulan' => $request->nilai_kesimpulan,
+                'nilai_metodologi' => $request->nilai_metodologi,
+                'nilai_penulisan' => $request->nilai_penulisan,
+                'nilai_referensi' => $request->nilai_referensi,
                 'catatan' => $request->catatan,
                 'total_nilai' => $total_nilai
             ]);
@@ -97,7 +105,9 @@ class NilaiLiteraturController extends Controller
                 'nilai_pemahaman' => $request->nilai_pemahaman,
                 'nilai_analisis' => $request->nilai_analisis,
                 'nilai_sintesis' => $request->nilai_sintesis,
-                'nilai_kesimpulan' => $request->nilai_kesimpulan,
+                'nilai_metodologi' => $request->nilai_metodologi,
+                'nilai_penulisan' => $request->nilai_penulisan,
+                'nilai_referensi' => $request->nilai_referensi,
                 'catatan' => $request->catatan,
                 'total_nilai' => $total_nilai
             ]);
@@ -107,11 +117,10 @@ class NilaiLiteraturController extends Controller
 
         return redirect()->back()->with('success', $message);
     }
-    // NilaiLiteraturController.php
+
     public function show($id)
     {
         $nilai = NilaiLiteratur::with(['mahasiswa', 'dosen'])->findOrFail($id);
-
         return response()->json($nilai);
     }
 }

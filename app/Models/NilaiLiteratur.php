@@ -17,7 +17,9 @@ class NilaiLiteratur extends Model
         'nilai_pemahaman',
         'nilai_analisis',
         'nilai_sintesis',
-        'nilai_kesimpulan',
+        'nilai_metodologi',
+        'nilai_penulisan',
+        'nilai_referensi',
         'total_nilai',
         'catatan'
     ];
@@ -31,10 +33,12 @@ class NilaiLiteratur extends Model
         parent::boot();
 
         static::saving(function ($model) {
-            $model->total_nilai = $model->nilai_pemahaman + 
-                                $model->nilai_analisis + 
-                                $model->nilai_sintesis + 
-                                $model->nilai_kesimpulan;
+            $model->total_nilai = $model->nilai_pemahaman +
+                                $model->nilai_analisis +
+                                $model->nilai_sintesis +
+                                $model->nilai_metodologi +
+                                $model->nilai_penulisan +
+                                $model->nilai_referensi;
         });
     }
 

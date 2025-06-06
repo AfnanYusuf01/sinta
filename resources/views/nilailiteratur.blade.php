@@ -167,7 +167,7 @@
 
       <div class="form-group">
         <label for="id_mahasiswa">Pilih Mahasiswa:</label>
-       
+
         <select name="id_mahasiswa" id="id_mahasiswa" required>
           <option value="">-- Pilih Mahasiswa --</option>
           @if(isset($mahasiswa) && count($mahasiswa) > 0)
@@ -192,73 +192,72 @@
         </tr>
         <tr>
           <td>
-            <strong>Pemahaman Literatur</strong>
+            <strong>1. Pemahaman Literatur</strong>
             <br>
             <small>Kemampuan memahami dan menjelaskan isi literatur yang digunakan</small>
           </td>
           <td>
-            <input type="number" name="nilai_pemahaman" min="0" max="100"
-              value="{{ old('nilai_pemahaman', request('nilai_pemahaman')) }}" required>
-            @error('nilai_pemahaman')
-              <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
+            <input type="number" name="nilai_pemahaman" min="0" max="100" required value="{{ old('nilai_pemahaman') }}">
           </td>
         </tr>
         <tr>
           <td>
-            <strong>Analisis Literatur</strong>
+            <strong>2. Analisis Literatur</strong>
             <br>
             <small>Kemampuan menganalisis dan mengkritisi literatur</small>
           </td>
           <td>
-            <input type="number" name="nilai_analisis" min="0" max="100"
-              value="{{ old('nilai_analisis', request('nilai_analisis')) }}" required>
-            @error('nilai_analisis')
-              <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
+            <input type="number" name="nilai_analisis" min="0" max="100" required value="{{ old('nilai_analisis') }}">
           </td>
         </tr>
         <tr>
           <td>
-            <strong>Sintesis Literatur</strong>
+            <strong>3. Sintesis Literatur</strong>
             <br>
             <small>Kemampuan menghubungkan dan mensintesis berbagai literatur</small>
           </td>
           <td>
-            <input type="number" name="nilai_sintesis" min="0" max="100"
-              value="{{ old('nilai_sintesis', request('nilai_sintesis')) }}" required>
-            @error('nilai_sintesis')
-              <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
+            <input type="number" name="nilai_sintesis" min="0" max="100" required value="{{ old('nilai_sintesis') }}">
           </td>
         </tr>
         <tr>
           <td>
-            <strong>Kesimpulan dan Rekomendasi</strong>
+            <strong>4. Metodologi Review</strong>
             <br>
-            <small>Kemampuan menarik kesimpulan dan memberikan rekomendasi</small>
+            <small>Sistematika dan metode dalam melakukan review literatur</small>
           </td>
           <td>
-            <input type="number" name="nilai_kesimpulan" min="0" max="100"
-              value="{{ old('nilai_kesimpulan', request('nilai_kesimpulan')) }}" required>
-            @error('nilai_kesimpulan')
-              <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
+            <input type="number" name="nilai_metodologi" min="0" max="100" required value="{{ old('nilai_metodologi') }}">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>5. Penulisan dan Organisasi</strong>
+            <br>
+            <small>Kualitas penulisan dan pengorganisasian literature review</small>
+          </td>
+          <td>
+            <input type="number" name="nilai_penulisan" min="0" max="100" required value="{{ old('nilai_penulisan') }}">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>6. Kualitas Referensi</strong>
+            <br>
+            <small>Kualitas dan relevansi referensi yang digunakan</small>
+          </td>
+          <td>
+            <input type="number" name="nilai_referensi" min="0" max="100" required value="{{ old('nilai_referensi') }}">
           </td>
         </tr>
       </table>
 
       <div class="form-group">
         <label for="catatan">Catatan/Komentar:</label>
-        <textarea name="catatan" id="catatan" rows="4">{{ old('catatan', request('catatan')) }}</textarea>
-        @error('catatan')
-          <div class="alert alert-danger">{{ $message }}</div>
-        @enderror
+        <textarea name="catatan" id="catatan" rows="4">{{ old('catatan') }}</textarea>
       </div>
 
-      <button type="submit" class="btn-submit">
-        <i class="fas fa-save"></i> Simpan Nilai
-      </button>
+      <button type="submit" class="btn-submit">Simpan Nilai</button>
     </form>
 
     @if($nilaiExisting->isNotEmpty())
@@ -270,7 +269,9 @@
             <th>Pemahaman</th>
             <th>Analisis</th>
             <th>Sintesis</th>
-            <th>Kesimpulan</th>
+            <th>Metodologi</th>
+            <th>Penulisan</th>
+            <th>Referensi</th>
             <th>Catatan</th>
           </tr>
         </thead>
@@ -281,7 +282,9 @@
               <td>{{ $nilai->nilai_pemahaman }}</td>
               <td>{{ $nilai->nilai_analisis }}</td>
               <td>{{ $nilai->nilai_sintesis }}</td>
-              <td>{{ $nilai->nilai_kesimpulan }}</td>
+              <td>{{ $nilai->nilai_metodologi }}</td>
+              <td>{{ $nilai->nilai_penulisan }}</td>
+              <td>{{ $nilai->nilai_referensi }}</td>
               <td>{{ $nilai->catatan }}</td>
             </tr>
           @endforeach

@@ -18,9 +18,6 @@ class NilaiDe extends Model
         'nilai_2',
         'nilai_3',
         'nilai_4',
-        'nilai_5',
-        'nilai_6',
-        'nilai_7',
         'total_nilai'
     ];
 
@@ -28,22 +25,17 @@ class NilaiDe extends Model
         'total_nilai' => 'float',
     ];
 
-
     protected static function boot()
     {
         parent::boot();
 
         static::saving(function ($model) {
-            $model->total_nilai = $model->nilai_1 + 
-                                $model->nilai_2 + 
-                                $model->nilai_3 + 
-                                $model->nilai_4 + 
-                                $model->nilai_5 + 
-                                $model->nilai_6 + 
-                                $model->nilai_7;
+            $model->total_nilai = $model->nilai_1 +
+                                $model->nilai_2 +
+                                $model->nilai_3 +
+                                $model->nilai_4;
         });
     }
-
 
     public function mahasiswa()
     {

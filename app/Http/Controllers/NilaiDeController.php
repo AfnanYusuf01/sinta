@@ -56,9 +56,6 @@ class NilaiDeController extends Controller
             'nilai_2' => 'required|integer|min:0|max:100',
             'nilai_3' => 'required|integer|min:0|max:100',
             'nilai_4' => 'required|integer|min:0|max:100',
-            'nilai_5' => 'required|integer|min:0|max:100',
-            'nilai_6' => 'required|integer|min:0|max:100',
-            'nilai_7' => 'required|integer|min:0|max:100',
         ]);
 
         // Ambil data dosen yang sedang login
@@ -80,9 +77,7 @@ class NilaiDeController extends Controller
         }
 
         // Hitung total nilai
-        $total_nilai = ($request->nilai_1 + $request->nilai_2 + $request->nilai_3 +
-                       $request->nilai_4 + $request->nilai_5 + $request->nilai_6 +
-                       $request->nilai_7) / 7;
+        $total_nilai = ($request->nilai_1 + $request->nilai_2 + $request->nilai_3 + $request->nilai_4) / 4;
 
         // Cek apakah sudah ada nilai untuk mahasiswa ini
         $nilai = NilaiDe::where('id_mahasiswa', $request->mahasiswa_id)
@@ -96,9 +91,6 @@ class NilaiDeController extends Controller
                 'nilai_2' => $request->nilai_2,
                 'nilai_3' => $request->nilai_3,
                 'nilai_4' => $request->nilai_4,
-                'nilai_5' => $request->nilai_5,
-                'nilai_6' => $request->nilai_6,
-                'nilai_7' => $request->nilai_7,
                 'total_nilai' => $total_nilai
             ]);
 
@@ -112,9 +104,6 @@ class NilaiDeController extends Controller
                 'nilai_2' => $request->nilai_2,
                 'nilai_3' => $request->nilai_3,
                 'nilai_4' => $request->nilai_4,
-                'nilai_5' => $request->nilai_5,
-                'nilai_6' => $request->nilai_6,
-                'nilai_7' => $request->nilai_7,
                 'total_nilai' => $total_nilai
             ]);
 

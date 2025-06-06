@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid px-4">
     <h1 class="mt-4">User Management</h1>
-    
+
     @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('success') }}
@@ -14,10 +14,16 @@
     @endif
 
     <!-- Add User Button -->
-    <div class="mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Manajemen User</h4>
+        <div>
+            <a href="{{ route('admin.users.import') }}" class="btn btn-success me-2">
+                <i class="fas fa-file-excel me-2"></i>Import Excel
+            </a>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
-            <i class="fas fa-user-plus"></i> Tambah User
+                <i class="fas fa-plus me-2"></i>Tambah User
         </button>
+        </div>
     </div>
 
     <!-- Users Table -->
@@ -43,8 +49,8 @@
                         <td>{{ $user->email }}</td>
                         <td>{{ ucfirst($user->role) }}</td>
                         <td>
-                            <button class="btn btn-sm btn-primary edit-user" 
-                                    data-bs-toggle="modal" 
+                            <button class="btn btn-sm btn-primary edit-user"
+                                    data-bs-toggle="modal"
                                     data-bs-target="#editUserModal"
                                     data-user-id="{{ $user->id }}"
                                     data-user-name="{{ $user->name }}"
@@ -52,7 +58,7 @@
                                     data-user-role="{{ $user->role }}">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <button class="btn btn-sm btn-danger delete-user" 
+                            <button class="btn btn-sm btn-danger delete-user"
                                     data-user-id="{{ $user->id }}"
                                     data-user-name="{{ $user->name }}">
                                 <i class="fas fa-trash"></i>
@@ -304,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle Add User Form Submit
     $('#addUserForm').on('submit', function(e) {
         e.preventDefault();
-        
+
         $.ajax({
             url: $(this).attr('action'),
             method: 'POST',
@@ -383,15 +389,15 @@ document.addEventListener('DOMContentLoaded', function() {
             // Reset form and clear errors
             editUserForm.reset();
             clearErrors();
-            
+
             // Set form action URL
             editUserForm.action = `{{ route('admin.users.update', '') }}/${userId}`;
-            
+
             // Set values
             editNameInput.value = userName;
             editEmailInput.value = userEmail;
             editRoleSelect.value = userRole;
-            
+
             // Reset password fields
             editPasswordInput.value = '';
             editPasswordConfirmInput.value = '';
@@ -484,10 +490,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle role selection change
     $('#add_role').on('change', function() {
         const role = $(this).val();
-        
+
         // Hide all role-specific fields first
         $('#mahasiswa_fields, #dosen_fields').hide();
-        
+
         // Show fields based on selected role
         if (role === 'mahasiswa') {
             $('#mahasiswa_fields').show();
@@ -506,4 +512,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-@endsection 
+@endsection

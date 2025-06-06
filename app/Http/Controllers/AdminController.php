@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\MahasiswaImport;
 
 class AdminController extends Controller
 {
@@ -81,7 +83,15 @@ class AdminController extends Controller
 
     public function logbimbingan()
     {
-        $logs = LogBimbingan::with(['mahasiswa', 'dosen'])
+        $logs = LogBimbingan::select(
+                'log_bimbingan.*',
+                'mahasiswa.nama as nama_mahasiswa',
+                'mahasiswa.nim',
+                'dosen.nama as nama_dosen'
+            )
+            ->join('users', 'log_bimbingan.id_user', '=', 'users.id')
+            ->join('mahasiswa', 'users.id', '=', 'mahasiswa.user_id')
+            ->join('dosen', 'log_bimbingan.id_dosen', '=', 'dosen.id')
             ->orderBy('tanggal', 'desc')
             ->paginate(10);
 
@@ -647,5 +657,274 @@ class AdminController extends Controller
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    public function importForm()
+    {
+        return view('admin.users.import');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:csv,txt',
+            'type' => 'required|in:mahasiswa,dosen'
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $file = $request->file('file');
+
+            // Baca file CSV
+            $handle = fopen($file->getPathname(), 'r');
+
+            // Get header dari baris pertama
+            $header = fgetcsv($handle);
+
+            // Bersihkan header dari karakter khusus dan whitespace
+            $header = array_map(function($item) {
+                // Bersihkan BOM dan whitespace
+                $item = trim($item);
+                if (substr($item, 0, 3) === "\xEF\xBB\xBF") {
+                    $item = substr($item, 3);
+                }
+                return strtolower(trim($item));
+            }, $header);
+
+            // Debug information
+            $debugInfo = [
+                'Header yang dibaca: ' . implode(', ', $header),
+                'Jumlah kolom header: ' . count($header),
+                'Tipe import: ' . $request->type
+            ];
+
+            // Validasi header sesuai dengan tipe import
+            $expectedHeaders = $request->type === 'mahasiswa'
+                ? ['nama', 'email', 'password', 'nim', 'prodi', 'angkatan']
+                : ['nama', 'email', 'password', 'nip', 'bidang_keahlian'];
+
+            $debugInfo[] = 'Header yang diharapkan: ' . implode(', ', $expectedHeaders);
+            $debugInfo[] = 'Jumlah kolom yang diharapkan: ' . count($expectedHeaders);
+
+            // Validasi jumlah kolom header
+            if (count($header) !== count($expectedHeaders)) {
+                fclose($handle);
+                throw new \Exception("Jumlah kolom tidak sesuai dengan template.\n\nDetail:\n" . implode("\n", $debugInfo));
+            }
+
+            // Validasi nama kolom header
+            $headerDiff = array_diff($expectedHeaders, $header);
+            if (!empty($headerDiff)) {
+                fclose($handle);
+                throw new \Exception("Format kolom tidak sesuai.\n\nDetail:\n" . implode("\n", $debugInfo) . "\n\nKolom yang tidak sesuai: " . implode(', ', $headerDiff));
+            }
+
+            $successCount = 0;
+            $errors = [];
+            $rowNumber = 2; // Start from row 2 (after header)
+
+            // Baca data baris per baris
+            while (($row = fgetcsv($handle)) !== false) {
+                try {
+                    // Skip empty rows
+                    if (empty(array_filter($row))) {
+                        continue;
+                    }
+
+                    // Validasi jumlah kolom data
+                    if (count($row) !== count($header)) {
+                        throw new \Exception(sprintf(
+                            'Jumlah kolom tidak sesuai dengan header (ditemukan %d kolom, diharapkan %d kolom)',
+                            count($row),
+                            count($header)
+                        ));
+                    }
+
+                    // Bersihkan data dari whitespace
+                    $row = array_map('trim', $row);
+
+                    // Convert array to associative array using header
+                    $data = array_combine($header, $row);
+
+                    if ($request->type === 'mahasiswa') {
+                        $this->processMahasiswaRow($data);
+                    } else {
+                        $this->processDosenRow($data);
+                    }
+                    $successCount++;
+                } catch (\Exception $e) {
+                    $errors[] = "Baris {$rowNumber}: " . $e->getMessage();
+                }
+                $rowNumber++;
+            }
+
+            fclose($handle);
+            DB::commit();
+
+            if (count($errors) > 0) {
+                $message = "Import selesai dengan {$successCount} data berhasil diimport.\n\nError yang ditemukan:\n" . implode("\n", $errors);
+                return redirect()->route('admin.users')
+                    ->with('warning', $message);
+            }
+
+            return redirect()->route('admin.users')
+                ->with('success', "{$successCount} data berhasil diimport!");
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('admin.users')
+                ->with('error', 'Error: ' . $e->getMessage());
+        }
+    }
+
+    private function processMahasiswaRow($data)
+    {
+        // Validasi data yang diperlukan
+        $requiredFields = ['nama', 'email', 'password', 'nim', 'prodi', 'angkatan'];
+        foreach ($requiredFields as $field) {
+            if (!isset($data[$field]) || empty($data[$field])) {
+                throw new \Exception("Data {$field} tidak boleh kosong");
+            }
+        }
+
+        // Validasi email unik
+        if (User::where('email', $data['email'])->exists()) {
+            throw new \Exception("Email {$data['email']} sudah terdaftar");
+        }
+
+        // Validasi NIM unik
+        if (\App\Models\Mahasiswa::where('nim', $data['nim'])->exists()) {
+            throw new \Exception("NIM {$data['nim']} sudah terdaftar");
+        }
+
+        // Create user
+        $user = User::create([
+            'name' => $data['nama'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'role' => 'mahasiswa'
+        ]);
+
+        // Create mahasiswa
+        \App\Models\Mahasiswa::create([
+            'user_id' => $user->id,
+            'nama' => $data['nama'],
+            'nim' => $data['nim'],
+            'prodi' => $data['prodi'],
+            'angkatan' => $data['angkatan']
+        ]);
+    }
+
+    private function processDosenRow($data)
+    {
+        // Validasi data yang diperlukan
+        $requiredFields = ['nama', 'email', 'password', 'nip', 'bidang_keahlian'];
+        foreach ($requiredFields as $field) {
+            if (!isset($data[$field]) || empty($data[$field])) {
+                throw new \Exception("Data {$field} tidak boleh kosong");
+            }
+        }
+
+        // Validasi email unik
+        if (User::where('email', $data['email'])->exists()) {
+            throw new \Exception("Email {$data['email']} sudah terdaftar");
+        }
+
+        // Validasi NIP unik
+        if (\App\Models\Dosen::where('nip', $data['nip'])->exists()) {
+            throw new \Exception("NIP {$data['nip']} sudah terdaftar");
+        }
+
+        // Create user
+        $user = User::create([
+            'name' => $data['nama'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'role' => 'dosen'
+        ]);
+
+        // Create dosen
+        \App\Models\Dosen::create([
+            'user_id' => $user->id,
+            'nama' => $data['nama'],
+            'nip' => $data['nip'],
+            'bidang_keahlian' => $data['bidang_keahlian']
+        ]);
+    }
+
+    public function downloadTemplateMahasiswa()
+    {
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="template_mahasiswa.csv"'
+        ];
+
+        // Create CSV content
+        $output = fopen('php://temp', 'r+');
+
+        // Add headers
+        fputcsv($output, ['nama', 'email', 'password', 'nim', 'prodi', 'angkatan']);
+
+        // Add example row
+        fputcsv($output, [
+            'John Doe',
+            'john@example.com',
+            'password123',
+            '12345678',
+            'Teknik Informatika',
+            '2023'
+        ]);
+
+        // Get content
+        rewind($output);
+        $content = stream_get_contents($output);
+        fclose($output);
+
+        // Add notes
+        $content .= "\n\nCatatan:\n";
+        $content .= "1. Jangan mengubah nama kolom pada baris pertama\n";
+        $content .= "2. Password minimal 8 karakter\n";
+        $content .= "3. NIM harus unik\n";
+        $content .= "4. Email harus unik dan valid\n";
+
+        return response($content, 200, $headers);
+    }
+
+    public function downloadTemplateDosen()
+    {
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="template_dosen.csv"'
+        ];
+
+        // Create CSV content
+        $output = fopen('php://temp', 'r+');
+
+        // Add headers
+        fputcsv($output, ['nama', 'email', 'password', 'nip', 'bidang_keahlian']);
+
+        // Add example row
+        fputcsv($output, [
+            'Dr. Jane Smith',
+            'jane.smith@example.com',
+            'password123',
+            '198501012015041001',
+            'Artificial Intelligence'
+        ]);
+
+        // Get content
+        rewind($output);
+        $content = stream_get_contents($output);
+        fclose($output);
+
+        // Add notes
+        $content .= "\n\nCatatan:\n";
+        $content .= "1. Jangan mengubah nama kolom pada baris pertama\n";
+        $content .= "2. Password minimal 8 karakter\n";
+        $content .= "3. NIP harus unik\n";
+        $content .= "4. Email harus unik dan valid\n";
+
+        return response($content, 200, $headers);
     }
 }

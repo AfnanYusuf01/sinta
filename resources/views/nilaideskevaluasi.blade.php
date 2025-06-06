@@ -325,95 +325,50 @@
           @endif
         </div>
 
-        <table class="table table-bordered mt-4">
-          <thead class="table-primary">
-            <tr>
-              <th width="5%">No</th>
-              <th>Kriteria Penilaian</th>
-              <th width="15%">Nilai (0-100)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td>
-                <div class="criteria-title">Orisinalitas</div>
-                <div class="criteria-desc">Keaslian dan keunikan ide penelitian</div>
-              </td>
-              <td>
-                <input type="number" name="nilai_1" class="form-control nilai-input" min="0" max="100" required>
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>
-                <div class="criteria-title">Kebaruan/Novelty</div>
-                <div class="criteria-desc">Kontribusi baru terhadap bidang penelitian</div>
-              </td>
-              <td>
-                <input type="number" name="nilai_2" class="form-control nilai-input" min="0" max="100" required>
-              </td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>
-                <div class="criteria-title">Urgensi Penelitian</div>
-                <div class="criteria-desc">Tingkat kepentingan dan dampak penelitian</div>
-              </td>
-              <td>
-                <input type="number" name="nilai_3" class="form-control nilai-input" min="0" max="100" required>
-              </td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>
-                <div class="criteria-title">Metodologi</div>
-                <div class="criteria-desc">Kesesuaian dan kelayakan metode penelitian</div>
-              </td>
-              <td>
-                <input type="number" name="nilai_4" class="form-control nilai-input" min="0" max="100" required>
-              </td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>
-                <div class="criteria-title">Tinjauan Pustaka</div>
-                <div class="criteria-desc">Kualitas dan relevansi referensi</div>
-              </td>
-              <td>
-                <input type="number" name="nilai_5" class="form-control nilai-input" min="0" max="100" required>
-              </td>
-            </tr>
-            <tr>
-              <td>6</td>
-              <td>
-                <div class="criteria-title">Kontribusi Penelitian</div>
-                <div class="criteria-desc">Potensi kontribusi terhadap pengembangan ilmu</div>
-              </td>
-              <td>
-                <input type="number" name="nilai_6" class="form-control nilai-input" min="0" max="100" required>
-              </td>
-            </tr>
-            <tr>
-              <td>7</td>
-              <td>
-                <div class="criteria-title">Kelayakan Tim Peneliti</div>
-                <div class="criteria-desc">Kemampuan dan kesiapan peneliti</div>
-              </td>
-              <td>
-                <input type="number" name="nilai_7" class="form-control nilai-input" min="0" max="100" required>
-              </td>
-            </tr>
-            <tr class="table-info">
-              <td colspan="2" class="text-end"><strong>Rata-rata Nilai:</strong></td>
-              <td><strong id="total">0</strong></td>
-            </tr>
-          </tbody>
+        <table>
+          <tr>
+            <th style="width: 60%">Komponen Penilaian</th>
+            <th style="width: 40%">Nilai (0-100)</th>
+          </tr>
+          <tr>
+            <td>
+              <div class="criteria-title">1. Latar Belakang dan Rumusan Masalah</div>
+              <div class="criteria-desc">Kejelasan latar belakang dan rumusan masalah penelitian</div>
+            </td>
+            <td>
+              <input type="number" name="nilai_1" min="0" max="100" required value="{{ old('nilai_1') }}">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="criteria-title">2. Tinjauan Pustaka</div>
+              <div class="criteria-desc">Relevansi dan kebaruan referensi yang digunakan</div>
+            </td>
+            <td>
+              <input type="number" name="nilai_2" min="0" max="100" required value="{{ old('nilai_2') }}">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="criteria-title">3. Metodologi</div>
+              <div class="criteria-desc">Kesesuaian metodologi dengan tujuan penelitian</div>
+            </td>
+            <td>
+              <input type="number" name="nilai_3" min="0" max="100" required value="{{ old('nilai_3') }}">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="criteria-title">4. Kontribusi Penelitian</div>
+              <div class="criteria-desc">Potensi kontribusi penelitian terhadap bidang terkait</div>
+            </td>
+            <td>
+              <input type="number" name="nilai_4" min="0" max="100" required value="{{ old('nilai_4') }}">
+            </td>
+          </tr>
         </table>
 
-        <button type="submit" class="submit-btn" {{ $mahasiswa->isEmpty() ? 'disabled' : '' }}>
-          Simpan Penilaian
-        </button>
+        <button type="submit" class="submit-btn">Simpan Nilai</button>
       </form>
     </div>
   </div>

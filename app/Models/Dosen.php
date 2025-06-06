@@ -40,21 +40,23 @@ class Dosen extends Model
 
     public function mahasiswaPembimbing()
     {
-        return $this->hasMany(Mahasiswa::class, 'pembimbing');
+        return $this->belongsToMany(Mahasiswa::class, 'pembimbing', 'id_dosen', 'id_mahasiswa')
+                    ->withPivot('status', 'jenis_pembimbing');
     }
 
     public function mahasiswaPenguji()
     {
-        return $this->hasMany(Mahasiswa::class, 'penguji');
+        return $this->belongsToMany(Mahasiswa::class, 'penguji', 'id_dosen', 'id_mahasiswa')
+                    ->withPivot('status', 'jenis_penguji');
     }
 
-public function usulanPembimbing1()
-{
-    return $this->hasMany(UsulDospem::class, 'id_dosen_1');
-}
+    public function usulanPembimbing1()
+    {
+        return $this->hasMany(UsulDospem::class, 'id_dosen_1');
+    }
 
-public function usulanPembimbing2()
-{
-    return $this->hasMany(UsulDospem::class, 'id_dosen_2');
-}
+    public function usulanPembimbing2()
+    {
+        return $this->hasMany(UsulDospem::class, 'id_dosen_2');
+    }
 }

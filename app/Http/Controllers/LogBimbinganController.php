@@ -17,18 +17,19 @@ class LogBimbinganController extends Controller
     {
         // Ambil data mahasiswa yang login
         $mahasiswa = Mahasiswa::where('user_id', Auth::id())->first();
-        // dd($mahasiswa);
 
-        // Ambil daftar dosen pembimbing
-        $dosen = Dosen::all();
-        
-        // Ambil daftar dosen pembimbing
-        $dosen = Dosen::all();
+        // Ambil daftar dosen pembimbing yang terkait dengan mahasiswa
+        $dosen = Dosen::whereHas('mahasiswaPembimbing', function($query) use ($mahasiswa) {
+            $query->where('pembimbing.id_mahasiswa', $mahasiswa->id)
+                  ->where('pembimbing.status', 'aktif');
+        })->get();
+
         // Ambil riwayat log bimbingan dengan pagination
         $logs = LogBimbingan::where('id_user', Auth::id())
             ->with('dosen')
             ->orderBy('tanggal', 'desc')
             ->paginate(10);
+
         return view('logBimbingan', compact('mahasiswa', 'dosen', 'logs'));
     }
 
@@ -46,6 +47,18 @@ class LogBimbinganController extends Controller
         // Ambil ID mahasiswa dari user yang login
         $mahasiswa = Mahasiswa::where('user_id', Auth::id())->first();
 
+        // Validasi bahwa dosen yang dipilih adalah pembimbing mahasiswa
+        $isValidDosen = $mahasiswa->dosenPembimbing()
+            ->where('dosen.id', $request->id_dosen)
+            ->where('pembimbing.status', 'aktif')
+            ->exists();
+
+        if (!$isValidDosen) {
+            return redirect()->back()
+                ->with('error', 'Dosen yang dipilih bukan pembimbing Anda!')
+                ->withInput();
+        }
+
         LogBimbingan::create([
             'id_user' => Auth::id(),
             'id_dosen' => $request->id_dosen,
@@ -59,15 +72,41 @@ class LogBimbinganController extends Controller
     }
 
     /**
-     * Menampilkan riwayat log bimbingan
+     * Menampilkan daftar log bimbingan untuk dosen
      */
-    public function index()
+    public function dosenIndex()
     {
-        $logs = LogBimbingan::where('id_user', Auth::id())
-            ->with('dosen')
+        // Ambil data dosen yang login
+        $dosen = Dosen::where('user_id', Auth::id())->first();
+
+        // Ambil log bimbingan yang perlu dinilai
+        $logs = LogBimbingan::where('id_dosen', $dosen->id)
+            ->with(['user.mahasiswa'])
             ->orderBy('tanggal', 'desc')
             ->paginate(10);
 
-        return view('log-bimbingan.index', compact('logs'));
+        return view('dosen.logBimbingan', compact('logs'));
+    }
+
+    /**
+     * Menyimpan nilai untuk log bimbingan
+     */
+    public function nilaiStore(Request $request, $id)
+    {
+        $request->validate([
+            'nilai' => 'required|integer|min:0|max:100'
+        ]);
+
+        $dosen = Dosen::where('user_id', Auth::id())->first();
+        $logBimbingan = LogBimbingan::where('id', $id)
+            ->where('id_dosen', $dosen->id)
+            ->firstOrFail();
+
+        $logBimbingan->update([
+            'nilai' => $request->nilai
+        ]);
+
+        return redirect()->route('dosen.log-bimbingan')
+            ->with('success', 'Nilai berhasil disimpan!');
     }
 }

@@ -50,7 +50,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h3 class="mb-0">{{ $logs->where('status', 'approved')->count() }}</h3>
+                            <h3 class="mb-0">{{ $logs->whereNotNull('nilai')->count() }}</h3>
                             <div>Disetujui</div>
                         </div>
                         <div>
@@ -65,7 +65,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h3 class="mb-0">{{ $logs->where('status', 'pending')->count() }}</h3>
+                            <h3 class="mb-0">{{ $logs->whereNull('nilai')->count() }}</h3>
                             <div>Menunggu</div>
                         </div>
                         <div>
@@ -161,12 +161,10 @@
                                 <td>{{ $log->nama_dosen }}</td>
                                 <td>{{ $log->catatan }}</td>
                                 <td>
-                                    @if($log->status === 'approved')
+                                    @if($log->nilai !== null)
                                         <span class="badge bg-success">Disetujui</span>
-                                    @elseif($log->status === 'pending')
-                                        <span class="badge bg-warning">Menunggu</span>
                                     @else
-                                        <span class="badge bg-secondary">-</span>
+                                        <span class="badge bg-warning">Menunggu</span>
                                     @endif
                                 </td>
                             </tr>
