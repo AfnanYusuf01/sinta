@@ -361,117 +361,119 @@
     </section><!-- /Tugas Akhir Section -->
 
     <!-- Services Section -->
-<section id="services" class="services section light-background">
-  <div class="container section-title" data-aos="fade-up">
-    <span>Layanan</span>
-    <h2>Layanan SINTA</h2>
-    <p>Berbagai fasilitas yang disediakan untuk mendukung proses penyelesaian Tugas Akhir</p>
-  </div>
+    <section id="services" class="services section light-background">
+      <div class="container section-title" data-aos="fade-up">
+        <span>Layanan</span>
+        <h2>Layanan SINTA</h2>
+        <p>Berbagai fasilitas yang disediakan untuk mendukung proses penyelesaian Tugas Akhir</p>
+      </div>
 
-  <div class="container">
-    <div class="row gy-4">
+      <div class="container">
+        <div class="row gy-4">
 
-      <!-- Pengajuan Pembimbing - Tidak tampil untuk Dosen -->
-      @auth
-        @if (Auth::user()->role !== 'dosen')
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-person-lines-fill"></i>
+          <!-- Pengajuan Pembimbing - Tidak tampil untuk Dosen -->
+          @auth
+            @if (Auth::user()->role !== 'dosen')
+              <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="service-item position-relative">
+                  <div class="icon">
+                    <i class="bi bi-person-lines-fill"></i>
+                  </div>
+                  <h3>Pengajuan Pembimbing</h3>
+                  <p>Pengajuan dosen pembimbing Tugas Akhir secara online dengan tracking status real-time</p>
+                  <a href="{{ route('pengajuanpembimbing') }}" class="stretched-link"></a>
+                </div>
               </div>
-              <h3>Pengajuan Pembimbing</h3>
-              <p>Pengajuan dosen pembimbing Tugas Akhir secara online dengan tracking status real-time</p>
-              <a href="{{ route('pengajuanpembimbing') }}" class="stretched-link"></a>
-            </div>
-          </div>
-        @endif
-      @endauth
+            @endif
+          @endauth
 
-      @auth
-        @if (Auth::user()->role !== 'dosen')
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-calendar-check"></i>
+          @auth
+            @if (Auth::user()->role !== 'dosen')
+              <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="service-item position-relative">
+                  <div class="icon">
+                    <i class="bi bi-calendar-check"></i>
+                  </div>
+                  <h3>Pendaftaran</h3>
+                  <p>Registrasi seminar proposal dan penjadwalan presentasi Tugas Akhir</p>
+                  <a href="{{ route('pendaftaranproposal') }}" class="stretched-link"></a>
+                </div>
               </div>
-              <h3>Pendaftaran</h3>
-              <p>Registrasi seminar proposal dan penjadwalan presentasi Tugas Akhir</p>
-              <a href="{{ route('pendaftaranproposal') }}" class="stretched-link"></a>
-            </div>
-          </div>
-        @endif
-      @endauth
+            @endif
+          @endauth
 
-      <!-- Log Bimbingan - Tidak tampil untuk Dosen -->
-      @auth
-        @if (Auth::user()->role !== 'dosen')
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-journal-text"></i>
+          <!-- Log Bimbingan - Untuk Dosen dan Mahasiswa -->
+          @auth
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+              <div class="service-item position-relative">
+                <div class="icon">
+                  <i class="bi bi-journal-text"></i>
+                </div>
+                <h3>Log Bimbingan</h3>
+                <p>Pencatatan kegiatan bimbingan antara mahasiswa dan dosen pembimbing</p>
+                @if (Auth::user()->role === 'dosen')
+                  <a href="{{ route('dosen.log-bimbingan') }}" class="stretched-link"></a>
+                @else
+                  <a href="{{ route('log-bimbingan.create') }}" class="stretched-link"></a>
+                @endif
               </div>
-              <h3>Log Bimbingan</h3>
-              <p>Pencatatan kegiatan bimbingan antara mahasiswa dan dosen pembimbing</p>
-              <a href="{{ route('log-bimbingan.create') }}" class="stretched-link"></a>
             </div>
-          </div>
-        @endif
-      @endauth
+          @endauth
 
-      <!-- Penilaian Dosen - Tampil hanya untuk Dosen -->
-      @auth
-        @if (Auth::user()->role === 'dosen')
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-file-earmark-check"></i>
+          <!-- Penilaian Dosen - Tampil hanya untuk Dosen -->
+          @auth
+            @if (Auth::user()->role === 'dosen')
+              <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                <div class="service-item position-relative">
+                  <div class="icon">
+                    <i class="bi bi-file-earmark-check"></i>
+                  </div>
+                  <h3>Penilaian Dosen</h3>
+                  <p>Sistem penilaian online oleh dosen pembimbing dan penguji</p>
+                  <a href="{{ url('/dosen/penilaiandosen') }}" class="stretched-link penilaian-dosen-link"></a>
+                </div>
               </div>
-              <h3>Penilaian Dosen</h3>
-              <p>Sistem penilaian online oleh dosen pembimbing dan penguji</p>
-              <a href="{{ url('/dosen/penilaiandosen') }}" class="stretched-link penilaian-dosen-link"></a>
-            </div>
-          </div>
 
+              <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+                <div class="service-item position-relative">
+                  <div class="icon">
+                    <i class="bi bi-file-text"></i>
+                  </div>
+                  <h3>Persetujuan Proposal</h3>
+                  <p>Persetujuan proposal tugas akhir mahasiswa bimbingan</p>
+                  <a href="{{ route('dosen.proposal-approval') }}" class="stretched-link"></a>
+                </div>
+              </div>
+            @endif
+          @endauth
+
+          <!-- Template Dokumen -->
           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+            <div class="service-item position-relative">
+              <div class="icon">
+                <i class="bi bi-file-earmark-pdf"></i>
+              </div>
+              <h3>Template Dokumen</h3>
+              <p>Download template proposal, laporan, dan dokumen pendukung Tugas Akhir</p>
+              <a href="{{ url('/templateTA') }}" class="stretched-link"></a>
+            </div>
+          </div>
+
+          <!-- SK Pembimbing/Penguji -->
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
             <div class="service-item position-relative">
               <div class="icon">
                 <i class="bi bi-file-text"></i>
               </div>
-              <h3>Persetujuan Proposal</h3>
-              <p>Persetujuan proposal tugas akhir mahasiswa bimbingan</p>
-              <a href="{{ route('dosen.proposal-approval') }}" class="stretched-link"></a>
+              <h3>SK Pembimbing/Penguji</h3>
+              <p>Pengunduhan Surat Keputusan Pembimbing dan Penguji Tugas Akhir</p>
+              <a href="{{ url('/skPembimbing') }}" class="stretched-link"></a>
             </div>
           </div>
-        @endif
-      @endauth
 
-      <!-- Template Dokumen -->
-      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
-        <div class="service-item position-relative">
-          <div class="icon">
-            <i class="bi bi-file-earmark-pdf"></i>
-          </div>
-          <h3>Template Dokumen</h3>
-          <p>Download template proposal, laporan, dan dokumen pendukung Tugas Akhir</p>
-          <a href="{{ url('/templateTA') }}" class="stretched-link"></a>
         </div>
       </div>
-
-      <!-- SK Pembimbing/Penguji -->
-      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
-        <div class="service-item position-relative">
-          <div class="icon">
-            <i class="bi bi-file-text"></i>
-          </div>
-          <h3>SK Pembimbing/Penguji</h3>
-          <p>Pengunduhan Surat Keputusan Pembimbing dan Penguji Tugas Akhir</p>
-          <a href="{{ url('/skPembimbing') }}" class="stretched-link"></a>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section><!-- /Services Section -->
+    </section><!-- /Services Section -->
 
     <!-- Contact Section -->
     <section id="contact" class="contact section">

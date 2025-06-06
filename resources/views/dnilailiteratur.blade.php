@@ -22,8 +22,9 @@
         <h2 class="mb-0">
           {{ $nilaiLiteratur->groupBy('id_mahasiswa')->filter(function($group) {
             $avgNilai = $group->avg(function($nilai) {
-              return ($nilai->nilai_pemahaman + $nilai->nilai_analisis + 
-                      $nilai->nilai_sintesis + $nilai->nilai_kesimpulan) / 4;
+              return ($nilai->nilai_pemahaman + $nilai->nilai_analisis +
+                      $nilai->nilai_sintesis + $nilai->nilai_metodologi +
+                      $nilai->nilai_penulisan + $nilai->nilai_referensi) / 6;
             });
             return $avgNilai >= 70;
           })->count() }}
@@ -38,8 +39,9 @@
         <h2 class="mb-0">
           {{ $nilaiLiteratur->groupBy('id_mahasiswa')->filter(function($group) {
             $avgNilai = $group->avg(function($nilai) {
-              return ($nilai->nilai_pemahaman + $nilai->nilai_analisis + 
-                      $nilai->nilai_sintesis + $nilai->nilai_kesimpulan) / 4;
+              return ($nilai->nilai_pemahaman + $nilai->nilai_analisis +
+                      $nilai->nilai_sintesis + $nilai->nilai_metodologi +
+                      $nilai->nilai_penulisan + $nilai->nilai_referensi) / 6;
             });
             return $avgNilai < 70;
           })->count() }}
@@ -53,8 +55,9 @@
         <h5 class="card-title">Rata-rata Nilai</h5>
         <h2 class="mb-0">
           {{ number_format($nilaiLiteratur->avg(function($nilai) {
-            return ($nilai->nilai_pemahaman + $nilai->nilai_analisis + 
-                    $nilai->nilai_sintesis + $nilai->nilai_kesimpulan) / 4;
+            return ($nilai->nilai_pemahaman + $nilai->nilai_analisis +
+                    $nilai->nilai_sintesis + $nilai->nilai_metodologi +
+                    $nilai->nilai_penulisan + $nilai->nilai_referensi) / 6;
           }), 2) }}
         </h2>
       </div>
@@ -90,34 +93,36 @@
           @foreach($nilaiLiteratur->groupBy('id_mahasiswa') as $idMahasiswa => $nilaiGroup)
           @php
               $mahasiswa = $nilaiGroup->first()->mahasiswa;
-              
+
               // Get pembimbing information from pembimbing table
               $pembimbing = $mahasiswa->pembimbing()->where('status', 'aktif')->get();
               $pembimbing1 = $pembimbing->where('jenis_pembimbing', 1)->first();
               $pembimbing2 = $pembimbing->where('jenis_pembimbing', 2)->first();
-              
+
               // Get nilai for each pembimbing
               $nilaiP1 = $nilaiGroup->where('id_dosen', optional($pembimbing1)->id_dosen)->first();
               $nilaiP2 = $nilaiGroup->where('id_dosen', optional($pembimbing2)->id_dosen)->first();
-              
+
               // Calculate average scores
               $totalNilai = 0;
               $pembimbingCount = 0;
-              
+
               if ($nilaiP1) {
-                  $nilaiP1Avg = ($nilaiP1->nilai_pemahaman + $nilaiP1->nilai_analisis + 
-                             $nilaiP1->nilai_sintesis + $nilaiP1->nilai_kesimpulan) / 4;
+                  $nilaiP1Avg = ($nilaiP1->nilai_pemahaman + $nilaiP1->nilai_analisis +
+                             $nilaiP1->nilai_sintesis + $nilaiP1->nilai_metodologi +
+                             $nilaiP1->nilai_penulisan + $nilaiP1->nilai_referensi) / 6;
                   $totalNilai += $nilaiP1Avg;
                   $pembimbingCount++;
               }
-              
+
               if ($nilaiP2) {
-                  $nilaiP2Avg = ($nilaiP2->nilai_pemahaman + $nilaiP2->nilai_analisis + 
-                             $nilaiP2->nilai_sintesis + $nilaiP2->nilai_kesimpulan) / 4;
+                  $nilaiP2Avg = ($nilaiP2->nilai_pemahaman + $nilaiP2->nilai_analisis +
+                             $nilaiP2->nilai_sintesis + $nilaiP2->nilai_metodologi +
+                             $nilaiP2->nilai_penulisan + $nilaiP2->nilai_referensi) / 6;
                   $totalNilai += $nilaiP2Avg;
                   $pembimbingCount++;
               }
-              
+
               $avgNilai = $pembimbingCount > 0 ? $totalNilai / $pembimbingCount : 0;
           @endphp
           <tr>
@@ -168,7 +173,7 @@
             </td>
             <td class="text-center">
               <button class="btn btn-sm btn-danger" onclick="showNilaiLiteratur([
-                {{ $nilaiP1 ? $nilaiP1->id : 'null' }}, 
+                {{ $nilaiP1 ? $nilaiP1->id : 'null' }},
                 {{ $nilaiP2 ? $nilaiP2->id : 'null' }}
               ])">
                 <i class="fas fa-eye"></i>
@@ -328,8 +333,9 @@
       let pembimbingCount = 0;
 
       validResponses.forEach((nilai, index) => {
-        const nilaiAvg = (nilai.nilai_pemahaman + nilai.nilai_analisis + 
-                         nilai.nilai_sintesis + nilai.nilai_kesimpulan) / 4;
+        const nilaiAvg = (nilai.nilai_pemahaman + nilai.nilai_analisis +
+                         nilai.nilai_sintesis + nilai.nilai_metodologi +
+                         nilai.nilai_penulisan + nilai.nilai_referensi) / 6;
         totalNilai += nilaiAvg;
         pembimbingCount++;
 
@@ -356,8 +362,16 @@
                     <td class="text-center">${nilai.nilai_sintesis}</td>
                   </tr>
                   <tr>
-                    <td>4. Kesimpulan</td>
-                    <td class="text-center">${nilai.nilai_kesimpulan}</td>
+                    <td>4. Metodologi Review</td>
+                    <td class="text-center">${nilai.nilai_metodologi}</td>
+                  </tr>
+                  <tr>
+                    <td>5. Penulisan dan Organisasi</td>
+                    <td class="text-center">${nilai.nilai_penulisan}</td>
+                  </tr>
+                  <tr>
+                    <td>6. Kualitas Referensi</td>
+                    <td class="text-center">${nilai.nilai_referensi}</td>
                   </tr>
                   <tr class="table-light fw-bold">
                     <td>Rata-rata</td>
@@ -379,7 +393,7 @@
 
       const finalAvg = pembimbingCount > 0 ? totalNilai / pembimbingCount : 0;
       document.getElementById('finalScore').textContent = finalAvg.toFixed(2);
-      
+
       const finalStatus = document.getElementById('finalStatus');
       if (finalAvg >= 70) {
         finalStatus.className = 'badge bg-success';
