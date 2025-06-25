@@ -68,10 +68,10 @@
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
     <h2 class="mb-0">Nilai Literatur Review</h2>
-    <button class="btn btn-primary">
+    {{-- <button class="btn btn-primary">
       <i class="fas fa-download me-1"></i>
       Export
-    </button>
+    </button> --}}
   </div>
 
   <div class="card-body">

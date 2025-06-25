@@ -443,56 +443,61 @@
         <tr>
             <td>1</td>
           <td>
-              <div class="criteria-title">Penguasaan Dasar Teori</div>
-              <div class="criteria-desc">Pemahaman konsep dasar dan teori yang relevan dengan topik</div>
+              <div class="criteria-title">Pemilihan Tema</div>
+              <div class="criteria-desc">- Kemampuan memilih dan menjustifikasiTema yang akan diangkat dari sisi Latar Belakang dan Rumusan Masalah</div>
+              <div class="criteria-desc">- Nilai Maksimal : 15</div>
           </td>
             <td><input type="number" name="nilai_1" class="form-control" min="0" max="100" required></td>
         </tr>
         <tr>
             <td>2</td>
           <td>
-              <div class="criteria-title">Tingkat Penguasaan Materi</div>
-              <div class="criteria-desc">Pemahaman mendalam tentang materi yang diteliti</div>
+              <div class="criteria-title">Pertanyaan Penelitian</div>
+              <div class="criteria-desc">- Cara menyajikan pertanyaan penelitian/ problem statement untuk membangun Rumusan Masalah dan Tujuan</div>
+              <div class="criteria-desc">- Nilai Maksimal : 15</div>
           </td>
             <td><input type="number" name="nilai_2" class="form-control" min="0" max="100" required></td>
         </tr>
         <tr>
             <td>3</td>
           <td>
-              <div class="criteria-title">Tinjauan Pustaka</div>
-              <div class="criteria-desc">Kualitas dan relevansi referensi yang digunakan</div>
+              <div class="criteria-title">Kajian Pustaka</div>
+              <div class="criteria-desc">- Ide/gagasan/strategi untuk menyelesaikan masalah</div>
+              <div class="criteria-desc">- Nilai Maksimal : 10</div>
           </td>
             <td><input type="number" name="nilai_3" class="form-control" min="0" max="100" required></td>
         </tr>
         <tr>
             <td>4</td>
           <td>
-              <div class="criteria-title">Kontribusi Praktis</div>
-              <div class="criteria-desc">Manfaat praktis dari hasil penelitian</div>
+              <div class="criteria-desc">- Justifikasi pemilihan model/metode/teori baik model simulasi,komputasi atau model pembangunan aplikasi / perangkat lunak dengan melakukan studi literatur</div>
+              <div class="criteria-desc">- Nilai Maksimal : 10</div>
           </td>
             <td><input type="number" name="nilai_4" class="form-control" min="0" max="100" required></td>
         </tr>
         <tr>
             <td>5</td>
           <td>
-              <div class="criteria-title">Kontribusi Teoritis</div>
-              <div class="criteria-desc">Kontribusi terhadap pengembangan ilmu pengetahuan</div>
+              <div class="criteria-title">Rencana Implementasi / Simulasi/ Komputasi</div>
+              <div class="criteria-desc">Penjelasan tentang bagaimana membangun Implementasi / Simulasi / Komputasi yang diturunkan dari pemodelan</div>
+              <div class="criteria-desc">- Nilai Maksimal : 10</div>
           </td>
             <td><input type="number" name="nilai_5" class="form-control" min="0" max="100" required></td>
         </tr>
         <tr>
             <td>6</td>
             <td>
-              <div class="criteria-title">Teknik Penulisan</div>
-              <div class="criteria-desc">Kualitas penulisan dan penyajian hasil penelitian</div>
+              <div class="criteria-title">Expert Judgement</div>
+              <div class="criteria-desc">Kemandirian mahasiswa dalam penyusunan proposal</div>
+              <div class="criteria-desc">- Nilai Maksimal : 20</div>
             </td>
             <td><input type="number" name="nilai_6" class="form-control" min="0" max="100" required></td>
         </tr>
         <tr>
             <td>7</td>
             <td>
-              <div class="criteria-title">Format Penulisan</div>
-              <div class="criteria-desc">Kesesuaian dengan format dan panduan penulisan</div>
+              <div class="criteria-desc">Proses bimbingan</div>
+              <div class="criteria-desc">- Nilai Maksimal : 20</div>
             </td>
             <td><input type="number" name="nilai_7" class="form-control" min="0" max="100" required></td>
         </tr>

@@ -88,16 +88,38 @@
             cursor: pointer;
             text-decoration: underline;
         }
+
+            /* Style untuk tombol kembali ke beranda (warna abu-abu) */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            margin: 20px;
+            background-color: #f8f9fa; /* Warna abu-abu muda */
+            color: #495057; /* Warna teks abu-abu gelap */
+            border: 1px solid #dee2e6; /* Border abu-abu */
+            border-radius: 30px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <a href="{{ url('/') }}" class="back-button">
+                    <i class="fas fa-arrow-left me-1"></i> Kembali ke Beranda
+                </a>
+            </div>
+    <div class="container">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="mb-0"><i class="fas fa-file-signature me-2"></i>Persetujuan Proposal Mahasiswa</h4>
-                <a href="{{ url('/') }}" class="btn btn-light">
-                    <i class="fas fa-arrow-left me-2"></i>Kembali ke Beranda
-                </a>
             </div>
             <div class="card-body">
                 @if(session('success'))

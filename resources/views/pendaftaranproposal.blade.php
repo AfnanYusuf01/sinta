@@ -1,382 +1,510 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Form Pendaftaran Proposal</title>
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    :root {
-      --primary-color: #E30613;
-      --primary-light: rgba(227, 6, 19, 0.1);
-      --primary-lighter: rgba(227, 6, 19, 0.05);
-      --primary-dark: #c00511;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Pendaftaran Proposal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #E30613;
+            --primary-dark: #c00511;
+            --primary-light: #FF6B74;
+            --secondary: #1A1A2E;
+            --text-dark: #2D3748;
+            --text-light: #FFFFFF;
+            --bg-light: #F8F9FA;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f8f9fa;
-      color: #333;
-      line-height: 1.6;
-    }
+        body {
+            font-family: 'Segoe UI', 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            padding: 5px;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(227, 6, 19, 0.05) 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, rgba(227, 6, 19, 0.05) 0%, transparent 25%);
+        }
 
-    .container {
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-      border-top: 4px solid var(--primary-color);
-    }
+        /* Style untuk tombol kembali ke beranda (warna abu-abu) */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            margin: 20px;
+            background-color: #f8f9fa; /* Warna abu-abu muda */
+            color: #495057; /* Warna teks abu-abu gelap */
+            border: 1px solid #dee2e6; /* Border abu-abu */
+            border-radius: 30px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
 
-    .back-button {
-      display: inline-flex;
-      align-items: center;
-      color: var(--primary-color);
-      text-decoration: none;
-      margin-bottom: 1.5rem;
-      font-weight: 500;
-      transition: all 0.3s;
-    }
+        .back-button i {
+            margin-right: 8px;
+            transition: var(--transition);
+            color: #6c757d; /* Warna icon abu-abu */
+        }
 
-    .back-button:hover {
-      color: var(--primary-dark);
-      transform: translateX(-3px);
-    }
+        .back-button:hover {
+            background-color: #e9ecef; /* Warna abu-abu sedikit lebih gelap saat hover */
+            color: #212529;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: #ced4da;
+        }
 
-    .back-button i {
-      margin-right: 8px;
-    }
+        .back-button:hover i {
+            transform: translateX(-3px);
+            color: #495057;
+        }
 
-    .form-header {
-      margin-bottom: 2rem;
-      text-align: center;
-      position: relative;
-      padding-bottom: 1rem;
-    }
+        .status-card {
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 25px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
 
-    .form-header h1 {
-      color: var(--primary-color);
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
+        .status-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+        }
 
-    .form-header::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 3px;
-      background-color: var(--primary-color);
-    }
+        .status-waiting {
+            background-color: #FFF3CD;
+            border-left: 5px solid #FFC107;
+        }
 
-    .subtitle {
-      color: #666;
-      font-size: 0.9rem;
-    }
+        .status-approved {
+            background-color: #D1E7DD;
+            border-left: 5px solid #198754;
+        }
 
-    form {
-      margin-top: 2rem;
-    }
+        .status-rejected {
+            background-color: #F8D7DA;
+            border-left: 5px solid #DC3545;
+        }
 
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-      color: #444;
-    }
+        .status-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
 
-    label.required::after {
-      content: ' *';
-      color: var(--primary-color);
-    }
+        .status-title {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
 
-    textarea, select {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      margin-bottom: 1.5rem;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 1rem;
-      transition: all 0.3s;
-    }
+        .form-container {
+            max-width: 600px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+        }
 
-    textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+        }
 
-    textarea:focus, select:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.15);
-    }
+        .form-header {
+            padding: 25px 30px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
 
-    .submit-btn {
-      background-color: var(--primary-color);
-      color: white;
-      border: none;
-      padding: 0.75rem 2rem;
-      font-size: 1rem;
-      font-weight: 500;
-      border-radius: 6px;
-      cursor: pointer;
-      width: 100%;
-      transition: all 0.3s;
-      margin-top: 1rem;
-    }
+        .form-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-    .submit-btn:hover {
-      background-color: var(--primary-dark);
-      transform: translateY(-2px);
-    }
+        .form-header p {
+            margin: 8px 0 0;
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
 
-    .alert {
-      padding: 1rem;
-      border-radius: 8px;
-      margin-bottom: 1.5rem;
-    }
+        .form-body {
+            padding: 25px 30px;
+        }
 
-    .alert-success {
-      background-color: rgba(25, 135, 84, 0.1);
-      border-left: 4px solid #198754;
-    }
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-    .alert-danger {
-      background-color: rgba(220, 53, 69, 0.1);
-      border-left: 4px solid #dc3545;
-    }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-    .status-card {
-      padding: 1.5rem;
-      border-radius: 8px;
-      margin-bottom: 2rem;
-      background-color: #fff;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
+        .input-wrapper {
+            position: relative;
+        }
 
-    .status-card i {
-      margin-right: 8px;
-      font-size: 1.2rem;
-    }
+        .input-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #718096;
+        }
 
-    .status-waiting {
-      border-left: 4px solid #ffc107;
-    }
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
 
-    .status-approved {
-      border-left: 4px solid #28a745;
-    }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.1);
+        }
 
-    .status-rejected {
-      border-left: 4px solid #dc3545;
-    }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
 
-    .dosen-info {
-      background-color: #f8f9fa;
-      padding: 1rem;
-      border-radius: 6px;
-      margin-top: 1rem;
-    }
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(227, 6, 19, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
 
-    .dosen-info h5 {
-      color: #333;
-      margin-bottom: 0.5rem;
-    }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(227, 6, 19, 0.3);
+        }
 
-    .dosen-info p {
-      margin-bottom: 0.5rem;
-    }
+        .form-footer {
+            margin-top: 30px;
+        }
 
-    .dosen-info strong {
-      color: #555;
-    }
+        .dosen-info {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
 
-    .form-disabled {
-      opacity: 0.6;
-      pointer-events: none;
-    }
+        .dosen-info h5 {
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
 
-    @media (max-width: 768px) {
-      .container {
-        padding: 1.5rem;
-        margin: 1rem;
-      }
-    }
-  </style>
+        .dosen-info p {
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                margin: 15px;
+            }
+            
+            .form-header, .form-body {
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <a href="{{ url('/') }}" class="back-button">
-      <i class="fas fa-arrow-left"></i> Kembali ke Beranda
-    </a>
-
-    @if(session('success'))
-      <div class="alert alert-success">
-        <i class="fas fa-check-circle me-2"></i>
-        {{ session('success') }}
-      </div>
-    @endif
-
-    @if(session('error'))
-      <div class="alert alert-danger">
-        <i class="fas fa-exclamation-circle me-2"></i>
-        {{ session('error') }}
-      </div>
-    @endif
-
-    @if(isset($pendaftaran))
-      @if($pendaftaran->status == 'menunggu')
-        <div class="status-card status-waiting">
-          <div class="d-flex align-items-center">
-            <div class="status-icon text-warning me-3">
-              <i class="fas fa-clock"></i>
+    <div class="container">
+        <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <a href="{{ url('/') }}" class="back-button">
+                    <i class="fas fa-arrow-left me-1"></i> Kembali ke Beranda
+                </a>
             </div>
-            <div>
-              <h3 class="status-title">Menunggu Persetujuan</h3>
-              <p>Pendaftaran proposal Anda sedang dalam proses peninjauan oleh dosen pembimbing.</p>
-              <p><strong>Judul TA:</strong> {{ $pendaftaran->judul_ta }}</p>
-              <p><strong>Abstrak:</strong> {{ $pendaftaran->abstrak }}</p>
-              <p><strong>Diajukan pada:</strong> {{ $pendaftaran->created_at->format('d F Y H:i') }}</p>
-
-              <div class="dosen-info mt-3">
-                <h5>Dosen Pembimbing 1</h5>
-                <p><strong>Nama:</strong> {{ $pendaftaran->dosen1->nama }}</p>
-                <p><strong>NIDN:</strong> {{ $pendaftaran->dosen1->nidn }}</p>
-              </div>
-
-              @if($pendaftaran->dosen2)
-                <div class="dosen-info mt-3">
-                  <h5>Dosen Pembimbing 2</h5>
-                  <p><strong>Nama:</strong> {{ $pendaftaran->dosen2->nama }}</p>
-                  <p><strong>NIDN:</strong> {{ $pendaftaran->dosen2->nidn }}</p>
-                </div>
-              @endif
-            </div>
-          </div>
         </div>
-      @elseif($pendaftaran->status == 'diterima')
-        <div class="status-card status-approved">
-          <div class="d-flex align-items-center">
-            <div class="status-icon text-success me-3">
-              <i class="fas fa-check-circle"></i>
+    </div>
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            <div>
-              <h3 class="status-title">Proposal Diterima</h3>
-              <p>Selamat! Proposal Anda telah disetujui oleh dosen pembimbing.</p>
-              <p><strong>Judul TA:</strong> {{ $pendaftaran->judul_ta }}</p>
-              <p><strong>Abstrak:</strong> {{ $pendaftaran->abstrak }}</p>
-              <p><strong>Disetujui pada:</strong> {{ $pendaftaran->updated_at->format('d F Y H:i') }}</p>
-
-              <div class="dosen-info mt-3">
-                <h5><i class="fas fa-user-graduate me-2"></i>Dosen Pembimbing 1</h5>
-                <p><strong>Nama:</strong> {{ $pendaftaran->dosen1->nama }}</p>
-                <p><strong>NIDN:</strong> {{ $pendaftaran->dosen1->nidn }}</p>
-              </div>
-
-              @if($pendaftaran->dosen2)
-                <div class="dosen-info mt-3">
-                  <h5><i class="fas fa-user-graduate me-2"></i>Dosen Pembimbing 2</h5>
-                  <p><strong>Nama:</strong> {{ $pendaftaran->dosen2->nama }}</p>
-                  <p><strong>NIDN:</strong> {{ $pendaftaran->dosen2->nidn }}</p>
-                </div>
-              @endif
-            </div>
-          </div>
-        </div>
-      @elseif($pendaftaran->status == 'ditolak')
-        <div class="status-card status-rejected">
-          <div class="d-flex align-items-center">
-            <div class="status-icon text-danger me-3">
-              <i class="fas fa-times-circle"></i>
-            </div>
-            <div>
-              <h3 class="status-title">Proposal Ditolak</h3>
-              <p>Mohon maaf, proposal Anda belum dapat disetujui. Silakan ajukan proposal baru dengan perbaikan yang diperlukan.</p>
-              <p><strong>Judul TA:</strong> {{ $pendaftaran->judul_ta }}</p>
-              <p><strong>Abstrak:</strong> {{ $pendaftaran->abstrak }}</p>
-              <p><strong>Ditolak pada:</strong> {{ $pendaftaran->updated_at->format('d F Y H:i') }}</p>
-            </div>
-          </div>
-        </div>
-      @endif
-    @endif
-
-    @if(!isset($pendaftaran) || $pendaftaran->status == 'ditolak')
-      <div class="form-header">
-        <h1><i class="fas fa-file-alt me-2"></i>Form Pendaftaran Proposal</h1>
-        <span class="subtitle">Fakultas Informatika</span>
-      </div>
-
-      <form action="{{ route('pendaftaranproposal.store') }}" method="POST">
-        @csrf
-
-        @if ($errors->any())
-          <div class="alert alert-danger">
-            <ul class="mb-0">
-              @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-              @endforeach
-            </ul>
-          </div>
         @endif
 
-        <div class="form-group">
-          <label for="judul_ta" class="required">
-            <i class="fas fa-heading"></i> Judul Tugas Akhir
-          </label>
-          <textarea id="judul_ta" name="judul_ta" rows="3" required placeholder="Masukkan judul tugas akhir Anda">{{ old('judul_ta') }}</textarea>
-        </div>
+        @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
 
-        <div class="form-group">
-          <label for="dosen1" class="required">
-            <i class="fas fa-user-graduate"></i> Dosen Pembimbing 1
-          </label>
-          <select id="dosen1" name="dosen1" required>
-            <option value="">-- Pilih Dosen Pembimbing 1 --</option>
-            @foreach($dosenList as $dosen)
-              <option value="{{ $dosen->id }}" {{ old('dosen1') == $dosen->id ? 'selected' : '' }}>
-                {{ $dosen->nama }} ({{ $dosen->nidn }})
-              </option>
-            @endforeach
-          </select>
-        </div>
+        <h1 class="text-center mb-4">Form Pendaftaran Proposal</h1>
 
-        <div class="form-group">
-          <label for="dosen2">
-            <i class="fas fa-user-graduate"></i> Dosen Pembimbing 2 (Opsional)
-          </label>
-          <select id="dosen2" name="dosen2">
-            <option value="">-- Pilih Dosen Pembimbing 2 --</option>
-            @foreach($dosenList as $dosen)
-              <option value="{{ $dosen->id }}" {{ old('dosen2') == $dosen->id ? 'selected' : '' }}>
-                {{ $dosen->nama }} ({{ $dosen->nidn }})
-              </option>
-            @endforeach
-          </select>
-        </div>
+        @if(isset($pendaftaran))
+            @if($pendaftaran->status == 'menunggu')
+                <div class="status-card status-waiting">
+                    <div class="d-flex align-items-center">
+                        <div class="status-icon text-warning me-3">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div>
+                            <h3 class="status-title">Menunggu Persetujuan</h3>
+                            <p>Pendaftaran proposal Anda sedang dalam proses peninjauan oleh dosen pembimbing.</p>
+                            <p><strong>Judul TA:</strong> {{ $pendaftaran->judul_ta }}</p>
+                            <p><strong>Abstrak:</strong> {{ $pendaftaran->abstrak }}</p>
+                            <p><strong>Diajukan pada:</strong> {{ $pendaftaran->created_at->format('d F Y H:i') }}</p>
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="dosen-info">
+                                        <h5>Dosen Pembimbing 1</h5>
+                                        <p><strong>Nama:</strong> {{ $pendaftaran->dosen1->nama }}</p>
+                                        <p><strong>NIDN:</strong> {{ $pendaftaran->dosen1->nidn }}</p>
+                                    </div>
+                                </div>
+                                @if($pendaftaran->dosen2)
+                                <div class="col-md-6">
+                                    <div class="dosen-info">
+                                        <h5>Dosen Pembimbing 2</h5>
+                                        <p><strong>Nama:</strong> {{ $pendaftaran->dosen2->nama }}</p>
+                                        <p><strong>NIDN:</strong> {{ $pendaftaran->dosen2->nidn }}</p>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @elseif($pendaftaran->status == 'diterima')
+                <div class="status-card status-approved">
+                    <div class="d-flex align-items-center">
+                        <div class="status-icon text-success me-3">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div>
+                            <h3 class="status-title">Proposal Diterima</h3>
+                            <p>Selamat! Proposal Anda telah disetujui oleh dosen pembimbing.</p>
+                            <p><strong>Judul TA:</strong> {{ $pendaftaran->judul_ta }}</p>
+                            <p><strong>Abstrak:</strong> {{ $pendaftaran->abstrak }}</p>
+                            <p><strong>Disetujui pada:</strong> {{ $pendaftaran->updated_at->format('d F Y H:i') }}</p>
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="dosen-info">
+                                        <h5>Dosen Pembimbing 1</h5>
+                                        <p><strong>Nama:</strong> {{ $pendaftaran->dosen1->nama }}</p>
+                                        <p><strong>NIDN:</strong> {{ $pendaftaran->dosen1->nidn }}</p>
+                                    </div>
+                                </div>
+                                @if($pendaftaran->dosen2)
+                                <div class="col-md-6">
+                                    <div class="dosen-info">
+                                        <h5>Dosen Pembimbing 2</h5>
+                                        <p><strong>Nama:</strong> {{ $pendaftaran->dosen2->nama }}</p>
+                                        <p><strong>NIDN:</strong> {{ $pendaftaran->dosen2->nidn }}</p>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @elseif($pendaftaran->status == 'ditolak')
+                <div class="status-card status-rejected">
+                    <div class="d-flex align-items-center">
+                        <div class="status-icon text-danger me-3">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div>
+                            <h3 class="status-title">Proposal Ditolak</h3>
+                            <p>Mohon maaf, proposal Anda belum dapat disetujui. Silakan ajukan proposal baru dengan perbaikan yang diperlukan.</p>
+                            <p><strong>Judul TA:</strong> {{ $pendaftaran->judul_ta }}</p>
+                            <p><strong>Abstrak:</strong> {{ $pendaftaran->abstrak }}</p>
+                            <p><strong>Ditolak pada:</strong> {{ $pendaftaran->updated_at->format('d F Y H:i') }}</p>
+                        </div>
+                    </div>
+                </div>
+            @endif
+        @endif
 
-        <div class="form-group">
-          <label for="abstrak" class="required">
-            <i class="fas fa-align-left"></i> Abstrak
-          </label>
-          <textarea id="abstrak" name="abstrak" rows="5" required placeholder="Masukkan abstrak proposal Anda">{{ old('abstrak') }}</textarea>
-        </div>
+        @if(!isset($pendaftaran) || $pendaftaran->status == 'ditolak')
+            <div class="form-container">
+                <div class="form-header">
+                    <h2><i class="fas fa-file-alt"></i> Form Pendaftaran Proposal</h2>
+                    @if(isset($pendaftaran) && $pendaftaran->status == 'ditolak')
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            Usulan sebelumnya ditolak. Silakan ajukan kembali dengan perbaikan yang diperlukan.
+                        </div>
+                    @else
+                        <p>Silakan lengkapi formulir berikut untuk mendaftarkan proposal tugas akhir Anda</p>
+                    @endif
+                </div>
+              
+                <div class="form-body">
+                    <form action="{{ route('pendaftaranproposal.store') }}" method="POST">
+                        @csrf
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        
+                        <div class="form-group">
+                            <label for="judul_ta">
+                                <i class="fas fa-heading"></i> Judul Tugas Akhir
+                            </label>
+                            <div class="input-wrapper">
+                                <textarea id="judul_ta" name="judul_ta" rows="3" required placeholder="Tuliskan judul tugas akhir Anda">{{ old('judul_ta', $pendaftaran->judul_ta ?? '') }}</textarea>
+                            </div>
+                        </div>
+                  
+                        <div class="form-group">
+                            <label for="dosen1">
+                                <i class="fas fa-chalkboard-teacher"></i> Dosen Pembimbing 1
+                            </label>
+                            <div class="input-wrapper">
+                                <select id="dosen1" name="dosen1" required>
+                                    <option value="">-- Pilih Dosen Pembimbing 1 --</option>
+                                    @foreach($dosenList as $dosen)
+                                        <option value="{{ $dosen->id }}" {{ old('dosen1', isset($pendaftaran) ? $pendaftaran->id_dosen_1 : '') == $dosen->id ? 'selected' : '' }}>
+                                            {{ $dosen->nama }} ({{ $dosen->nidn }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                  
+                        <div class="form-group">
+                            <label for="dosen2">
+                                <i class="fas fa-chalkboard-teacher"></i> Dosen Pembimbing 2 (Opsional)
+                            </label>
+                            <div class="input-wrapper">
+                                <select id="dosen2" name="dosen2">
+                                    <option value="">-- Pilih Dosen Pembimbing 2 --</option>
+                                    @foreach($dosenList as $dosen)
+                                        <option value="{{ $dosen->id }}" {{ old('dosen2', isset($pendaftaran) ? $pendaftaran->id_dosen_2 : '') == $dosen->id ? 'selected' : '' }}>
+                                            {{ $dosen->nama }} ({{ $dosen->nidn }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
 
-        <button type="submit" class="submit-btn">
-          <i class="fas fa-paper-plane me-2"></i>
-          Kirim Pengajuan
-        </button>
-      </form>
-    @endif
-  </div>
+                        <div class="form-group">
+                            <label for="abstrak">
+                                <i class="fas fa-align-left"></i> Abstrak
+                            </label>
+                            <div class="input-wrapper">
+                                <textarea id="abstrak" name="abstrak" rows="5" required placeholder="Tuliskan abstrak proposal Anda">{{ old('abstrak', $pendaftaran->abstrak ?? '') }}</textarea>
+                            </div>
+                        </div>
+                  
+                        <div class="form-footer">
+                            <button type="submit" class="submit-btn">
+                                <i class="fas fa-paper-plane"></i>
+                                {{ isset($pendaftaran) && $pendaftaran->status == 'ditolak' ? 'Kirim Ulang Proposal' : 'Kirim Proposal' }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        @else
+            <div class="alert alert-info">
+                <h4><i class="fas fa-info-circle"></i> Status Pendaftaran Proposal</h4>
+                <p>Anda sudah memiliki pendaftaran proposal dengan status: <strong>{{ ucfirst($pendaftaran->status) }}</strong></p>
+                <p>Silakan tunggu proses persetujuan dari dosen pembimbing.</p>
+            </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            <div class="card">
+                <div class="card-header">
+                    <h5>Detail Pendaftaran</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <th>Judul TA</th>
+                            <td>{{ $pendaftaran->judul_ta }}</td>
+                        </tr>
+                        <tr>
+                            <th>Abstrak</th>
+                            <td>{{ $pendaftaran->abstrak }}</td>
+                        </tr>
+                        <tr>
+                            <th>Pembimbing 1</th>
+                            <td>{{ $pendaftaran->dosen1->nama ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Pembimbing 2</th>
+                            <td>{{ $pendaftaran->dosen2->nama ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td>
+                                @if($pendaftaran->status == 'menunggu')
+                                    <span class="badge bg-warning">Menunggu</span>
+                                @elseif($pendaftaran->status == 'diterima')
+                                    <span class="badge bg-success">Diterima</span>
+                                @else
+                                    <span class="badge bg-danger">Ditolak</span>
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Tanggal Pengajuan</th>
+                            <td>{{ $pendaftaran->created_at->format('d/m/Y H:i') }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        @endif
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

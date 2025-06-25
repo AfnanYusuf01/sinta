@@ -16,9 +16,9 @@
             </nav>
         </div>
         <div class="d-flex gap-2">
-            <button class="btn btn-primary" onclick="exportToExcel()">
+            {{-- <button class="btn btn-primary" onclick="exportToExcel()">
                 <i class="fas fa-download me-2"></i>Export Data
-            </button>
+            </button> --}}
             <button class="btn btn-success" onclick="refreshData()">
                 <i class="fas fa-sync-alt me-2"></i>Refresh
             </button>
@@ -128,7 +128,7 @@
                             <th>Judul Proposal</th>
                             <th>Pembimbing</th>
                             <th>Status</th>
-                            <th>Aksi</th>
+                            {{-- <th>Aksi</th> --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -167,9 +167,9 @@
                             </td>
                             <td>
                                 <div class="d-flex gap-2">
-                                    <button class="btn btn-sm btn-info" onclick="showDetail({{ $proposal->id }})">
+                                    {{-- <button class="btn btn-sm btn-info" onclick="showDetail({{ $proposal->id }})">
                                         <i class="fas fa-eye"></i>
-                                    </button>
+                                    </button> --}}
                                     @if($proposal->status === 'menunggu')
                                     <button class="btn btn-sm btn-success" onclick="approveProposal({{ $proposal->id }})">
                                         <i class="fas fa-check"></i>

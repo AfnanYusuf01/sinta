@@ -330,6 +330,8 @@
             <div class="year-btn" onclick="showYear(2023)">2023-2024</div>
             <div class="year-btn" onclick="showYear(2022)">2022-2023</div>
             <div class="year-btn" onclick="showYear(2021)">2021-2022</div>
+            <div class="year-btn" onclick="showYear(2020)">2020-2021</div>
+            <div class="year-btn" onclick="showYear(2019)">2019-2020</div>
         </div>
         
         <!-- Tab Semester -->

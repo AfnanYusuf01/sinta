@@ -332,8 +332,10 @@
           </tr>
           <tr>
             <td>
-              <div class="criteria-title">1. Latar Belakang dan Rumusan Masalah</div>
-              <div class="criteria-desc">Kejelasan latar belakang dan rumusan masalah penelitian</div>
+              <div class="criteria-title">1. Latar Belakang</div>
+              <div class="criteria-desc">- Motivasi</div>
+              <div class="criteria-desc">- Kemanfaatan/Dampak</div>
+              <div class="criteria-desc">- Nilai Maksimal : 25</div>
             </td>
             <td>
               <input type="number" name="nilai_1" min="0" max="100" required value="{{ old('nilai_1') }}">
@@ -341,8 +343,11 @@
           </tr>
           <tr>
             <td>
-              <div class="criteria-title">2. Tinjauan Pustaka</div>
-              <div class="criteria-desc">Relevansi dan kebaruan referensi yang digunakan</div>
+              <div class="criteria-title">2. Formulasi Masalah</div>
+              <div class="criteria-desc">- Tujuan </div>
+              <div class="criteria-desc">- Batasan/Asumsi yang digunakan</div>
+              <div class="criteria-desc">- Kelayakan waktu dan sarana pendukung</div>
+              <div class="criteria-desc">- Nilai Maksimal :  30</div>
             </td>
             <td>
               <input type="number" name="nilai_2" min="0" max="100" required value="{{ old('nilai_2') }}">
@@ -350,8 +355,8 @@
           </tr>
           <tr>
             <td>
-              <div class="criteria-title">3. Metodologi</div>
-              <div class="criteria-desc">Kesesuaian metodologi dengan tujuan penelitian</div>
+              <div class="criteria-title">3. Teori Pendukung / Penelusuran Literatur</div>
+              <div class="criteria-desc">- Nilai Maksimal :  30</div>
             </td>
             <td>
               <input type="number" name="nilai_3" min="0" max="100" required value="{{ old('nilai_3') }}">
@@ -359,8 +364,8 @@
           </tr>
           <tr>
             <td>
-              <div class="criteria-title">4. Kontribusi Penelitian</div>
-              <div class="criteria-desc">Potensi kontribusi penelitian terhadap bidang terkait</div>
+              <div class="criteria-title">4. Ide/Metode Penyelesaian masalah</div>
+              <div class="criteria-desc">- Nilai Maksimal : 15</div>
             </td>
             <td>
               <input type="number" name="nilai_4" min="0" max="100" required value="{{ old('nilai_4') }}">

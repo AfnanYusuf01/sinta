@@ -36,6 +36,11 @@ Route::get('/skPembimbing', function () {
     return view('skPembimbing');
 });
 
+Route::get('/skPenguji', function () {
+    return view('skPenguji'); 
+});
+
+
 // Guest routes (for non-authenticated users)
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
@@ -122,7 +127,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/admin/pendaftaranproposal/approve/{id}', [AdminController::class, 'approveProposal'])->name('admin.pendaftaranproposal.approve');
         Route::post('/admin/pendaftaranproposal/reject/{id}', [AdminController::class, 'rejectProposal'])->name('admin.pendaftaranproposal.reject');
 
-        // Dosen Penguji routes
+        // Dosen Penguji routes (commented out in your original, kept as is)
         // Route::get('/dpenguji', [DPengujiController::class, 'index'])->name('dpenguji.index');
         // Route::post('/dpenguji', [DPengujiController::class, 'store'])->name('dpenguji.store');
         // Route::put('/dpenguji/{id}', [DPengujiController::class, 'update'])->name('dpenguji.update');

@@ -19,9 +19,9 @@
             </nav>
         </div>
         <div class="d-flex gap-2">
-            <button class="btn btn-primary" onclick="exportData()">
+            {{-- <button class="btn btn-primary" onclick="exportData()">
                 <i class="fas fa-download me-2"></i>Export Data
-            </button>
+            </button> --}}
             <button class="btn btn-success" onclick="refreshData()">
                 <i class="fas fa-sync-alt me-2"></i>Refresh
             </button>
@@ -124,11 +124,6 @@
                         <input type="date" class="form-control" name="start_date"
                                value="{{ request('start_date') }}"
                                placeholder="Tanggal Mulai">
-                    </div>
-                    <div>
-                        <input type="date" class="form-control" name="end_date"
-                               value="{{ request('end_date') }}"
-                               placeholder="Tanggal Akhir">
                     </div>
                     <div>
                         <button type="submit" class="btn btn-primary w-100">
