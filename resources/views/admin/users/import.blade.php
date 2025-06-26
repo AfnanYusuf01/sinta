@@ -52,10 +52,10 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="file" class="form-label">File Excel/CSV</label>
+                            <label for="file" class="form-label">File CSV</label>
                             <input type="file" class="form-control" id="file" name="file" accept=".xlsx,.xls,.csv">
                             <div class="form-text">
-                                Format file yang didukung: Excel (.xlsx, .xls) atau CSV
+                                Format file yang didukung: CSV
                             </div>
                         </div>
 

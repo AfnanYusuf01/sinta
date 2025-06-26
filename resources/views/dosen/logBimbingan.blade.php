@@ -6,6 +6,9 @@
     <title>Penilaian Log Bimbingan</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Add jsPDF library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <style>
         :root {
             --primary-color: #E30613;
@@ -33,6 +36,9 @@
             font-weight: 600;
             padding: 1.25rem 1.5rem;
             border-bottom: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .card-header i {
@@ -93,6 +99,18 @@
         .btn-success:hover {
             background-color: #218838;
             border-color: #218838;
+        }
+
+        .btn-pdf {
+            background-color: #d32f2f;
+            border-color: #d32f2f;
+            color: white;
+        }
+
+        .btn-pdf:hover {
+            background-color: #b71c1c;
+            border-color: #b71c1c;
+            color: white;
         }
 
         .alert {
@@ -178,7 +196,12 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <i class="fas fa-clipboard-check me-2"></i>Penilaian Log Bimbingan
+                            <div>
+                                <i class="fas fa-clipboard-check me-2"></i>Penilaian Log Bimbingan
+                            </div>
+                            <button id="downloadPdf" class="btn btn-pdf btn-sm">
+                                <i class="fas fa-file-pdf me-1"></i>Download PDF
+                            </button>
                         </div>
 
                         <div class="card-body">
@@ -199,7 +222,7 @@
                             @endif
 
                             <div class="table-responsive">
-                                <table class="table table-bordered table-hover">
+                                <table class="table table-bordered table-hover" id="logTable">
                                     <thead>
                                         <tr>
                                             <th width="5%">No</th>
@@ -300,6 +323,65 @@
                     bsAlert.close();
                 });
             }, 5000);
+
+            // PDF Download functionality
+            document.getElementById('downloadPdf').addEventListener('click', function() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                // Add title
+                doc.setFontSize(18);
+                doc.setTextColor(40);
+                doc.text('Laporan Log Bimbingan', 105, 15, { align: 'center' });
+
+                // Add date
+                doc.setFontSize(12);
+                doc.text(`Dicetak pada: ${new Date().toLocaleDateString()}`, 105, 22, { align: 'center' });
+
+                // Add table using autoTable plugin
+                doc.autoTable({
+                    html: '#logTable',
+                    startY: 30,
+                    theme: 'grid',
+                    headStyles: {
+                        fillColor: [227, 6, 19],
+                        textColor: 255,
+                        fontStyle: 'bold'
+                    },
+                    alternateRowStyles: {
+                        fillColor: [245, 245, 245]
+                    },
+                    columnStyles: {
+                        0: { cellWidth: 10 },
+                        1: { cellWidth: 20 },
+                        2: { cellWidth: 30 },
+                        3: { cellWidth: 25 },
+                        4: { cellWidth: 'auto' },
+                        5: { cellWidth: 20 },
+                        6: { cellWidth: 25 }
+                    },
+                    didParseCell: function(data) {
+                        // Skip the action column (index 6)
+                        if (data.column.index === 6) {
+                            data.cell.text = '';
+                        }
+
+                        // Format status badges
+                        if (data.column.index === 5) {
+                            if (data.cell.text.includes('Disetujui')) {
+                                data.cell.styles.fillColor = [40, 167, 69];
+                                data.cell.styles.textColor = 255;
+                            } else if (data.cell.text.includes('Belum disetujui')) {
+                                data.cell.styles.fillColor = [255, 193, 7];
+                                data.cell.styles.textColor = 0;
+                            }
+                        }
+                    }
+                });
+
+                // Save the PDF
+                doc.save('Laporan_Log_Bimbingan.pdf');
+            });
         });
     </script>
 </body>

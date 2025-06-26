@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\UsulDospem;
 use App\Models\Dosen;
 use App\Models\Mahasiswa;
+use App\Models\Pembimbing;
 use Illuminate\Support\Facades\Auth;
 
 class PengajuanPembimbingController extends Controller
@@ -14,17 +15,20 @@ class PengajuanPembimbingController extends Controller
     {
         $mahasiswa = Mahasiswa::where('user_id', Auth::id())->first();
         $mahasiswa_id = $mahasiswa->id;
-        
-        // Cek apakah mahasiswa sudah pernah mengajukan
-        $usulan = UsulDospem::where('id_mahasiswa', $mahasiswa_id)
-                            ->latest()
-                            ->first();
 
-        // Ambil data dosen untuk dropdown
-        $dosenList = Dosen::orderBy('nama')->get();
+        // Ambil usulan terakhir jika ada
+        $usulan = UsulDospem::where('id_mahasiswa', $mahasiswa_id)->latest()->first();
 
-        return view('pengajuanpembimbing', compact('usulan', 'dosenList'));
+        // Ambil semua pembimbing untuk mahasiswa ini
+        $pembimbing = Pembimbing::where('id_mahasiswa', $mahasiswa_id)->get();
+
+        // Ambil semua dosen berdasarkan id_dosen dari pembimbing
+        $dosenPembimbing = Dosen::whereIn('id', $pembimbing->pluck('id_dosen'))->get();
+
+
+        return view('pengajuanpembimbing', compact('usulan', 'dosenPembimbing'));
     }
+
 
     public function store(Request $request)
     {

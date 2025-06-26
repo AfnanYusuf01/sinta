@@ -8,6 +8,9 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Add jsPDF library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 
     <style>
         :root {
@@ -16,13 +19,13 @@
             --primary-lighter: rgba(227, 6, 19, 0.05);
             --primary-dark: #c00511;
         }
-        
+
         body {
             background-color: #f8f9fa;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #333;
         }
-        
+
         .card {
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
             margin-top: 2rem;
@@ -31,55 +34,55 @@
             border-radius: 10px;
             overflow: hidden;
         }
-        
+
         .card-header {
             background-color: var(--primary-color);
             color: white;
             border-bottom: none;
             padding: 1.25rem 1.5rem;
         }
-        
+
         .card-header h4 {
             font-weight: 600;
             margin-bottom: 0;
         }
-        
+
         .card-header i {
             font-size: 1.5rem;
             margin-right: 10px;
         }
-        
+
         .table th {
             background-color: var(--primary-lighter);
             color: var(--primary-color);
             font-weight: 600;
             border-bottom: 2px solid var(--primary-color);
         }
-        
+
         .table {
             border-radius: 8px;
             overflow: hidden;
         }
-        
+
         .table tr:hover {
             background-color: var(--primary-lighter);
         }
-        
+
         .badge {
             font-size: 0.875em;
             font-weight: 500;
             padding: 0.35em 0.65em;
         }
-        
+
         .badge.bg-success {
             background-color: #28a745 !important;
         }
-        
+
         .badge.bg-warning {
             background-color: #ffc107 !important;
             color: #000;
         }
-        
+
         .btn-primary {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
@@ -88,51 +91,71 @@
             border-radius: 6px;
             transition: all 0.3s;
         }
-        
+
         .btn-primary:hover {
             background-color: var(--primary-dark);
             border-color: var(--primary-dark);
             transform: translateY(-2px);
         }
-        
+
+        .btn-pdf {
+            background-color: #d32f2f;
+            border-color: #d32f2f;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .btn-pdf:hover {
+            background-color: #b71c1c;
+            border-color: #b71c1c;
+            color: white;
+            transform: translateY(-2px);
+        }
+
         .form-control:focus, .form-select:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 0.25rem rgba(227, 6, 19, 0.25);
         }
-        
+
         .alert {
             border-radius: 8px;
             border-left: 4px solid;
         }
-        
+
         .alert-success {
             background-color: rgba(40, 167, 69, 0.1);
             border-left-color: #28a745;
             color: #155724;
         }
-        
+
         .alert-danger {
             background-color: rgba(220, 53, 69, 0.1);
             border-left-color: #dc3545;
             color: #721c24;
         }
-        
+
         .pagination .page-item.active .page-link {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
         }
-        
+
         .pagination .page-link {
             color: var(--primary-color);
         }
-        
+
         .section-title {
             position: relative;
             padding-bottom: 0.5rem;
             margin-bottom: 1.5rem;
             color: var(--primary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        
+
         .section-title::after {
             content: '';
             position: absolute;
@@ -142,16 +165,16 @@
             height: 3px;
             background-color: var(--primary-color);
         }
-        
+
         textarea {
             min-height: 120px;
             resize: vertical;
         }
-        
+
         .table-responsive {
             border-radius: 8px;
         }
-        
+
         @media (max-width: 768px) {
             .card {
                 margin-top: 1rem;
@@ -264,9 +287,14 @@
 
                         <!-- Tabel Riwayat Log Bimbingan -->
                         <div class="mt-5">
-                            <h5 class="section-title"><i class="fas fa-history me-2"></i>Riwayat Log Bimbingan</h5>
+                            <h5 class="section-title">
+                                <span><i class="fas fa-history me-2"></i>Riwayat Log Bimbingan</span>
+                                <button id="downloadPdf" class="btn btn-pdf btn-sm">
+                                    <i class="fas fa-file-pdf me-1"></i>Download PDF
+                                </button>
+                            </h5>
                             <div class="table-responsive">
-                                <table class="table table-bordered table-hover">
+                                <table class="table table-bordered table-hover" id="logTable">
                                     <thead>
                                         <tr>
                                             <th width="5%">No</th>
@@ -326,6 +354,65 @@
                     bsAlert.close();
                 });
             }, 5000);
+
+            // PDF Download functionality
+            document.getElementById('downloadPdf').addEventListener('click', function() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                // Add title
+                doc.setFontSize(18);
+                doc.setTextColor(40);
+                doc.text('Riwayat Log Bimbingan', 105, 15, { align: 'center' });
+
+                // Add student info if available
+                @if(auth()->user()->mahasiswa)
+                doc.setFontSize(12);
+                doc.text(`Nama: {{ auth()->user()->mahasiswa->nama }}`, 14, 25);
+                doc.text(`NIM: {{ auth()->user()->mahasiswa->nim }}`, 14, 32);
+                @endif
+
+                // Add date
+                doc.setFontSize(12);
+                doc.text(`Dicetak pada: ${new Date().toLocaleDateString()}`, 105, 25, { align: 'center' });
+
+                // Add table using autoTable plugin
+                doc.autoTable({
+                    html: '#logTable',
+                    startY: 40,
+                    theme: 'grid',
+                    headStyles: {
+                        fillColor: [227, 6, 19],
+                        textColor: 255,
+                        fontStyle: 'bold'
+                    },
+                    alternateRowStyles: {
+                        fillColor: [245, 245, 245]
+                    },
+                    columnStyles: {
+                        0: { cellWidth: 10 },
+                        1: { cellWidth: 20 },
+                        2: { cellWidth: 30 },
+                        3: { cellWidth: 'auto' },
+                        4: { cellWidth: 20 }
+                    },
+                    didParseCell: function(data) {
+                        // Format status badges
+                        if (data.column.index === 4) {
+                            if (data.cell.text.includes('Disetujui')) {
+                                data.cell.styles.fillColor = [40, 167, 69];
+                                data.cell.styles.textColor = 255;
+                            } else if (data.cell.text.includes('Menunggu')) {
+                                data.cell.styles.fillColor = [255, 193, 7];
+                                data.cell.styles.textColor = 0;
+                            }
+                        }
+                    }
+                });
+
+                // Save the PDF
+                doc.save('Riwayat_Log_Bimbingan.pdf');
+            });
         });
     </script>
 </body>
