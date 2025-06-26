@@ -665,118 +665,109 @@ class AdminController extends Controller
     }
 
     public function import(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|mimes:csv,txt',
-            'type' => 'required|in:mahasiswa,dosen'
-        ]);
+{
+    $request->validate([
+        'file' => 'required|mimes:csv,txt',
+        'type' => 'required|in:mahasiswa,dosen'
+    ]);
 
-        try {
-            DB::beginTransaction();
+    try {
+        DB::beginTransaction();
 
-            $file = $request->file('file');
+        $file = $request->file('file');
+        $handle = fopen($file->getPathname(), 'r');
 
-            // Baca file CSV
-            $handle = fopen($file->getPathname(), 'r');
-
-            // Get header dari baris pertama
-            $header = fgetcsv($handle);
-
-            // Bersihkan header dari karakter khusus dan whitespace
-            $header = array_map(function($item) {
-                // Bersihkan BOM dan whitespace
-                $item = trim($item);
-                if (substr($item, 0, 3) === "\xEF\xBB\xBF") {
-                    $item = substr($item, 3);
-                }
-                return strtolower(trim($item));
-            }, $header);
-
-            // Debug information
-            $debugInfo = [
-                'Header yang dibaca: ' . implode(', ', $header),
-                'Jumlah kolom header: ' . count($header),
-                'Tipe import: ' . $request->type
-            ];
-
-            // Validasi header sesuai dengan tipe import
-            $expectedHeaders = $request->type === 'mahasiswa'
-                ? ['nama', 'email', 'password', 'nim', 'prodi', 'angkatan']
-                : ['nama', 'email', 'password', 'nip', 'bidang_keahlian'];
-
-            $debugInfo[] = 'Header yang diharapkan: ' . implode(', ', $expectedHeaders);
-            $debugInfo[] = 'Jumlah kolom yang diharapkan: ' . count($expectedHeaders);
-
-            // Validasi jumlah kolom header
-            if (count($header) !== count($expectedHeaders)) {
-                fclose($handle);
-                throw new \Exception("Jumlah kolom tidak sesuai dengan template.\n\nDetail:\n" . implode("\n", $debugInfo));
+        // Ambil header
+        $header = fgetcsv($handle);
+        $header = array_map(function($item) {
+            $item = trim($item);
+            if (substr($item, 0, 3) === "\xEF\xBB\xBF") {
+                $item = substr($item, 3);
             }
+            return strtolower(trim($item));
+        }, $header);
 
-            // Validasi nama kolom header
-            $headerDiff = array_diff($expectedHeaders, $header);
-            if (!empty($headerDiff)) {
-                fclose($handle);
-                throw new \Exception("Format kolom tidak sesuai.\n\nDetail:\n" . implode("\n", $debugInfo) . "\n\nKolom yang tidak sesuai: " . implode(', ', $headerDiff));
-            }
+        $debugInfo = [
+            'Header yang dibaca: ' . implode(', ', $header),
+            'Jumlah kolom header: ' . count($header),
+            'Tipe import: ' . $request->type
+        ];
 
-            $successCount = 0;
-            $errors = [];
-            $rowNumber = 2; // Start from row 2 (after header)
+        $expectedHeaders = $request->type === 'mahasiswa'
+            ? ['nama', 'email', 'password', 'nim', 'prodi', 'angkatan']
+            : ['nama', 'email', 'password', 'nip', 'bidang_keahlian'];
 
-            // Baca data baris per baris
-            while (($row = fgetcsv($handle)) !== false) {
-                try {
-                    // Skip empty rows
-                    if (empty(array_filter($row))) {
-                        continue;
-                    }
+        $debugInfo[] = 'Header yang diharapkan: ' . implode(', ', $expectedHeaders);
+        $debugInfo[] = 'Jumlah kolom yang diharapkan: ' . count($expectedHeaders);
 
-                    // Validasi jumlah kolom data
-                    if (count($row) !== count($header)) {
-                        throw new \Exception(sprintf(
-                            'Jumlah kolom tidak sesuai dengan header (ditemukan %d kolom, diharapkan %d kolom)',
-                            count($row),
-                            count($header)
-                        ));
-                    }
-
-                    // Bersihkan data dari whitespace
-                    $row = array_map('trim', $row);
-
-                    // Convert array to associative array using header
-                    $data = array_combine($header, $row);
-
-                    if ($request->type === 'mahasiswa') {
-                        $this->processMahasiswaRow($data);
-                    } else {
-                        $this->processDosenRow($data);
-                    }
-                    $successCount++;
-                } catch (\Exception $e) {
-                    $errors[] = "Baris {$rowNumber}: " . $e->getMessage();
-                }
-                $rowNumber++;
-            }
-
+        if (count($header) !== count($expectedHeaders)) {
             fclose($handle);
-            DB::commit();
-
-            if (count($errors) > 0) {
-                $message = "Import selesai dengan {$successCount} data berhasil diimport.\n\nError yang ditemukan:\n" . implode("\n", $errors);
-                return redirect()->route('admin.users')
-                    ->with('warning', $message);
-            }
-
-            return redirect()->route('admin.users')
-                ->with('success', "{$successCount} data berhasil diimport!");
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->route('admin.users')
-                ->with('error', 'Error: ' . $e->getMessage());
+            throw new \Exception("Jumlah kolom tidak sesuai dengan template.\n\nDetail:\n" . implode("\n", $debugInfo));
         }
+
+        $headerDiff = array_diff($expectedHeaders, $header);
+        if (!empty($headerDiff)) {
+            fclose($handle);
+            throw new \Exception("Format kolom tidak sesuai.\n\nDetail:\n" . implode("\n", $debugInfo) . "\n\nKolom yang tidak sesuai: " . implode(', ', $headerDiff));
+        }
+
+        $successCount = 0;
+        $errors = [];
+        $rowNumber = 2; // Mulai dari baris kedua (setelah header)
+
+        while (($row = fgetcsv($handle)) !== false) {
+            try {
+                if (empty(array_filter($row))) {
+                    continue;
+                }
+
+                if (count($row) !== count($header)) {
+                    throw new \Exception(sprintf(
+                        'Jumlah kolom tidak sesuai dengan header (ditemukan %d kolom, diharapkan %d kolom)',
+                        count($row),
+                        count($header)
+                    ));
+                }
+
+                $row = array_map('trim', $row);
+                $data = array_combine($header, $row);
+
+                if ($request->type === 'mahasiswa') {
+                    $this->processMahasiswaRow($data);
+                } else {
+                    $this->processDosenRow($data);
+                }
+                $successCount++;
+            } catch (\Exception $e) {
+                $errors[] = "Baris {$rowNumber}: " . $e->getMessage();
+            }
+            $rowNumber++;
+        }
+
+        fclose($handle);
+        DB::commit();
+
+        // ❗ Error jika tidak ada satupun berhasil diimport
+        if ($successCount === 0) {
+            throw new \Exception("Import gagal! Tidak ada data {$request->type} yang berhasil diimpor.\n\nDetail error:\n" . implode("\n", $errors));
+        }
+
+        if (count($errors) > 0) {
+            $message = "Import selesai dengan {$successCount} data berhasil diimpor.\n\nError yang ditemukan:\n" . implode("\n", $errors);
+            return redirect()->route('admin.users')
+                ->with('warning', $message);
+        }
+
+        return redirect()->route('admin.users')
+            ->with('success', "{$successCount} data berhasil diimport!");
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return redirect()->route('admin.users')
+            ->with('error', 'Error: ' . $e->getMessage());
     }
+}
+
 
     private function processMahasiswaRow($data)
     {

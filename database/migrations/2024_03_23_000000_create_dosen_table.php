@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('nama');
             $table->string('nip')->unique();
-            $table->string('program_studi');
+            $table->string('program_studi')->nullable();
             $table->string('bidang_keahlian')->nullable();
             $table->timestamps();
         });
