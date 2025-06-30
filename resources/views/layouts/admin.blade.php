@@ -350,7 +350,7 @@
           <li>
             <a href="{{ route('admin.dashboardadmin') }}" class="{{ request()->routeIs('admin.dashboardadmin') ? 'active' : '' }}">
               <i class="fas fa-home"></i>
-              <span>Dashboard</span>
+              <span>Pengajuan Pembimbing</span>
             </a>
           </li>
           <li>
@@ -410,7 +410,7 @@
         <div class="header-controls">
           <div class="dropdown">
             <button class="btn btn-link position-relative" type="button" data-bs-toggle="dropdown">
-              <i class="fas fa-bell text-muted fs-5"></i>
+              {{-- <i class="fas fa-bell text-muted fs-5"></i> --}}
               @if(isset($pending_count) && $pending_count > 0)
                 <span class="notification-badge">{{ $pending_count }}</span>
               @endif

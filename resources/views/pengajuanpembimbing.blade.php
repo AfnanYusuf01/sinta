@@ -463,7 +463,7 @@
                             </div>
                             <div>
                                 <h3 class="status-title">Menunggu Persetujuan</h3>
-                                <p>Usulan pembimbing Anda sedang dalam proses peninjauan oleh administrasi. Anda akan menerima notifikasi ketika status berubah.</p>
+                                <p>Usulan pembimbing Anda sedang dalam proses peninjauan oleh administrasi.</p>
 
                                 <div class="status-detail">
                                     <div class="status-detail-item">
@@ -510,18 +510,11 @@
                                 </div>
 
                                 <div class="dosen-container mt-4">
-                                    @foreach ($dosenPembimbing as $dosen)
-                                        @php
-                                            $jenis = '-';
-                                            if ($dosen->relationLoaded('pembimbing') && $dosen->pembimbing) {
-                                                $jenis = optional($dosen->pembimbing->first())->jenis_pembimbing ?? '-';
-                                            }
-                                        @endphp
-
+                                    @foreach ($dosenPembimbing as $loopIndex => $dosen)
                                         <div class="dosen-card">
                                             <h5>
                                                 <i class="fas fa-user-tie"></i>
-                                                Dosen Pembimbing {{ $jenis }}
+                                                Dosen Pembimbing {{ $loop->iteration }}
                                             </h5>
                                             <div class="dosen-info-item">
                                                 <strong>Nama:</strong>
@@ -536,7 +529,7 @@
                                                 <span>{{ $dosen->user->email ?? '-' }}</span>
                                             </div>
                                         </div>
-                                    @endforeach
+                                    @endforeach
                                 </div>
                             </div>
                         </div>

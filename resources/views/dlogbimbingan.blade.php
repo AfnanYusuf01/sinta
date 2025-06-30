@@ -22,9 +22,9 @@
             {{-- <button class="btn btn-primary" onclick="exportData()">
                 <i class="fas fa-download me-2"></i>Export Data
             </button> --}}
-            <button class="btn btn-success" onclick="refreshData()">
+            {{-- <button class="btn btn-success" onclick="refreshData()">
                 <i class="fas fa-sync-alt me-2"></i>Refresh
-            </button>
+            </button> --}}
         </div>
     </div>
 
@@ -125,11 +125,11 @@
                                value="{{ request('start_date') }}"
                                placeholder="Tanggal Mulai">
                     </div>
-                    <div>
+                    {{-- <div>
                         <button type="submit" class="btn btn-primary w-100">
                             <i class="fas fa-filter me-2"></i>Filter
                         </button>
-                    </div>
+                    </div> --}}
                 </div>
             </form>
 

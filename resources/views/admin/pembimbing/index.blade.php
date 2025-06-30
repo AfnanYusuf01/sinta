@@ -54,7 +54,7 @@
                                         @endif
                                     </span>
                                 @else
-                                    <span class="badge bg-secondary">Belum ditentukan</span>
+                                    <span class="badge bg-secondary"> - </span>
                                 @endif
                             </td>
                             <td>
@@ -66,7 +66,7 @@
                                         @endif
                                     </span>
                                 @else
-                                    <span class="badge bg-secondary">Belum ditentukan</span>
+                                    <span class="badge bg-secondary"> - </span>
                                 @endif
                             </td>
                             <td>
@@ -86,10 +86,10 @@
                                         data-status="{{ $pembimbing1->status }}">
                                     <i class="fas fa-edit"></i> P1
                                 </button>
-                                <button type="button" class="btn btn-sm btn-danger delete-pembimbing" 
+                                {{-- <button type="button" class="btn btn-sm btn-danger delete-pembimbing" 
                                         data-id="{{ $pembimbing1->id }}">
                                     <i class="fas fa-trash"></i> P1
-                                </button>
+                                </button> --}}
                                 @endif
                                 @if($pembimbing2)
                                 <button type="button" class="btn btn-sm btn-warning edit-pembimbing" 
@@ -100,10 +100,10 @@
                                         data-status="{{ $pembimbing2->status }}">
                                     <i class="fas fa-edit"></i> P2
                                 </button>
-                                <button type="button" class="btn btn-sm btn-danger delete-pembimbing" 
+                                {{-- <button type="button" class="btn btn-sm btn-danger delete-pembimbing" 
                                         data-id="{{ $pembimbing2->id }}">
                                     <i class="fas fa-trash"></i> P2
-                                </button>
+                                </button> --}}
                                 @endif
                             </td>
                         </tr>

@@ -127,6 +127,40 @@
             background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
         }
 
+        /* Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .page-header h1 {
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            border-radius: 2px;
+        }
+
+        .page-header p {
+            color: #6c757d;
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.05rem;
+        }
+
         .form-header {
             padding: 25px 30px;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
@@ -279,7 +313,11 @@
             </div>
         @endif
 
-        <h1 class="text-center mb-4">Form Pendaftaran Proposal</h1>
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Form Pendaftaran Proposal</h1>
+            <p class="lead">Ajukan judul dan abstrak untuk tugas akhir Anda melalui form berikut</p>
+        </div>
 
         @if(isset($pendaftaran))
             @if($pendaftaran->status == 'menunggu')

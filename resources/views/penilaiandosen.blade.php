@@ -231,6 +231,16 @@
         Isi Formulir <i class="fas fa-arrow-right"></i>
       </a>
     </div>
+    
+    <div class="card">
+      <div class="card-icon">
+        <i class="fas fa-book-open"></i>
+      </div>
+      <h2>Formulir Nilai Literatur Review Proposal TA</h2>
+      <a href="{{ route('nilai-literatur.index') }}" class="card-btn">
+        Isi Formulir <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
 
     <div class="card">
       <div class="card-icon">
@@ -242,15 +252,7 @@
       </a>
     </div>
 
-    <div class="card">
-      <div class="card-icon">
-        <i class="fas fa-book-open"></i>
-      </div>
-      <h2>Formulir Nilai Literatur Review Proposal TA</h2>
-      <a href="{{ route('nilai-literatur.index') }}" class="card-btn">
-        Isi Formulir <i class="fas fa-arrow-right"></i>
-      </a>
-    </div>
+    
   </div>
 
 </body>

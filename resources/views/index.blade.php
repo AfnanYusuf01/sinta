@@ -55,9 +55,9 @@
             <a href="#"><span>Informasi</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul class="dropdown-menu">
               <li><a href="{{ url('/templateTA') }}">Panduan Tugas Akhir</a></li>
-              <li><a href="{{ url('/dataTA') }}">Data TA</a></li>
+              {{-- <li><a href="{{ url('/dataTA') }}">Data TA</a></li> --}}
               <li><a href="{{ url('/skPembimbing') }}">SK Pembimbing</a></li>
-              <li><a href="{{ url('/skPenguji') }}">SK Penguji</a></li>
+              {{-- <li><a href="{{ url('/skPenguji') }}">SK Penguji</a></li> --}}
             </ul>
           </li>
           <li><a href="#contact">Kontak</a></li>
@@ -387,21 +387,6 @@
             @endif
           @endauth
 
-          @auth
-            @if (Auth::user()->role !== 'dosen')
-              <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                <div class="service-item position-relative">
-                  <div class="icon">
-                    <i class="bi bi-calendar-check"></i>
-                  </div>
-                  <h3>Pendaftaran</h3>
-                  <p>Registrasi seminar proposal dan penjadwalan presentasi Tugas Akhir</p>
-                  <a href="{{ route('pendaftaranproposal') }}" class="stretched-link"></a>
-                </div>
-              </div>
-            @endif
-          @endauth
-
           <!-- Log Bimbingan - Untuk Dosen dan Mahasiswa -->
           @auth
             <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
@@ -418,6 +403,21 @@
                 @endif
               </div>
             </div>
+          @endauth
+
+          @auth
+            @if (Auth::user()->role !== 'dosen')
+              <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="service-item position-relative">
+                  <div class="icon">
+                    <i class="bi bi-calendar-check"></i>
+                  </div>
+                  <h3>Pendaftaran</h3>
+                  <p>Registrasi seminar proposal dan penjadwalan presentasi Tugas Akhir</p>
+                  <a href="{{ route('pendaftaranproposal') }}" class="stretched-link"></a>
+                </div>
+              </div>
+            @endif
           @endauth
 
           <!-- Penilaian Dosen - Tampil hanya untuk Dosen -->

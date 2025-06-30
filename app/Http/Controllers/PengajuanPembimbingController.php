@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class PengajuanPembimbingController extends Controller
 {
+
     public function index()
     {
         $mahasiswa = Mahasiswa::where('user_id', Auth::id())->first();
@@ -25,10 +26,11 @@ class PengajuanPembimbingController extends Controller
         // Ambil semua dosen berdasarkan id_dosen dari pembimbing
         $dosenPembimbing = Dosen::whereIn('id', $pembimbing->pluck('id_dosen'))->get();
 
+        $dosenList = Dosen::orderBy('nama')->get();
 
-        return view('pengajuanpembimbing', compact('usulan', 'dosenPembimbing'));
+
+        return view('pengajuanpembimbing', compact('usulan', 'dosenPembimbing', 'dosenList'));
     }
-
 
     public function store(Request $request)
     {

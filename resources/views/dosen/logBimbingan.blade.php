@@ -197,7 +197,7 @@
                     <div class="card">
                         <div class="card-header">
                             <div>
-                                <i class="fas fa-clipboard-check me-2"></i>Penilaian Log Bimbingan
+                                <i class="fas fa-clipboard-check me-2"></i>Approval Log Bimbingan
                             </div>
                             <button id="downloadPdf" class="btn btn-pdf btn-sm">
                                 <i class="fas fa-file-pdf me-1"></i>Download PDF

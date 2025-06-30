@@ -35,6 +35,40 @@
             overflow: hidden;
         }
 
+        /* Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .page-header h1 {
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            border-radius: 2px;
+        }
+
+        .page-header p {
+            color: #6c757d;
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.05rem;
+        }
+
         .card-header {
             background-color: var(--primary-color);
             color: white;
@@ -230,6 +264,13 @@
             </div>
         </div>
     </div>
+
+    <!-- Page Header -->
+        <div class="page-header">
+            <h1>Log Bimbingan</h1>
+            <p class="lead">Input log bimbingan setelah melakukan dengan dosen pembimbing</p>
+        </div>
+
     <div class="container mt-4">
         <div class="row justify-content-center">
             <div class="col-md-12">
